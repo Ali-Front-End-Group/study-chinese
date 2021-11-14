@@ -1,3 +1,10 @@
 .courseCard {
     margin: 10px 10px;
+    border-radius: 20px;
+    width: 240px;
+    height: 275px;
+}
+
+img {
+    height: 180px;
 }
