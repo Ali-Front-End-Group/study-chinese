@@ -1,0 +1,23 @@
+.addCourse {
+    width: 240px;
+    margin: 10px 10px 0px 10px;
+    height: 275px;
+    border-radius: 20px;
+}
+
+.addBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.addIcon {
+    width: 100px;
+    height: 100px;
+    margin-top: 25%;
+}
+
+.addText {
+    margin-top: 20px;
+}
