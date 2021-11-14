@@ -1,0 +1,24 @@
+.addBox {
+    height: 100%;
+    width: 100%;
+}
+
+.addCenter {
+    margin: auto;
+    width: 76%;
+    height: 100%;
+    display: flex;
+}
+
+.addLeft,
+.addRight {
+    flex: 1;
+}
+
+.addLeft {
+    background-color: rgb(67, 199, 216);
+}
+
+.addRight {
+    background-color: rgb(140, 235, 161);
+}
