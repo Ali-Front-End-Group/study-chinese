@@ -1,0 +1,37 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+}
+
+/* input {
+    background: none;
+    outline: none;
+    border: 0px;
+    border-radius: 0;
+} */
+
+/* div {
+    box-sizing: border-box;
+} */
+
+/* a,
+a:link,
+a:visited,
+a:hover,
+a:active,
+a:focus {
+    text-decoration: none !important;
+} */
