@@ -1,0 +1,21 @@
+.loginBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 40px;
+    background-color: rgb(43, 142, 223);
+    font-size: 24px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translate(0, -50%);
+    user-select: none;
+    border-radius: 14px;
+    transition: all 0.3s;
+}
+
+.loginBtn:hover {
+    background-color: rgb(14, 126, 218);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}

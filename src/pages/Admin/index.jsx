@@ -1,5 +1,5 @@
 // import { useState, useEffect } from 'react';
-import CourseCard from './CourseCard';
+import CourseCard from '../../components/CourseCard';
 import './index.css';
 
 const Admin = () => {
