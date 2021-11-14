@@ -1,0 +1,23 @@
+.welcomeBox {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.left,
+.right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left {
+    font-size: 80px;
+    font-weight: 700;
+    background-color: rgb(77, 241, 228);
+}
+
+.right {
+    background-color: rgb(65, 206, 194);
+}
