@@ -3,10 +3,11 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: left;
-    margin-left: 17%;
+    width: 70%;
+    margin: auto;
 }
 
-.addTest {
+/* .addTest {
     height: 100px;
     width: 100px;
     background-color: rgb(36, 215, 221);
@@ -20,4 +21,4 @@
 .addTest:hover {
     background-color: rgb(8, 165, 170);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-}
+} */
