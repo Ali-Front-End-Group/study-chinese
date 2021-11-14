@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
 import { Input, Button, Upload } from 'antd';
 import { BASE_URL } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
+import { withRouter } from 'react-router-dom';
+import dayjs from 'dayjs';
 import axios from 'axios';
 import './index.css';
 
-const Add = () => {
+const Add = ({ history }) => {
     const { TextArea } = Input;
     const [time, setTime] = useState('');
     // 左上角时间
@@ -54,10 +55,14 @@ const Add = () => {
 
     // 视频
     // 获得七牛云token
-    const getQiniuToken = () => {
-        return axios.post(BASE_URL + '/api/get_uploadToken', {}).then(res => res.data.uptoken);
-    };
+    // const getQiniuToken = () => {
+    //     return axios.post(BASE_URL + '/api/get_uploadToken', {}).then(res => res.data.uptoken);
+    // };
 
+    // 返回
+    const goBack = () => {
+        history.push('/admin/course');
+    };
     return (
         <div className="addBox">
             <div className="addCenter">
@@ -65,7 +70,9 @@ const Add = () => {
                 <div className="addLeft">
                     <div className="inputBox">
                         <div className="addBtnBox">
-                            <div className="addBackBtn">取消</div>
+                            <div className="addBackBtn" onClick={goBack}>
+                                取消
+                            </div>
                             <div className="addBtn">确认</div>
                         </div>
                         <span>课程名称：</span>
@@ -150,10 +157,12 @@ const Add = () => {
                                     <img src={imgText} alt="请点击按钮" />
                                 </div>
                             ) : null}
-                            <div className="courseVoice">
-                                <RiVoiceprintFill />
-                                voice
-                            </div>
+                            {voiceText ? (
+                                <div className="courseVoice">
+                                    <RiVoiceprintFill />
+                                    voice
+                                </div>
+                            ) : null}
                         </div>
                     </div>
                 </div>
@@ -162,4 +171,4 @@ const Add = () => {
     );
 };
 
-export default Add;
+export default withRouter(Add);

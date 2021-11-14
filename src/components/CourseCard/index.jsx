@@ -1,11 +1,17 @@
 import { Card } from 'antd';
-import CourseInfo from './CourseInfo'
+import CourseInfo from './CourseInfo';
 import './index.css';
 
 // 单个课程卡片
-const CourseCard = ({ courseCard, onHandleDelete, showModal, handleEdit, handleCancel, visible }) => {
+const CourseCard = ({
+    courseCard,
+    onHandleDelete,
+    showModal,
+    handleEdit,
+    handleCancel,
+    visible,
+}) => {
     const { Meta } = Card;
-
     const imgLink = courseCard.imgLink;
     const courseName = courseCard.courseName;
     const teacherName = courseCard.teacherName;
@@ -26,7 +32,7 @@ const CourseCard = ({ courseCard, onHandleDelete, showModal, handleEdit, handleC
                     onClick={onHandleDelete}
                 />
             </Card>
-            <CourseInfo 
+            <CourseInfo
                 showModal={showModal}
                 handleCancel={handleCancel}
                 handleEdit={handleEdit}

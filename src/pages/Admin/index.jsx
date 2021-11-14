@@ -6,18 +6,16 @@ import Course from './Course';
 import Add from './Add';
 import './index.css';
 
-const Admin = () => {
-    return (
-        <div className="adminBox">
-            <Switch>
-                <Route path="/admin/add" component={Add} />
-                <Route path="/admin/course" component={Course} />
-                <Route path="/admin/help" component={Help} />
-                <Route path="/admin/" component={Home} />
-                <Redirect to="/admin/" />
-            </Switch>
-        </div>
-    );
-};
+const Admin = () => (
+    <div className="adminBox">
+        <Switch>
+            <Route path="/admin/add" component={Add} />
+            <Route path="/admin/course" component={Course} />
+            <Route path="/admin/help" component={Help} />
+            <Route path="/admin/" component={Home} />
+            <Redirect to="/admin/" />
+        </Switch>
+    </div>
+);
 
 export default Admin;

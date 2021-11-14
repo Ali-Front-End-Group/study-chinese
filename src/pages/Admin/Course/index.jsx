@@ -1,43 +1,44 @@
-// import { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import CourseCard from '../../../components/CourseCard';
 import AddCourse from '../../../components/AddCourse';
 import './index.css';
-import { useState } from 'react';
 
-const Course = ({ history }) => {
+const Course = () => {
     //测试数据
-    const [courseData, setCourseData] = useState(
-        [
+    const [courseData, setCourseData] = useState([]);
+
+    useEffect(() => {
+        const data = [
             {
-                imgLink: "/img/chinese.jpeg",
-                courseName: "111",
-                teacherName: "222",
-                courseLink: "http://www.baidu.com",
-                courseInfo: "这是课程简介",
+                imgLink: '/img/chinese.jpeg',
+                courseName: '111',
+                teacherName: '222',
+                courseLink: 'http://www.baidu.com',
+                courseInfo: '这是课程简介',
                 stuNum: 7,
-                star: 2
+                star: 2,
             },
             {
-                imgLink: "/img/math.jpg",
-                courseName: "333",
-                teacherName: "444",
-                courseLink: "http://www.bilibili.com",
-                courseInfo: "这是课程简介",
+                imgLink: '/img/math.jpg',
+                courseName: '333',
+                teacherName: '444',
+                courseLink: 'http://www.bilibili.com',
+                courseInfo: '这是课程简介',
                 stuNum: 2,
-                star: 7
+                star: 7,
             },
             {
-                imgLink: "/img/chinese.jpeg",
-                courseName: "1",
-                teacherName: "222",
-                courseLink: "http://www.baidu.com",
-                courseInfo: "这是课程简介",
+                imgLink: '/img/chinese.jpeg',
+                courseName: '1',
+                teacherName: '222',
+                courseLink: 'http://www.baidu.com',
+                courseInfo: '这是课程简介',
                 stuNum: 4,
-                star: 2
+                star: 2,
             },
-        ]
-    )
+        ];
+        setCourseData(data);
+    }, []);
     const [visible, setVisible] = useState(false);
     const [ifDelete, setIfDelete] = useState(false);
 
@@ -62,31 +63,26 @@ const Course = ({ history }) => {
     //删除卡片
     const handleDelete = () => {
         setIfDelete(true);
-        console.log("delete");
+        console.log('delete');
         //还没写
-    }
+    };
 
     return (
         <div className="courseLayout">
-            {/* <div className="addTest" onClick={() => history.push('/admin/add')}>
-                添加班级
-            </div> */}
             <AddCourse />
-            {
-                courseData.map(course => (
-                    <CourseCard
-                        key={course.courseName}
-                        courseCard={course}
-                        onHandleDelete={handleDelete}
-                        showModal={showModal}
-                        handleEdit={handleEdit}
-                        handleCancel={handleCancel}
-                        visible={visible}
-                    />
-                ))
-            }
+            {courseData.map(course => (
+                <CourseCard
+                    key={course.courseName}
+                    courseCard={course}
+                    onHandleDelete={handleDelete}
+                    showModal={showModal}
+                    handleEdit={handleEdit}
+                    handleCancel={handleCancel}
+                    visible={visible}
+                />
+            ))}
         </div>
     );
 };
 
-export default withRouter(Course);
+export default Course;
