@@ -8,7 +8,7 @@ const CourseCard = () => {
         <Card
             hoverable
             style={{ width: 240 }}
-            cover={<img alt="example" src="./img/数学.jpg" />}
+            cover={<img alt="example" src="/img/math.jpg" />}
             className="courseCard"
         >
             <Meta title="{courseName}" description="{teacherName}" />

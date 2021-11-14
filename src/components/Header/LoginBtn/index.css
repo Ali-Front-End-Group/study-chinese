@@ -17,5 +17,5 @@
 
 .loginBtn:hover {
     background-color: rgb(14, 126, 218);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }

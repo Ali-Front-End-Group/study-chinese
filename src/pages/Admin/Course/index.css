@@ -1,0 +1,23 @@
+.courseLayout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+    margin-left: 17%;
+}
+
+.addTest {
+    height: 100px;
+    width: 100px;
+    background-color: rgb(36, 215, 221);
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    transition: all 0.3s;
+}
+.addTest:hover {
+    background-color: rgb(8, 165, 170);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
