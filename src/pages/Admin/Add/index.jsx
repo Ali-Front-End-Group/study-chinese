@@ -12,6 +12,10 @@ import { FontColorsOutlined, FileImageOutlined, AudioOutlined } from '@ant-desig
 import './index.css';
 
 const Add = ({ history }) => {
+    // 返回
+    const goBack = () => {
+        history.push('/admin/course');
+    };
     const [time, setTime] = useState('');
     // 左上角时间
     useEffect(() => {
@@ -22,7 +26,8 @@ const Add = ({ history }) => {
         return () => {
             clearTimeout(timer);
         };
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    });
     // 课程名
     const [name, setName] = useState('');
     // 文字信息课程
@@ -31,6 +36,8 @@ const Add = ({ history }) => {
     const [imgType, setImgType] = useState([]);
     // 声音信息课程
     const [voiceType, setVoiceType] = useState([]);
+    // 所有课程
+    const [allCourse, setAllCourse] = useState([]);
 
     // 获得图片url
     const getImg = (character, index) => {
@@ -42,12 +49,13 @@ const Add = ({ history }) => {
             })
             .then(res => {
                 if (res.data.status === 200) {
-                    const copy = [...imgType];
+                    const copy = [...allCourse];
                     copy[index].url = res.data.url;
-                    setImgType(copy);
+                    setAllCourse(copy);
                 }
             });
     };
+    // 获得声音url
     const getVoice = (text, index) => {
         axios
             .post(BASE_URL + '/api/tts', {
@@ -55,9 +63,9 @@ const Add = ({ history }) => {
             })
             .then(res => {
                 if (res.data.status === 200) {
-                    const copy = [...voiceType];
+                    const copy = [...allCourse];
                     copy[index].url = res.data.array['思悦'];
-                    setVoiceType(copy);
+                    setAllCourse(copy);
                 }
             });
     };
@@ -82,9 +90,23 @@ const Add = ({ history }) => {
                 return null;
         }
     };
-    // 返回
-    const goBack = () => {
-        history.push('/admin/course');
+
+    // 添加一般课程
+    const addCourse = type => {
+        const id = nanoid();
+        let obj;
+        if (type === 'text') {
+            obj = { id, type, zh: '', en: '' };
+        } else {
+            obj = { id, type, url: '' };
+        }
+        const newCourse = [...allCourse, obj];
+        setAllCourse(newCourse);
+    };
+    // 删除一般课程
+    const deleteCourseById = id => {
+        const newCourse = allCourse.filter(obj => obj.id !== id);
+        setAllCourse(newCourse);
     };
     // 添加文字课程
     const addTextType = () => {
@@ -137,19 +159,19 @@ const Add = ({ history }) => {
                                 type="primary"
                                 shape="circle"
                                 icon={<FontColorsOutlined />}
-                                onClick={addTextType}
+                                onClick={() => addCourse('text')}
                             />
                             <Button
                                 type="primary"
                                 shape="circle"
                                 icon={<FileImageOutlined />}
-                                onClick={addImgType}
+                                onClick={() => addCourse('img')}
                             />
                             <Button
                                 type="primary"
                                 shape="circle"
                                 icon={<AudioOutlined />}
-                                onClick={addVoiceType}
+                                onClick={() => addCourse('voice')}
                             />
                         </div>
                         <span className="courseItem">课程名称：</span>
@@ -160,122 +182,112 @@ const Add = ({ history }) => {
                             maxLength={10}
                             onChange={e => setName(e.target.value)}
                         />
-                        {/* —————————————————————————— */}
-                        {!textType.length ? null : (
-                            <>
-                                <span className="courseItem">文字信息：</span>
-                                <br />
-                            </>
-                        )}
-                        {/* 动态渲染文字信息 */}
-                        {textType.map((obj, index) => (
-                            <div className="autoItem" key={obj.id}>
-                                <Input
-                                    placeholder="请输入中文课程内容..."
-                                    value={obj.zh}
-                                    style={{ width: 'calc(100% - 50px)' }}
-                                    onChange={e => {
-                                        const copy = [...textType];
-                                        copy[index].zh = e.target.value;
-                                        setTextType(copy);
-                                    }}
-                                />
-                                <Input
-                                    placeholder="请输入英文课程内容..."
-                                    value={obj.en}
-                                    style={{ width: 'calc(100% - 50px)' }}
-                                    onChange={e => {
-                                        const copy = [...textType];
-                                        copy[index].en = e.target.value;
-                                        setTextType(copy);
-                                    }}
-                                />
-                                <Button
-                                    type="primary"
-                                    danger
-                                    style={{ width: '50px' }}
-                                    onClick={() => deleteTextById(obj.id)}
-                                >
-                                    -
-                                </Button>
-                            </div>
-                        ))}
-                        {/* —————————————————————————— */}
-                        {!imgType.length ? null : (
-                            <>
-                                <span className="courseItem">图片地址：</span>
-                                <br />
-                            </>
-                        )}
-                        {/* 动态渲染图片信息 */}
-                        {imgType.map((obj, index) => (
-                            <div className="autoItem" key={obj.id}>
-                                <Input
-                                    placeholder="请输入一个汉字，并转化为图片url..."
-                                    style={{ width: 'calc(100% - 100px)' }}
-                                    maxLength={1}
-                                    value={obj.url}
-                                    onChange={e => {
-                                        const copy = [...imgType];
-                                        copy[index].url = e.target.value;
-                                        setImgType(copy);
-                                    }}
-                                />
-                                <Button
-                                    type="primary"
-                                    style={{ width: '50px' }}
-                                    onClick={() => getImg(obj.url, index)}
-                                >
-                                    +
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    danger
-                                    style={{ width: '50px' }}
-                                    onClick={() => deleteImgById(obj.id)}
-                                >
-                                    -
-                                </Button>
-                            </div>
-                        ))}
 
-                        {!voiceType.length ? null : (
-                            <>
-                                <span className="courseItem">声音信息：</span>
-                                <br />
-                            </>
-                        )}
-                        {/* 动态渲染声音课程 */}
-                        {voiceType.map((obj, index) => (
-                            <div className="autoItem" key={obj.id}>
-                                <Input
-                                    placeholder="请输入中文，并生成语音url..."
-                                    style={{ width: 'calc(100% - 100px)' }}
-                                    value={obj.url}
-                                    maxLength={36}
-                                    onChange={e => {
-                                        const copy = [...voiceType];
-                                        copy[index].url = e.target.value;
-                                        setVoiceType(copy);
-                                    }}
-                                />
-                                <Button
-                                    type="primary"
-                                    style={{ width: '50px' }}
-                                    onClick={() => getVoice(obj.url, index)}
-                                >
-                                    AI
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    danger
-                                    style={{ width: '50px' }}
-                                    onClick={() => deleteVoiceById(obj.id)}
-                                >
-                                    -
-                                </Button>
-                            </div>
-                        ))}
+                        {/* 渲染所有课程 */}
+                        {allCourse.map((obj, index) => {
+                            if (obj.type === 'text') {
+                                return (
+                                    <div className="autoItem" key={obj.id}>
+                                        <span className="courseItem">文字信息：</span>
+                                        <br />
+                                        <Input
+                                            placeholder="请输入中文课程内容..."
+                                            value={obj.zh}
+                                            style={{ width: 'calc(100% - 50px)' }}
+                                            onChange={e => {
+                                                const copy = [...allCourse];
+                                                copy[index].zh = e.target.value;
+                                                setAllCourse(copy);
+                                            }}
+                                        />
+                                        <Input
+                                            placeholder="请输入英文课程内容..."
+                                            value={obj.en}
+                                            style={{ width: 'calc(100% - 50px)' }}
+                                            onChange={e => {
+                                                const copy = [...allCourse];
+                                                copy[index].en = e.target.value;
+                                                setAllCourse(copy);
+                                            }}
+                                        />
+                                        <Button
+                                            type="primary"
+                                            danger
+                                            style={{ width: '50px' }}
+                                            onClick={() => deleteCourseById(obj.id)}
+                                        >
+                                            -
+                                        </Button>
+                                    </div>
+                                );
+                            } else if (obj.type === 'img') {
+                                return (
+                                    <div className="autoItem" key={obj.id}>
+                                        <span className="courseItem">图片地址：</span>
+                                        <br />
+                                        <Input
+                                            placeholder="请输入一个汉字，并转化为图片url..."
+                                            style={{ width: 'calc(100% - 100px)' }}
+                                            maxLength={1}
+                                            value={obj.url}
+                                            onChange={e => {
+                                                const copy = [...allCourse];
+                                                copy[index].url = e.target.value;
+                                                setAllCourse(copy);
+                                            }}
+                                        />
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '50px' }}
+                                            onClick={() => getImg(obj.url, index)}
+                                        >
+                                            +
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            danger
+                                            style={{ width: '50px' }}
+                                            onClick={() => deleteCourseById(obj.id)}
+                                        >
+                                            -
+                                        </Button>
+                                    </div>
+                                );
+                            } else if (obj.type === 'voice') {
+                                return (
+                                    <div className="autoItem" key={obj.id}>
+                                        <span className="courseItem">声音信息：</span>
+                                        <br />
+                                        <Input
+                                            placeholder="请输入中文，并生成语音url..."
+                                            style={{ width: 'calc(100% - 100px)' }}
+                                            value={obj.url}
+                                            maxLength={36}
+                                            onChange={e => {
+                                                const copy = [...allCourse];
+                                                copy[index].url = e.target.value;
+                                                setAllCourse(copy);
+                                            }}
+                                        />
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '50px' }}
+                                            onClick={() => getVoice(obj.url, index)}
+                                        >
+                                            AI
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            danger
+                                            style={{ width: '50px' }}
+                                            onClick={() => deleteCourseById(obj.id)}
+                                        >
+                                            -
+                                        </Button>
+                                    </div>
+                                );
+                            }
+                        })}
                         <span className="courseItem">测试题目：</span>
                         <Input
                             placeholder="请输入题目内容..."
@@ -340,33 +352,33 @@ const Add = ({ history }) => {
                             <AiOutlineEllipsis />
                         </div>
                         <div className="mobileBody">
-                            {textType.map(obj =>
-                                obj.zh ? (
-                                    <div className="courseContent">
-                                        <div className="contentZh">{obj.zh}</div>
-                                        {obj.en ? (
-                                            <div className="contentEn">翻译：{obj.en}</div>
-                                        ) : null}
-                                    </div>
-                                ) : null
-                            )}
-                            {imgType.map(obj =>
-                                obj.url ? (
-                                    <div className="courseImg">
-                                        <img src={obj.url} alt="请点击按钮" />
-                                    </div>
-                                ) : null
-                            )}
-                            {voiceType.map(obj =>
-                                obj.url ? (
-                                    <div className="courseVoice">
-                                        <RiVoiceprintFill />
-                                        voice
-                                    </div>
-                                ) : null
-                            )}
+                            {allCourse.map(obj => {
+                                if (obj.type === 'text') {
+                                    return obj.zh ? (
+                                        <div className="courseContent">
+                                            <div className="contentZh">{obj.zh}</div>
+                                            {obj.en ? (
+                                                <div className="contentEn">翻译：{obj.en}</div>
+                                            ) : null}
+                                        </div>
+                                    ) : null;
+                                } else if (obj.type === 'img') {
+                                    return obj.url ? (
+                                        <div className="courseImg">
+                                            <img src={obj.url} alt="请点击按钮" />
+                                        </div>
+                                    ) : null;
+                                } else if (obj.type === 'voice') {
+                                    return obj.url ? (
+                                        <div className="courseVoice">
+                                            <RiVoiceprintFill />
+                                            voice
+                                        </div>
+                                    ) : null;
+                                }
+                            })}
+                            {/* 渲染测试题目 */}
                             {question ? <div className="courseTest">小测试：{question}</div> : null}
-
                             {ansA || ansB || ansC || ansD ? (
                                 <div className="answer">
                                     {[ansA, ansB, ansC, ansD].map((value, index) =>

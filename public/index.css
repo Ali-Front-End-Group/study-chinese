@@ -16,9 +16,9 @@ body,
     width: 100%;
 }
 
-/* body::-webkit-scrollbar {
+body::-webkit-scrollbar {
     display: none;
-} */
+}
 
 /* input {
     background: none;
