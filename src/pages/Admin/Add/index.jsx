@@ -8,7 +8,12 @@ import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import { nanoid } from 'nanoid';
-import { FontColorsOutlined, FileImageOutlined, AudioOutlined } from '@ant-design/icons';
+import {
+    FontColorsOutlined,
+    FileImageOutlined,
+    AudioOutlined,
+    QuestionOutlined,
+} from '@ant-design/icons';
 import './index.css';
 
 const Add = ({ history }) => {
@@ -62,13 +67,6 @@ const Add = ({ history }) => {
                 }
             });
     };
-    // 测试题目
-    const [question, setQuestion] = useState('');
-    const [ansIndex, setAnsIndex] = useState(0);
-    const [ansA, setAnsA] = useState('');
-    const [ansB, setAnsB] = useState('');
-    const [ansC, setAnsC] = useState('');
-    const [ansD, setAnsD] = useState('');
     const getIndex = index => {
         switch (index) {
             case 0:
@@ -83,13 +81,25 @@ const Add = ({ history }) => {
                 return null;
         }
     };
-
     // 添加课程
     const addCourse = type => {
         const id = nanoid();
         let obj;
         if (type === 'text') {
             obj = { id, type, zh: '', en: '' };
+        } else if (type === 'ques') {
+            obj = {
+                id,
+                type,
+                question: '',
+                ansIndex: 0,
+                ans: {
+                    A: '',
+                    B: '',
+                    C: '',
+                    D: '',
+                },
+            };
         } else {
             obj = { id, type, url: '' };
         }
@@ -132,6 +142,12 @@ const Add = ({ history }) => {
                                 shape="circle"
                                 icon={<AudioOutlined />}
                                 onClick={() => addCourse('voice')}
+                            />
+                            <Button
+                                type="primary"
+                                shape="circle"
+                                icon={<QuestionOutlined />}
+                                onClick={() => addCourse('ques')}
                             />
                         </div>
                         <span className="courseItem">课程名称：</span>
@@ -246,57 +262,96 @@ const Add = ({ history }) => {
                                         </Button>
                                     </div>
                                 );
+                            } else if (obj.type === 'ques') {
+                                return (
+                                    <div className="autoItem" key={obj.id}>
+                                        <span className="courseItem">测试题目：</span>
+                                        <br />
+                                        <Input
+                                            placeholder="请输入题目内容..."
+                                            value={obj.question}
+                                            maxLength={36}
+                                            style={{ width: 'calc(100% - 50px)' }}
+                                            onChange={e => {
+                                                const copy = [...allCourse];
+                                                copy[index].question = e.target.value;
+                                                setAllCourse(copy);
+                                            }}
+                                        />
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '50px' }}
+                                            danger
+                                            onClick={() => deleteCourseById(obj.id)}
+                                        >
+                                            -
+                                        </Button>
+                                        <span className="courseItem">题目答案：</span>
+                                        <br />
+                                        <Radio.Group
+                                            name="radiogroup"
+                                            value={obj.ansIndex}
+                                            onChange={e => {
+                                                const copy = [...allCourse];
+                                                copy[index].ansIndex = e.target.value;
+                                                setAllCourse(copy);
+                                            }}
+                                        >
+                                            <Space direction="vertical">
+                                                <Radio value={0}>
+                                                    <Input
+                                                        placeholder="请输入选项答案..."
+                                                        value={obj.ans.A}
+                                                        onChange={e => {
+                                                            const copy = [...allCourse];
+                                                            copy[index].ans.A = e.target.value;
+                                                            setAllCourse(copy);
+                                                        }}
+                                                        maxLength={12}
+                                                    />
+                                                </Radio>
+                                                <Radio value={1}>
+                                                    <Input
+                                                        placeholder="请输入选项答案..."
+                                                        value={obj.ans.B}
+                                                        onChange={e => {
+                                                            const copy = [...allCourse];
+                                                            copy[index].ans.B = e.target.value;
+                                                            setAllCourse(copy);
+                                                        }}
+                                                        maxLength={12}
+                                                    />
+                                                </Radio>
+                                                <Radio value={2}>
+                                                    <Input
+                                                        placeholder="请输入选项答案..."
+                                                        value={obj.ans.C}
+                                                        onChange={e => {
+                                                            const copy = [...allCourse];
+                                                            copy[index].ans.C = e.target.value;
+                                                            setAllCourse(copy);
+                                                        }}
+                                                        maxLength={12}
+                                                    />
+                                                </Radio>
+                                                <Radio value={3}>
+                                                    <Input
+                                                        placeholder="请输入选项答案..."
+                                                        value={obj.ans.D}
+                                                        onChange={e => {
+                                                            const copy = [...allCourse];
+                                                            copy[index].ans.D = e.target.value;
+                                                            setAllCourse(copy);
+                                                        }}
+                                                        maxLength={12}
+                                                    />
+                                                </Radio>
+                                            </Space>
+                                        </Radio.Group>
+                                    </div>
+                                );
                             }
                         })}
-                        <span className="courseItem">测试题目：</span>
-                        <Input
-                            placeholder="请输入题目内容..."
-                            value={question}
-                            maxLength={36}
-                            onChange={e => setQuestion(e.target.value)}
-                        />
-                        <span className="courseItem">题目答案：</span>
-                        <br />
-                        <Radio.Group
-                            name="radiogroup"
-                            value={ansIndex}
-                            onChange={e => setAnsIndex(e.target.value)}
-                        >
-                            <Space direction="vertical">
-                                <Radio value={0}>
-                                    <Input
-                                        placeholder="请输入选项答案..."
-                                        value={ansA}
-                                        onChange={e => setAnsA(e.target.value)}
-                                        maxLength={12}
-                                    />
-                                </Radio>
-                                <Radio value={1}>
-                                    <Input
-                                        placeholder="请输入选项答案..."
-                                        value={ansB}
-                                        onChange={e => setAnsB(e.target.value)}
-                                        maxLength={12}
-                                    />
-                                </Radio>
-                                <Radio value={2}>
-                                    <Input
-                                        placeholder="请输入选项答案..."
-                                        value={ansC}
-                                        onChange={e => setAnsC(e.target.value)}
-                                        maxLength={12}
-                                    />
-                                </Radio>
-                                <Radio value={3}>
-                                    <Input
-                                        placeholder="请输入选项答案..."
-                                        value={ansD}
-                                        onChange={e => setAnsD(e.target.value)}
-                                        maxLength={12}
-                                    />
-                                </Radio>
-                            </Space>
-                        </Radio.Group>
                     </div>
                 </div>
                 {/* 右边预览 */}
@@ -335,24 +390,39 @@ const Add = ({ history }) => {
                                             voice
                                         </div>
                                     ) : null;
+                                } else if (obj.type === 'ques') {
+                                    return (
+                                        <>
+                                            {obj.question ? (
+                                                <div className="courseTest">
+                                                    小测试：{obj.question}
+                                                </div>
+                                            ) : null}
+                                            {obj.ans.A || obj.ans.B || obj.ans.C || obj.ans.D ? (
+                                                <div className="answer">
+                                                    {[
+                                                        obj.ans.A,
+                                                        obj.ans.B,
+                                                        obj.ans.C,
+                                                        obj.ans.D,
+                                                    ].map((value, index) =>
+                                                        value ? (
+                                                            <div className="answerItem" key={index}>
+                                                                <div className="answerItemIndex">
+                                                                    {getIndex(index)}
+                                                                </div>
+                                                                <div className="answerItemContent">
+                                                                    {value}
+                                                                </div>
+                                                            </div>
+                                                        ) : null
+                                                    )}
+                                                </div>
+                                            ) : null}
+                                        </>
+                                    );
                                 }
                             })}
-                            {/* 渲染测试题目 */}
-                            {question ? <div className="courseTest">小测试：{question}</div> : null}
-                            {ansA || ansB || ansC || ansD ? (
-                                <div className="answer">
-                                    {[ansA, ansB, ansC, ansD].map((value, index) =>
-                                        value ? (
-                                            <div className="answerItem" key={index}>
-                                                <div className="answerItemIndex">
-                                                    {getIndex(index)}
-                                                </div>
-                                                <div className="answerItemContent">{value}</div>
-                                            </div>
-                                        ) : null
-                                    )}
-                                </div>
-                            ) : null}
                         </div>
                     </div>
                 </div>
