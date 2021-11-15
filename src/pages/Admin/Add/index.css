@@ -156,36 +156,25 @@
     /* background-color: #ededed; */
 }
 
-.addBtnBox {
-    height: 60px;
-    position: relative;
+.backBtn {
+    margin-right: 20px;
 }
-.addBackBtn,
-.addBtn {
-    width: 70px;
-    height: 40px;
-    background-color: rgb(144, 220, 230);
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translate(0, -50%);
+
+.addBtns {
+    height: 46px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    font-size: 18px;
-    user-select: none;
-    border-radius: 14px;
-    transition: all 0.3s;
 }
-.addBtn {
-    left: 90px;
-}
-.addBackBtn:hover,
-.addBtn:hover {
-    background-color: rgb(64, 209, 228);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+
+.addBtns Button {
+    margin-right: 10px;
 }
 
 .courseItem {
-    font-size: 20px;
+    font-size: 18px;
+}
+
+.autoItem {
+    margin-bottom: 6px;
 }

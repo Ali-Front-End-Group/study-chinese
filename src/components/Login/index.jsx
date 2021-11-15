@@ -39,10 +39,10 @@ const Login = () => {
                                     right: '5%',
                                 }}
                             >
-                                <span
+                                {/* <span
                                     style={{ color: 'white' }}
                                     className="glyphicon glyphicon-share-alt"
-                                ></span>
+                                ></span> */}
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@ const Login = () => {
                     <form action="" method="" className="form-horizontal" role="form">
                         {/* <!-- 登录的用户名组 --> */}
                         <div className="form-group">
-                            <label for="login_userName" className=" col-lg-5 col-md-5 col-xs-5">
+                            <label htmlFor="login_userName" className=" col-lg-5 col-md-5 col-xs-5">
                                 <span style={{ color: 'indianred' }}>登录</span>
                                 用户名
                             </label>
@@ -61,14 +61,16 @@ const Login = () => {
                                     className="form-control"
                                     name="login_userName"
                                     id="login_userName"
-                                    value=""
                                     placeholder="请输入登录用户名"
                                 />
                             </div>
                         </div>
                         {/* <!-- 登录的密码组 --> */}
                         <div className="form-group">
-                            <label for="login_passWord" className="col-lg-12 col-md-12 col-xs-12">
+                            <label
+                                htmlFor="login_passWord"
+                                className="col-lg-12 col-md-12 col-xs-12"
+                            >
                                 密码
                             </label>
                             <div className="col-md-12">
@@ -78,7 +80,6 @@ const Login = () => {
                                     className="form-control"
                                     name="login_passWord"
                                     id="login_passWord"
-                                    value=""
                                     placeholder="请输入登录密码"
                                 />
                             </div>
@@ -124,7 +125,7 @@ const Login = () => {
                                     right: '5%',
                                 }}
                             >
-                                <span className="glyphicon glyphicon-share-alt"></span>
+                                {/* <span className="glyphicon glyphicon-share-alt"></span> */}
                             </div>
                         </div>
                     </div>
@@ -132,7 +133,7 @@ const Login = () => {
                     <form action="" method="" className="form-horizontal" role="form">
                         {/* <!-- 注册的用户名组 --> */}
                         <div className="form-group">
-                            <label for="userName" className="col-lg-5 col-md-5 col-xs-5">
+                            <label htmlFor="userName" className="col-lg-5 col-md-5 col-xs-5">
                                 <span style={{ color: 'indianred' }}>注册</span>
                                 用户名
                             </label>
@@ -143,7 +144,6 @@ const Login = () => {
                                     className="form-control"
                                     name="userName"
                                     id="register_userName"
-                                    value=""
                                     placeholder="请输入注册用户名"
                                 />
                             </div>
@@ -151,7 +151,7 @@ const Login = () => {
                         {/* <!-- 注册的密码组 --> */}
                         <div className="form-group">
                             <label
-                                for="register_passWord"
+                                htmlFor="register_passWord"
                                 required="required"
                                 className="col-lg-12 col-md-12 col-xs-12"
                             >
@@ -163,7 +163,6 @@ const Login = () => {
                                     className="form-control"
                                     name="register_passWord"
                                     id="register_passWord"
-                                    value=""
                                     placeholder="请输入注册密码"
                                 />
                             </div>
@@ -175,7 +174,6 @@ const Login = () => {
                                     id="register_btn"
                                     className="col-lg-12 col-xs-12 btn btn-primary"
                                     type="submit"
-                                    name=""
                                     value="注册"
                                 />
                             </div>
