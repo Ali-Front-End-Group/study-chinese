@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
-import { Input, Button, Upload } from 'antd';
+import { Input, Button, Radio, Space } from 'antd';
 import { BASE_URL } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import './index.css';
+import { forOfStatement } from '@babel/types';
 
 const Add = ({ history }) => {
     const { TextArea } = Input;
@@ -58,7 +59,25 @@ const Add = ({ history }) => {
     // const getQiniuToken = () => {
     //     return axios.post(BASE_URL + '/api/get_uploadToken', {}).then(res => res.data.uptoken);
     // };
-
+    // 测试题目
+    const [question, setQuestion] = useState('');
+    const [ansIndex, setAnsIndex] = useState(0);
+    const [ansA, setAnsA] = useState('');
+    const [ansB, setAnsB] = useState('');
+    const [ansC, setAnsC] = useState('');
+    const [ansD, setAnsD] = useState('');
+    const getIndex = index => {
+        switch (index) {
+            case 0:
+                return 'A';
+            case 1:
+                return 'B';
+            case 2:
+                return 'C';
+            case 3:
+                return 'D';
+        }
+    };
     // 返回
     const goBack = () => {
         history.push('/admin/course');
@@ -75,14 +94,14 @@ const Add = ({ history }) => {
                             </div>
                             <div className="addBtn">确认</div>
                         </div>
-                        <span>课程名称：</span>
+                        <span className="courseItem">课程名称：</span>
                         <Input
                             placeholder="请输入课程名..."
                             value={name}
                             maxLength={10}
                             onChange={e => setName(e.target.value)}
                         />
-                        <span>课程内容：</span>
+                        <span className="courseItem">课程内容：</span>
                         <TextArea
                             placeholder="请输入中文课程内容..."
                             rows={3}
@@ -97,7 +116,7 @@ const Add = ({ history }) => {
                             value={contentEn}
                             onChange={e => setContentEn(e.target.value)}
                         />
-                        <span>图片地址：</span>
+                        <span className="courseItem">图片地址：</span>
                         <Input
                             placeholder="请输入一个汉字，并转化为图片url..."
                             style={{ width: 'calc(100% - 50px)' }}
@@ -108,7 +127,7 @@ const Add = ({ history }) => {
                         <Button type="primary" style={{ width: '50px' }} onClick={getImg}>
                             +
                         </Button>
-                        <span>声音信息：</span>
+                        <span className="courseItem">声音信息：</span>
                         <Input
                             placeholder="请输入中文，并生成语音url..."
                             style={{ width: 'calc(100% - 50px)' }}
@@ -119,16 +138,65 @@ const Add = ({ history }) => {
                         <Button type="primary" style={{ width: '50px' }} onClick={getVoice}>
                             AI
                         </Button>
-                        <span>视频信息：</span>
+                        {/* <span className="courseItem">视频信息：</span>
                         <Input
-                            placeholder="请选择视频，并声称视频url..."
+                            placeholder="请选择视频，并生成视频url..."
                             style={{ width: 'calc(100% - 50px)' }}
                         />
                         <Upload multiple={false} accept=".mp4,.avi,.flv,.wmv">
                             <Button type="primary" style={{ width: '50px' }}>
                                 +
                             </Button>
-                        </Upload>
+                        </Upload> */}
+                        <span className="courseItem">测试题目：</span>
+                        <Input
+                            placeholder="请输入题目内容..."
+                            value={question}
+                            maxLength={36}
+                            onChange={e => setQuestion(e.target.value)}
+                        />
+                        <span className="courseItem">题目答案：</span>
+                        <br />
+                        <Radio.Group
+                            name="radiogroup"
+                            value={ansIndex}
+                            onChange={e => setAnsIndex(e.target.value)}
+                        >
+                            <Space direction="vertical">
+                                <Radio value={0}>
+                                    <Input
+                                        placeholder="请输入选项答案..."
+                                        value={ansA}
+                                        onChange={e => setAnsA(e.target.value)}
+                                        maxLength={12}
+                                    />
+                                </Radio>
+                                <Radio value={1}>
+                                    <Input
+                                        placeholder="请输入选项答案..."
+                                        value={ansB}
+                                        onChange={e => setAnsB(e.target.value)}
+                                        maxLength={12}
+                                    />
+                                </Radio>
+                                <Radio value={2}>
+                                    <Input
+                                        placeholder="请输入选项答案..."
+                                        value={ansC}
+                                        onChange={e => setAnsC(e.target.value)}
+                                        maxLength={12}
+                                    />
+                                </Radio>
+                                <Radio value={3}>
+                                    <Input
+                                        placeholder="请输入选项答案..."
+                                        value={ansD}
+                                        onChange={e => setAnsD(e.target.value)}
+                                        maxLength={12}
+                                    />
+                                </Radio>
+                            </Space>
+                        </Radio.Group>
                     </div>
                 </div>
                 {/* 右边预览 */}
@@ -161,6 +229,24 @@ const Add = ({ history }) => {
                                 <div className="courseVoice">
                                     <RiVoiceprintFill />
                                     voice
+                                </div>
+                            ) : null}
+                            {question ? <div className="courseTest">小测试：{question}</div> : null}
+
+                            {ansA || ansB || ansC || ansD ? (
+                                <div className="answer">
+                                    {[ansA, ansB, ansC, ansD].map((value, index) => {
+                                        if (value) {
+                                            return (
+                                                <div className="answerItem" key={index}>
+                                                    <div className="answerItemIndex">
+                                                        {getIndex(index)}
+                                                    </div>
+                                                    <div className="answerItemContent">{value}</div>
+                                                </div>
+                                            );
+                                        }
+                                    })}
                                 </div>
                             ) : null}
                         </div>
