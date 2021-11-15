@@ -3,10 +3,7 @@ import './index.css';
 import { Modal, Button } from 'antd';
 
 const CourseInfo = ({ handleCancel, handleEdit, visible, courseCard }) => {
-    const courseName = courseCard.courseName;
-    const courseInfo = courseCard.courseInfo;
-    const stuNum = courseCard.stuNum;
-    const star = courseCard.star;
+    const {courseName, courseInfo, stuNum, star} = courseCard;
 
     return (
         <>
