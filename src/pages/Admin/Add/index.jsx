@@ -30,15 +30,8 @@ const Add = ({ history }) => {
     });
     // 课程名
     const [name, setName] = useState('');
-    // 文字信息课程
-    const [textType, setTextType] = useState([]);
-    // 图片信息课程
-    const [imgType, setImgType] = useState([]);
-    // 声音信息课程
-    const [voiceType, setVoiceType] = useState([]);
     // 所有课程
     const [allCourse, setAllCourse] = useState([]);
-
     // 获得图片url
     const getImg = (character, index) => {
         axios
@@ -91,7 +84,7 @@ const Add = ({ history }) => {
         }
     };
 
-    // 添加一般课程
+    // 添加课程
     const addCourse = type => {
         const id = nanoid();
         let obj;
@@ -103,43 +96,10 @@ const Add = ({ history }) => {
         const newCourse = [...allCourse, obj];
         setAllCourse(newCourse);
     };
-    // 删除一般课程
+    // 删除课程
     const deleteCourseById = id => {
         const newCourse = allCourse.filter(obj => obj.id !== id);
         setAllCourse(newCourse);
-    };
-    // 添加文字课程
-    const addTextType = () => {
-        const id = nanoid();
-        const newTextType = [...textType, { id, zh: '', en: '' }];
-        setTextType(newTextType);
-    };
-    // 删除文字课程
-    const deleteTextById = id => {
-        const newTextType = textType.filter(obj => obj.id !== id);
-        setTextType(newTextType);
-    };
-    // 添加图像课程
-    const addImgType = () => {
-        const id = nanoid();
-        const newImgType = [...imgType, { id, url: '' }];
-        setImgType(newImgType);
-    };
-    // 删除图像课程
-    const deleteImgById = id => {
-        const newImgType = imgType.filter(obj => obj.id !== id);
-        setImgType(newImgType);
-    };
-    // 添加声音课程
-    const addVoiceType = () => {
-        const id = nanoid();
-        const newVoiceType = [...voiceType, { id, url: '' }];
-        setVoiceType(newVoiceType);
-    };
-    // 删除声音课程
-    const deleteVoiceById = id => {
-        const newVoiceType = voiceType.filter(obj => obj.id !== id);
-        setVoiceType(newVoiceType);
     };
 
     return (
@@ -355,7 +315,7 @@ const Add = ({ history }) => {
                             {allCourse.map(obj => {
                                 if (obj.type === 'text') {
                                     return obj.zh ? (
-                                        <div className="courseContent">
+                                        <div className="courseContent" key={obj.id}>
                                             <div className="contentZh">{obj.zh}</div>
                                             {obj.en ? (
                                                 <div className="contentEn">翻译：{obj.en}</div>
@@ -364,13 +324,13 @@ const Add = ({ history }) => {
                                     ) : null;
                                 } else if (obj.type === 'img') {
                                     return obj.url ? (
-                                        <div className="courseImg">
+                                        <div className="courseImg" key={obj.id}>
                                             <img src={obj.url} alt="请点击按钮" />
                                         </div>
                                     ) : null;
                                 } else if (obj.type === 'voice') {
                                     return obj.url ? (
-                                        <div className="courseVoice">
+                                        <div className="courseVoice" key={obj.id}>
                                             <RiVoiceprintFill />
                                             voice
                                         </div>
