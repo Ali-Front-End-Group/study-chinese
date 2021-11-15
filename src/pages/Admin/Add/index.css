@@ -60,7 +60,13 @@
     font-size: 16px;
 }
 .mobileBody {
+    height: 682px;
     padding: 14px;
+    overflow-y: auto;
+    user-select: none;
+}
+.mobileBody::-webkit-scrollbar {
+    display: none;
 }
 .courseContent {
     padding: 10px;
@@ -68,6 +74,7 @@
     background-color: #fff;
     border-radius: 12px;
     margin-bottom: 10px;
+    word-break: break-all;
 }
 .contentZh {
     font-size: 22px;
@@ -98,6 +105,48 @@
     border-radius: 12px;
     width: 80px;
     user-select: none;
+    margin-bottom: 10px;
+}
+.courseTest {
+    padding: 10px;
+    width: 80%;
+    background-color: #fff;
+    border-radius: 12px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    word-break: break-all;
+}
+.answer {
+    padding: 10px;
+    width: 80%;
+    background-color: #fff;
+    border-radius: 12px;
+}
+.answerItem {
+    height: 24px;
+    display: flex;
+    margin-bottom: 10px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+.answerItem:hover {
+    background-color: rgb(223, 223, 223);
+}
+.answerItem:last-child {
+    margin-bottom: 0;
+}
+.answerItemIndex {
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 22px;
+    border-right: 1px solid #ededed;
+}
+.answerItemContent {
+    text-align: center;
+    height: 22px;
+    line-height: 22px;
+    flex: 1;
 }
 
 /* ——————————————————————左边————————————————————————— */
@@ -107,32 +156,25 @@
     /* background-color: #ededed; */
 }
 
-.addBtnBox {
-    height: 60px;
-    position: relative;
+.backBtn {
+    margin-right: 20px;
 }
-.addBackBtn,
-.addBtn {
-    width: 70px;
-    height: 40px;
-    background-color: rgb(144, 220, 230);
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translate(0, -50%);
+
+.addBtns {
+    height: 46px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+}
+
+.addBtns Button {
+    margin-right: 10px;
+}
+
+.courseItem {
     font-size: 18px;
-    user-select: none;
-    border-radius: 14px;
-    transition: all 0.3s;
 }
-.addBtn {
-    left: 90px;
-}
-.addBackBtn:hover,
-.addBtn:hover {
-    background-color: rgb(64, 209, 228);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+
+.autoItem {
+    margin-bottom: 6px;
 }

@@ -10,7 +10,7 @@ const App = () => {
     useEffect(() => {
         // 判断是否已经登录的逻辑
         // ....
-        setIsLogin(true);
+        setIsLogin(false);
     }, []);
     return (
         <>

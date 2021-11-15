@@ -5,9 +5,13 @@ import './index.css';
 const Welcome = () => {
     return (
         <div className="welcomeBox">
-            <div className="left">大图、特效、Logo</div>
+            {/* 左边 */}
+            <div className="left">
+                <img style={{ width: ' 500px' }} src="/img/Saly-10_2.png" />
+            </div>
+            {/* 右边 */}
             <div className="right">
-                <Login className="login" />
+                <Login />
             </div>
         </div>
     );
