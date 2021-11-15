@@ -40,10 +40,21 @@ const Course = () => {
         setCourseData(data);
     }, []);
     const [visible, setVisible] = useState(false);
-    const [ifDelete, setIfDelete] = useState(false);
+    const [ifDelete, setIfDelete] = useState(false); //FIXME:img启用的逻辑
+
+    //删除课程数据
+    const deleteData = (courseId) => {
+        if (ifDelete === true) {
+            let newCourseData = [...courseData];
+            newCourseData.splice(courseId, 1);
+            setCourseData(newCourseData);
+            setIfDelete(false);
+        }
+    };
 
     //显示课程信息
     const showModal = () => {
+        console.log(ifDelete);
         if (!ifDelete) {
             setVisible(true);
         }
@@ -52,19 +63,12 @@ const Course = () => {
     //跳转到编辑页面
     const handleEdit = () => {
         setVisible(false);
-        //跳转到编辑页面（还没写）
+        //TODO:跳转到编辑页面
     };
 
     //取消弹窗
     const handleCancel = () => {
         setVisible(false);
-    };
-
-    //删除卡片
-    const handleDelete = () => {
-        setIfDelete(true);
-        console.log('delete');
-        //还没写
     };
 
     return (
@@ -74,11 +78,13 @@ const Course = () => {
                 <CourseCard
                     key={course.courseName}
                     courseCard={course}
-                    onHandleDelete={handleDelete}
+                    handleDeleteData={deleteData}
                     showModal={showModal}
                     handleEdit={handleEdit}
                     handleCancel={handleCancel}
                     visible={visible}
+                    courseId={course.id}
+                    setIfDelete={setIfDelete}
                 />
             ))}
         </div>

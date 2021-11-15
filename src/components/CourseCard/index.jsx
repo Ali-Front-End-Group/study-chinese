@@ -5,16 +5,22 @@ import './index.css';
 // 单个课程卡片
 const CourseCard = ({
     courseCard,
-    onHandleDelete,
+    handleDeleteData,
     showModal,
     handleEdit,
     handleCancel,
     visible,
+    courseId,
+    setIfDelete
 }) => {
     const { Meta } = Card;
-    const imgLink = courseCard.imgLink;
-    const courseName = courseCard.courseName;
-    const teacherName = courseCard.teacherName;
+    const {imgLink, courseName, teacherName} = courseCard;
+
+    const handleDelete = () => {
+        setIfDelete(true);
+        console.log("setTrue");
+        handleDeleteData({courseId});
+    }
 
     return (
         <>
@@ -29,7 +35,7 @@ const CourseCard = ({
                     alt="delete"
                     src="/img/delete.png"
                     className="extraImg"
-                    onClick={onHandleDelete}
+                    onClick={handleDelete}
                 />
             </Card>
             <CourseInfo
