@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
 import { Input, Button, Radio, Space } from 'antd';
-import { BASE_URL } from '../../../utils/constant';
+import { BASE_URL, appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -37,6 +37,8 @@ const Add = ({ history }) => {
     const [name, setName] = useState('');
     // 所有课程
     const [allCourse, setAllCourse] = useState([]);
+    // 选择图片的DOM节点
+    const selectImg = useRef();
     // 获得图片url
     const getImg = (character, index) => {
         axios
@@ -111,6 +113,8 @@ const Add = ({ history }) => {
         const newCourse = allCourse.filter(obj => obj.id !== id);
         setAllCourse(newCourse);
     };
+
+    const beforeUploadImg = () => {};
 
     return (
         <div className="addBox">
@@ -203,7 +207,7 @@ const Add = ({ history }) => {
                                         <br />
                                         <Input
                                             placeholder="请输入一个汉字，并转化为图片url..."
-                                            style={{ width: 'calc(100% - 100px)' }}
+                                            style={{ width: 'calc(100% - 150px)' }}
                                             maxLength={1}
                                             value={obj.url}
                                             onChange={e => {
@@ -218,6 +222,21 @@ const Add = ({ history }) => {
                                             onClick={() => getImg(obj.url, index)}
                                         >
                                             +
+                                        </Button>
+
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '50px' }}
+                                            onClick={() => selectImg.current.click()}
+                                        >
+                                            +
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                ref={selectImg}
+                                                className="selectImg"
+                                                onChange={beforeUploadImg}
+                                            />
                                         </Button>
                                         <Button
                                             type="primary"

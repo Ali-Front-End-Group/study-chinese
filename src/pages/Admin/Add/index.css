@@ -181,3 +181,7 @@
 .autoItem {
     margin-bottom: 6px;
 }
+
+.selectImg {
+    display: none !important;
+}
