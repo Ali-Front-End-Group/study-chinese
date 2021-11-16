@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
 import { Input, Button, Radio, Space } from 'antd';
@@ -13,6 +13,10 @@ import {
     FileImageOutlined,
     AudioOutlined,
     QuestionOutlined,
+    FolderOpenOutlined,
+    DeleteOutlined,
+    SearchOutlined,
+    SoundOutlined,
 } from '@ant-design/icons';
 import './index.css';
 
@@ -21,12 +25,13 @@ const Add = ({ history }) => {
     const goBack = () => {
         history.push('/admin/course');
     };
+    // 处理动态时间
     const [time, setTime] = useState('');
-    // 左上角时间
+    const runPerSed = () => setTime(dayjs().format('HH:mm:ss'));
     useEffect(() => {
-        setTime(dayjs().format('HH:mm:ss'));
+        runPerSed();
         let timer = setTimeout(() => {
-            setTime(dayjs().format('HH:mm:ss'));
+            runPerSed();
         }, 1000);
         return () => {
             clearTimeout(timer);
@@ -37,8 +42,6 @@ const Add = ({ history }) => {
     const [name, setName] = useState('');
     // 所有课程
     const [allCourse, setAllCourse] = useState([]);
-    // 选择图片的DOM节点
-    const selectImg = useRef();
     // 获得图片url
     const getImg = (character, index) => {
         axios
@@ -113,8 +116,89 @@ const Add = ({ history }) => {
         const newCourse = allCourse.filter(obj => obj.id !== id);
         setAllCourse(newCourse);
     };
-
-    const beforeUploadImg = () => {};
+    // 上传图片
+    const beforeUploadImg = async (id, index) => {
+        // 获取文件对象
+        const imgFile = document.getElementById(`${id}`).files[0];
+        // 文件类型
+        const fileType = imgFile.type;
+        // 文件后缀
+        const fileEnd = fileType.split('/')[1];
+        // 1. 判断是否是图片
+        if (
+            !(
+                fileType === 'image/png' ||
+                fileType === 'image/bmp' ||
+                fileType === 'image/jpeg' ||
+                fileType === 'image/gif'
+            )
+        ) {
+            // 不是图片文件，提醒用户，中止操作
+            console.log('不是图片！！！！！');
+            return;
+        }
+        // 2. 判断图片大小是否>1M
+        if (imgFile.size / 1024 / 1024 > 1) {
+            // 图片大于1M，提醒用户，中止操作
+            console.log('图片大于1M！！！！');
+            return;
+        }
+        await appTcb
+            .uploadFile({
+                // 云存储的路径
+                cloudPath: `img/${nanoid()}.${fileEnd}`,
+                // 需要上传的文件，File 类型
+                filePath: imgFile,
+            })
+            .then(
+                res => {
+                    const copy = [...allCourse];
+                    copy[index].url = res.download_url;
+                    setAllCourse(copy);
+                },
+                err => {
+                    console.log(err);
+                }
+            );
+    };
+    // 上传声音
+    const beforeUploadVoice = async (id, index) => {
+        // 获取文件对象
+        const voiceFile = document.getElementById(`${id}`).files[0];
+        // 文件类型
+        const fileType = voiceFile.type;
+        // 文件后缀
+        const fileEnd = fileType.split('/')[1];
+        // 1. 判断是否是常见声音格式
+        if (!(fileType === 'audio/mpeg')) {
+            // 不是声音文件，提醒用户，中止操作
+            console.log('不是声音！！！！！');
+            return;
+        }
+        // 2. 判断声音大小是否>1M
+        if (voiceFile.size / 1024 / 1024 > 1) {
+            // 声音大于1M，提醒用户，中止操作
+            console.log('声音大于1M！！！！');
+            return;
+        }
+        await appTcb
+            .uploadFile({
+                // 云存储的路径
+                cloudPath: `voice/${nanoid()}.${fileEnd}`,
+                // 需要上传的文件，File 类型
+                filePath: voiceFile,
+            })
+            .then(
+                res => {
+                    const copy = [...allCourse];
+                    copy[index].url = res.download_url;
+                    setAllCourse(copy);
+                },
+                err => {
+                    console.log(err);
+                }
+            );
+    };
 
     return (
         <div className="addBox">
@@ -128,6 +212,7 @@ const Add = ({ history }) => {
                             </Button>
                             <Button type="primary">发布</Button>
                         </div>
+                        {/* 动态添加项目的按钮 */}
                         <div className="addBtns">
                             <Button
                                 type="primary"
@@ -196,7 +281,7 @@ const Add = ({ history }) => {
                                             style={{ width: '50px' }}
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
-                                            -
+                                            <DeleteOutlined />
                                         </Button>
                                     </div>
                                 );
@@ -221,21 +306,22 @@ const Add = ({ history }) => {
                                             style={{ width: '50px' }}
                                             onClick={() => getImg(obj.url, index)}
                                         >
-                                            +
+                                            <SearchOutlined />
                                         </Button>
-
                                         <Button
                                             type="primary"
                                             style={{ width: '50px' }}
-                                            onClick={() => selectImg.current.click()}
+                                            onClick={() =>
+                                                document.getElementById(`${obj.id}`).click()
+                                            }
                                         >
-                                            +
+                                            <FolderOpenOutlined />
                                             <input
                                                 type="file"
                                                 accept="image/*"
-                                                ref={selectImg}
-                                                className="selectImg"
-                                                onChange={beforeUploadImg}
+                                                id={obj.id}
+                                                className="selectFile"
+                                                onChange={() => beforeUploadImg(obj.id, index)}
                                             />
                                         </Button>
                                         <Button
@@ -244,7 +330,7 @@ const Add = ({ history }) => {
                                             style={{ width: '50px' }}
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
-                                            -
+                                            <DeleteOutlined />
                                         </Button>
                                     </div>
                                 );
@@ -255,7 +341,7 @@ const Add = ({ history }) => {
                                         <br />
                                         <Input
                                             placeholder="请输入中文，并生成语音url..."
-                                            style={{ width: 'calc(100% - 100px)' }}
+                                            style={{ width: 'calc(100% - 150px)' }}
                                             value={obj.url}
                                             maxLength={36}
                                             onChange={e => {
@@ -269,7 +355,23 @@ const Add = ({ history }) => {
                                             style={{ width: '50px' }}
                                             onClick={() => getVoice(obj.url, index)}
                                         >
-                                            AI
+                                            <SoundOutlined />
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '50px' }}
+                                            onClick={() =>
+                                                document.getElementById(`${obj.id}`).click()
+                                            }
+                                        >
+                                            <FolderOpenOutlined />
+                                            <input
+                                                type="file"
+                                                accept="audio/*"
+                                                id={obj.id}
+                                                className="selectFile"
+                                                onChange={() => beforeUploadVoice(obj.id, index)}
+                                            />
                                         </Button>
                                         <Button
                                             type="primary"
@@ -277,7 +379,7 @@ const Add = ({ history }) => {
                                             style={{ width: '50px' }}
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
-                                            -
+                                            <DeleteOutlined />
                                         </Button>
                                     </div>
                                 );
@@ -303,7 +405,7 @@ const Add = ({ history }) => {
                                             danger
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
-                                            -
+                                            <DeleteOutlined />
                                         </Button>
                                         <span className="courseItem">题目答案：</span>
                                         <br />
@@ -369,6 +471,8 @@ const Add = ({ history }) => {
                                         </Radio.Group>
                                     </div>
                                 );
+                            } else {
+                                return null;
                             }
                         })}
                     </div>
@@ -386,6 +490,7 @@ const Add = ({ history }) => {
                             <AiOutlineEllipsis />
                         </div>
                         <div className="mobileBody">
+                            {/* 渲染可视化预览 */}
                             {allCourse.map(obj => {
                                 if (obj.type === 'text') {
                                     return obj.zh ? (
@@ -411,7 +516,7 @@ const Add = ({ history }) => {
                                     ) : null;
                                 } else if (obj.type === 'ques') {
                                     return (
-                                        <>
+                                        <div key={obj.id}>
                                             {obj.question ? (
                                                 <div className="courseTest">
                                                     小测试：{obj.question}
@@ -438,8 +543,10 @@ const Add = ({ history }) => {
                                                     )}
                                                 </div>
                                             ) : null}
-                                        </>
+                                        </div>
                                     );
+                                } else {
+                                    return null;
                                 }
                             })}
                         </div>
