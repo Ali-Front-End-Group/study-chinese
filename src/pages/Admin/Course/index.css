@@ -1,24 +1,48 @@
 .courseLayout {
+    width: 1300px;
+    min-height: calc(100vh - 60px);
+    margin: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: left;
-    width: 70%;
-    margin: auto;
 }
 
-/* .addTest {
-    height: 100px;
-    width: 100px;
-    background-color: rgb(36, 215, 221);
-    border-radius: 14px;
+/* ———————————————————————————————————————————————— */
+.courseCard {
+    margin: 10px 10px;
+    border-radius: 20px;
+    width: 240px;
+    height: 275px;
+    overflow: hidden;
+    position: relative;
+    background-color: rgb(214, 252, 245);
+}
+
+.coverImg {
+    height: 180px;
+}
+
+.deleteCourseBtn {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    z-index: 999;
+    top: 6px;
+    right: 6px;
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    user-select: none;
+    font-size: 18px;
     transition: all 0.3s;
+    background-color: rgb(160, 160, 160);
+    color: #fff;
+    opacity: 0;
 }
-.addTest:hover {
-    background-color: rgb(8, 165, 170);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-} */
+.courseCard:hover .deleteCourseBtn {
+    opacity: 1;
+}
+.deleteCourseBtn:hover {
+    background-color: red;
+}

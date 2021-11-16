@@ -1,10 +1,3 @@
-.addCourse {
-    width: 240px;
-    margin: 10px 10px 0px 10px;
-    height: 275px;
-    border-radius: 20px;
-}
-
 .addBox {
     display: flex;
     justify-content: center;
