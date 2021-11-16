@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
-import { Input, Button, Radio, Space, Card } from 'antd';
+import { Input, Button, Radio, Space, Card, message } from 'antd';
 import { BASE_URL, appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
@@ -57,6 +57,7 @@ const Add = ({ history }) => {
                     const copy = [...allCourse];
                     copy[index].url = res.data.url;
                     setAllCourse(copy);
+                    message.success('成功获得图片url！');
                 }
             });
     };
@@ -71,6 +72,7 @@ const Add = ({ history }) => {
                     const copy = [...allCourse];
                     copy[index].url = res.data.array['思悦'];
                     setAllCourse(copy);
+                    message.success('成功获得音频url！');
                 }
             });
     };
@@ -136,13 +138,13 @@ const Add = ({ history }) => {
             )
         ) {
             // 不是图片文件，提醒用户，中止操作
-            console.log('不是图片！！！！！');
+            message.error('请选择图片文件！');
             return;
         }
         // 2. 判断图片大小是否>1M
         if (imgFile.size / 1024 / 1024 > 1) {
             // 图片大于1M，提醒用户，中止操作
-            console.log('图片大于1M！！！！');
+            message.error('图片文件大小不能超过1M！');
             return;
         }
         await appTcb
@@ -157,10 +159,9 @@ const Add = ({ history }) => {
                     const copy = [...allCourse];
                     copy[index].url = res.download_url;
                     setAllCourse(copy);
+                    message.success('添加图片成功！');
                 },
-                err => {
-                    console.log(err);
-                }
+                () => message.error('上传失败，请重试！')
             );
     };
     // 上传声音
@@ -174,13 +175,13 @@ const Add = ({ history }) => {
         // 1. 判断是否是常见声音格式
         if (!(fileType === 'audio/mpeg')) {
             // 不是声音文件，提醒用户，中止操作
-            console.log('不是声音！！！！！');
+            message.error('请选择音频文件！');
             return;
         }
         // 2. 判断声音大小是否>1M
         if (voiceFile.size / 1024 / 1024 > 1) {
             // 声音大于1M，提醒用户，中止操作
-            console.log('声音大于1M！！！！');
+            message.error('音频文件大小不能超过1M！');
             return;
         }
         await appTcb
@@ -195,10 +196,9 @@ const Add = ({ history }) => {
                     const copy = [...allCourse];
                     copy[index].url = res.download_url;
                     setAllCourse(copy);
+                    message.success('添加音频成功！');
                 },
-                err => {
-                    console.log(err);
-                }
+                () => message.error('上传失败，请重试！')
             );
     };
     // 上传课程封面
@@ -212,13 +212,13 @@ const Add = ({ history }) => {
         // 1. 判断是否是图片
         if (!(fileType === 'image/png' || fileType === 'image/bmp' || fileType === 'image/jpeg')) {
             // 不是图片文件，提醒用户，中止操作
-            console.log('不是图片！！！！！');
+            message.error('请选择图片文件！');
             return;
         }
         // 2. 判断图片大小是否>1M
         if (imgFile.size / 1024 / 1024 > 1) {
             // 图片大于1M，提醒用户，中止操作
-            console.log('图片大于1M！！！！');
+            message.error('图片文件大小不能超过1M！');
             return;
         }
         await appTcb
@@ -229,11 +229,46 @@ const Add = ({ history }) => {
                 filePath: imgFile,
             })
             .then(
-                res => setCoverLink(res.download_url),
-                err => console.log(err)
+                res => {
+                    setCoverLink(res.download_url);
+                    message.success('添加封面成功！');
+                },
+                () => message.error('上传失败，请重试！')
             );
     };
-
+    // 发布课程
+    const releaseCourse = () => {
+        // 检验是否填写课程基本信息
+        if (!name || !desc || !coverLink) {
+            message.warning('请填写课程基本信息：名称、描述、封面！');
+            return;
+        }
+        // 检验是否为课程添加授课内容
+        if (!allCourse.length) {
+            message.warning('请为课程添加授课内容！');
+            return;
+        }
+        // 判断每条信息是否有内容
+        for (const obj of allCourse) {
+            if (obj.type === 'text') {
+                if (!obj.zh || !obj.en) {
+                    message.warning('文字授课内容请填写完整！');
+                    return;
+                }
+            } else if (obj.type === 'img' || obj.type === 'voice') {
+                if (!obj.url) {
+                    message.warning(`${obj.type === 'img' ? '图片' : '音频'}授课内容请填写完整！`);
+                    return;
+                }
+            } else if (obj.type === 'ques') {
+                if (!obj.question || !obj.ans.A || !obj.ans.B || !obj.ans.C || !obj.ans.D) {
+                    message.warning('测试内容请填写完整！');
+                    return;
+                }
+            }
+        }
+        message.success('添加课程成功！');
+    };
     return (
         <div className="addBox">
             <div className="addCenter">
@@ -244,7 +279,9 @@ const Add = ({ history }) => {
                             <Button type="primary" danger onClick={goBack} className="backBtn">
                                 取消
                             </Button>
-                            <Button type="primary">发布</Button>
+                            <Button type="primary" onClick={releaseCourse}>
+                                发布
+                            </Button>
                         </div>
                         {/* 动态添加项目的按钮 */}
                         <div className="addBtns">
