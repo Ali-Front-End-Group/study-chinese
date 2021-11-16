@@ -174,7 +174,7 @@ const Course = () => {
     };
     // 点击垃圾桶，删除课程
     const deleteCourseById = (e, id) => {
-        // 阻止事件向下传递
+        // 阻止事件冒泡
         e.stopPropagation();
         // 将相应id过滤掉
         const newCourseData = courseData.filter(obj => obj.id !== id);
