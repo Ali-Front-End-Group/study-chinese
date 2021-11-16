@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Header from './components/Header';
 import Admin from './pages/Admin';
@@ -12,6 +12,7 @@ const App = () => {
             {isLogin ? (
                 <>
                     <Route path="/admin" component={Admin} />
+                    <Redirect to="/admin" />
                 </>
             ) : (
                 <>
