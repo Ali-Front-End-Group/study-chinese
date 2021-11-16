@@ -5,7 +5,7 @@ import Admin from './pages/Admin';
 import Welcome from './pages/Welcome';
 
 const App = () => {
-    const [isLogin, setIsLogin] = useState(true);
+    const [isLogin, setIsLogin] = useState(false);
     return (
         <>
             <Header isLogin={isLogin} setIsLogin={setIsLogin} />
