@@ -108,6 +108,10 @@
     width: 80px;
     user-select: none;
     margin-bottom: 10px;
+    transition: all 0.3s;
+}
+.courseVoice:hover {
+    background-color: rgb(223, 223, 223);
 }
 .courseTest {
     padding: 10px;
@@ -184,4 +188,11 @@
 
 .selectFile {
     display: none !important;
+}
+
+.voiceVideo {
+    display: none;
+    width: 80px;
+    height: 30px;
+    background-color: rgb(146, 122, 122);
 }

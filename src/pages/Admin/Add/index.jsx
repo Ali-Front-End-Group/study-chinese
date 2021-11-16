@@ -509,9 +509,24 @@ const Add = ({ history }) => {
                                     ) : null;
                                 } else if (obj.type === 'voice') {
                                     return obj.url ? (
-                                        <div className="courseVoice" key={obj.id}>
+                                        <div
+                                            key={obj.id}
+                                            className="courseVoice"
+                                            onClick={() =>
+                                                document
+                                                    .getElementById(`${obj.id}+voicePlay`)
+                                                    .play()
+                                            }
+                                        >
                                             <RiVoiceprintFill />
                                             voice
+                                            <video
+                                                controls
+                                                name="media"
+                                                className="voiceVideo"
+                                                id={`${obj.id}+voicePlay`}
+                                                src={obj.url}
+                                            ></video>
                                         </div>
                                     ) : null;
                                 } else if (obj.type === 'ques') {
