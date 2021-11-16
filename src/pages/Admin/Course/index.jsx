@@ -151,7 +151,6 @@ const Course = () => {
         const courseObj = courseData.filter(obj => obj.id === id)[0];
         // 获得该课程的具体信息
         const { courseName, courseInfo, stuNum, star } = courseObj;
-        console.log(star);
         // 更新状态
         setCourseId(id);
         setCourseName(courseName);
@@ -222,6 +221,7 @@ const Course = () => {
                             placement="bottom"
                             title={text}
                             onConfirm={e => deleteCourseById(e, obj.id)}
+                            onCancel={e => e.stopPropagation()}
                             okText="删除"
                             cancelText="取消"
                             onClick={e => e.stopPropagation()}
