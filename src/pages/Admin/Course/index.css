@@ -5,7 +5,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: left;
+    justify-content: flex-start;
+    align-content: flex-start;
 }
 
 /* ———————————————————————————————————————————————— */
@@ -13,10 +14,38 @@
     margin: 10px 10px;
     border-radius: 20px;
     width: 240px;
-    height: 275px;
+    height: 280px;
     overflow: hidden;
     position: relative;
     background-color: rgb(214, 252, 245);
+    transition: all 0.3s;
+    cursor: pointer;
+    user-select: none;
+}
+.courseCard:hover {
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.ant-card-body {
+    padding: 4px 12px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.courseName {
+    font-size: 16px;
+    font-weight: 700;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+}
+.courseDesc {
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .coverImg {
@@ -27,7 +56,7 @@
     width: 28px;
     height: 28px;
     position: absolute;
-    z-index: 999;
+    z-index: 900;
     top: 6px;
     right: 6px;
     border-radius: 10px;

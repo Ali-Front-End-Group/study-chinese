@@ -13,7 +13,7 @@ const Admin = () => (
             <Route path="/admin/course" component={Course} />
             <Route path="/admin/help" component={Help} />
             <Route path="/admin/" component={Home} />
-            <Redirect to="/admin/" />
+            <Redirect to="/admin" />
         </Switch>
     </div>
 );

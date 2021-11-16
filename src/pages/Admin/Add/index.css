@@ -1,40 +1,83 @@
 .addBox {
-    height: 100%;
+    min-height: calc(100vh - 60px);
     width: 100%;
 }
 
 .addCenter {
+    min-height: calc(100vh - 60px);
     margin: auto;
     width: 1500px;
-    height: 100%;
     display: flex;
 }
 
 .addLeft,
 .addRight {
+    min-height: calc(100vh - 60px);
     flex: 1;
+}
+
+/* ——————————————————————左边————————————————————————— */
+.inputBox {
+    min-height: calc(100vh - 60px);
+    width: 600px;
+    padding: 60px 0;
+    margin: auto;
+}
+
+.backBtn {
+    margin-right: 20px;
+}
+
+.addBtns {
+    height: 50px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 
-/* .addLeft {
-    background-color: rgb(67, 199, 216);
+.addBtns Button {
+    margin-right: 10px;
 }
 
-.addRight {
-    background-color: rgb(140, 235, 161);
-} */
+.courseItem {
+    font-size: 18px;
+}
+
+.autoItem {
+    margin-bottom: 6px;
+}
+
+.selectFile {
+    display: none !important;
+}
 
 /* ————————————右边———————————— */
-
+/* 手机主体 */
 .mobileBox {
     position: fixed;
+    top: 50vh;
+    left: calc(50vw + ((1500px / 4)));
+    transform: translate(-50%, -50%);
     width: 360px;
     height: 760px;
     background-color: #ededed;
     border-radius: 24px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+/* 预览卡片主体 */
+.courseCardPre {
+    position: absolute;
+    right: -280px;
+    top: 50%;
+    transform: translate(0, -50%);
+    margin: 10px 10px;
+    border-radius: 20px;
+    width: 240px;
+    height: 280px;
+    overflow: hidden;
+    background-color: rgb(214, 252, 245);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    user-select: none;
 }
 
 .mobileTime {
@@ -155,41 +198,6 @@
     line-height: 22px;
     flex: 1;
 }
-
-/* ——————————————————————左边————————————————————————— */
-.inputBox {
-    width: 600px;
-    height: 760px;
-    /* background-color: #ededed; */
-}
-
-.backBtn {
-    margin-right: 20px;
-}
-
-.addBtns {
-    height: 46px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.addBtns Button {
-    margin-right: 10px;
-}
-
-.courseItem {
-    font-size: 18px;
-}
-
-.autoItem {
-    margin-bottom: 6px;
-}
-
-.selectFile {
-    display: none !important;
-}
-
 .voiceVideo {
     display: none;
     width: 80px;

@@ -1,4 +1,3 @@
-// import { useState, useEffect } from 'react';
 import { MdSpellcheck } from 'react-icons/md';
 import List from './List';
 import LoginBtn from './LoginBtn';
@@ -7,12 +6,19 @@ import './index.css';
 
 const Header = ({ isLogin, setIsLogin }) => {
     return (
-        <header>
-            <MdSpellcheck className="logo" />
-            <span>这是header</span>
-            {isLogin ? <List /> : null}
-            {isLogin ? <LogoutBtn setIsLogin={setIsLogin} /> : <LoginBtn setIsLogin={setIsLogin} />}
-        </header>
+        <>
+            <header>
+                <MdSpellcheck className="logo" />
+                <span>这是header</span>
+                {isLogin ? <List /> : null}
+                {isLogin ? (
+                    <LogoutBtn setIsLogin={setIsLogin} />
+                ) : (
+                    <LoginBtn setIsLogin={setIsLogin} />
+                )}
+            </header>
+            <div className="placeholderBox"></div>
+        </>
     );
 };
 

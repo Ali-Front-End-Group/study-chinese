@@ -1,15 +1,13 @@
-import { Card } from 'antd';
 import { withRouter } from 'react-router-dom';
+import { PlusOutlined } from '@ant-design/icons';
 import './index.css';
 
 // 加入课程卡片
 const AddCourse = ({ history }) => (
-    <Card hoverable className="courseCard" onClick={() => history.push('/admin/add')}>
-        <div className="addBox">
-            <img alt="add" src="/img/add.png" className="addIcon" />
-            <p className="addText">添加课程</p>
-        </div>
-    </Card>
+    <div className="courseCard addCourseCard" onClick={() => history.push('/admin/add')}>
+        <PlusOutlined className="addCourseBtn" />
+        <span className="addCourseText">添加课程</span>
+    </div>
 );
 
 export default withRouter(AddCourse);

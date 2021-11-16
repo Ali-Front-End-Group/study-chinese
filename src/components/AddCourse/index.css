@@ -1,16 +1,15 @@
-.addBox {
+.addCourseCard {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    user-select: none;
+}
+.addCourseBtn {
+    font-size: 100px;
+    color: #8a8a8a;
 }
 
-.addIcon {
-    width: 100px;
-    height: 100px;
-    margin-top: 25%;
-}
-
-.addText {
-    margin-top: 20px;
+.addCourseText {
+    font-size: 16px;
 }

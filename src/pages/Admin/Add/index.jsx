@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
-import { Input, Button, Radio, Space } from 'antd';
+import { Input, Button, Radio, Space, Card } from 'antd';
 import { BASE_URL, appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
@@ -38,8 +38,10 @@ const Add = ({ history }) => {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     });
-    // 课程名
+    // 课程名、课程描述、课程封面
     const [name, setName] = useState('');
+    const [desc, setDesc] = useState('');
+    const [coverLink, setCoverLink] = useState('');
     // 所有课程
     const [allCourse, setAllCourse] = useState([]);
     // 获得图片url
@@ -199,6 +201,38 @@ const Add = ({ history }) => {
                 }
             );
     };
+    // 上传课程封面
+    const beforeUploadCover = async id => {
+        // 获取文件对象
+        const imgFile = document.getElementById(`${id}`).files[0];
+        // 文件类型
+        const fileType = imgFile.type;
+        // 文件后缀
+        const fileEnd = fileType.split('/')[1];
+        // 1. 判断是否是图片
+        if (!(fileType === 'image/png' || fileType === 'image/bmp' || fileType === 'image/jpeg')) {
+            // 不是图片文件，提醒用户，中止操作
+            console.log('不是图片！！！！！');
+            return;
+        }
+        // 2. 判断图片大小是否>1M
+        if (imgFile.size / 1024 / 1024 > 1) {
+            // 图片大于1M，提醒用户，中止操作
+            console.log('图片大于1M！！！！');
+            return;
+        }
+        await appTcb
+            .uploadFile({
+                // 云存储的路径
+                cloudPath: `img/${nanoid()}.${fileEnd}`,
+                // 需要上传的文件，File 类型
+                filePath: imgFile,
+            })
+            .then(
+                res => setCoverLink(res.download_url),
+                err => console.log(err)
+            );
+    };
 
     return (
         <div className="addBox">
@@ -239,15 +273,47 @@ const Add = ({ history }) => {
                                 onClick={() => addCourse('ques')}
                             />
                         </div>
-                        <span className="courseItem">课程名称：</span>
-                        <br />
-                        <Input
-                            placeholder="请输入课程名..."
-                            value={name}
-                            maxLength={10}
-                            onChange={e => setName(e.target.value)}
-                        />
-
+                        {/* 课程名称、课程描述、课程封面 */}
+                        <>
+                            <span className="courseItem">课程名称：</span>
+                            <br />
+                            <Input
+                                placeholder="请输入课程名..."
+                                value={name}
+                                maxLength={10}
+                                onChange={e => setName(e.target.value)}
+                            />
+                            <span className="courseItem">课程描述：</span>
+                            <br />
+                            <Input
+                                placeholder="请输入课程描述..."
+                                value={desc}
+                                maxLength={26}
+                                onChange={e => setDesc(e.target.value)}
+                            />
+                            <span className="courseItem">课程封面：</span>
+                            <br />
+                            <Input
+                                placeholder="请选择课程封面..."
+                                value={coverLink}
+                                style={{ width: 'calc(100% - 50px)' }}
+                                onChange={e => setCoverLink(e.target.value)}
+                            />
+                            <Button
+                                type="primary"
+                                style={{ width: '50px' }}
+                                onClick={() => document.getElementById('selectCourseCover').click()}
+                            >
+                                <FolderOpenOutlined />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="selectFile"
+                                    id="selectCourseCover"
+                                    onChange={() => beforeUploadCover('selectCourseCover')}
+                                />
+                            </Button>
+                        </>
                         {/* 渲染所有课程 */}
                         {allCourse.map((obj, index) => {
                             if (obj.type === 'text') {
@@ -479,7 +545,24 @@ const Add = ({ history }) => {
                 </div>
                 {/* 右边预览 */}
                 <div className="addRight">
+                    {/* 手机 */}
                     <div className="mobileBox">
+                        {/* 卡片 */}
+                        <Card
+                            cover={
+                                coverLink ? (
+                                    <img
+                                        alt="请选择图片或输入正确的图片url..."
+                                        src={coverLink}
+                                        className="coverImg"
+                                    />
+                                ) : null
+                            }
+                            className="courseCardPre"
+                        >
+                            <div className="courseName">{name}</div>
+                            <div className="courseDesc">{desc}</div>
+                        </Card>
                         <div className="mobileTime">
                             <span>{time}</span>
                             <FaWifi />

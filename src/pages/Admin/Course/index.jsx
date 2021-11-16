@@ -5,7 +5,6 @@ import { DeleteOutlined } from '@ant-design/icons';
 import './index.css';
 
 const Course = () => {
-    const { Meta } = Card;
     //测试数据
     const [courseData, setCourseData] = useState([]);
     useEffect(() => {
@@ -14,9 +13,8 @@ const Course = () => {
                 id: '00',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '语文',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 7,
                 star: 3.5,
             },
@@ -24,9 +22,8 @@ const Course = () => {
                 id: '01',
                 imgLink: '/img/math.jpg',
                 courseName: '数学',
-                teacherName: '444',
                 courseLink: 'http://www.bilibili.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 2,
                 star: 4.5,
             },
@@ -34,9 +31,8 @@ const Course = () => {
                 id: '02',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '英语',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 2.5,
             },
@@ -44,9 +40,8 @@ const Course = () => {
                 id: '03',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '物理',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 3,
             },
@@ -54,9 +49,8 @@ const Course = () => {
                 id: '04',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '化学',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 3.5,
             },
@@ -64,9 +58,8 @@ const Course = () => {
                 id: '05',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '生物',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 2.5,
             },
@@ -74,9 +67,8 @@ const Course = () => {
                 id: '06',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '地理',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 5,
             },
@@ -84,9 +76,8 @@ const Course = () => {
                 id: '07',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '历史',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 2.5,
             },
@@ -94,9 +85,8 @@ const Course = () => {
                 id: '08',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '政治',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 3,
             },
@@ -104,9 +94,8 @@ const Course = () => {
                 id: '09',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '政治',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 3,
             },
@@ -114,9 +103,8 @@ const Course = () => {
                 id: '10',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '政治',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 3,
             },
@@ -124,9 +112,35 @@ const Course = () => {
                 id: '11',
                 imgLink: '/img/chinese.jpeg',
                 courseName: '政治',
-                teacherName: '222',
                 courseLink: 'http://www.baidu.com',
-                courseInfo: '这是课程简介',
+                courseDesc: '这是课程简介',
+                stuNum: 4,
+                star: 3,
+            },
+            {
+                id: '12',
+                imgLink: '/img/chinese.jpeg',
+                courseName: '政治',
+                courseLink: 'http://www.baidu.com',
+                courseDesc: '这是课程简介',
+                stuNum: 4,
+                star: 3,
+            },
+            {
+                id: '13',
+                imgLink: '/img/chinese.jpeg',
+                courseName: '政治',
+                courseLink: 'http://www.baidu.com',
+                courseDesc: '这是课程简介',
+                stuNum: 4,
+                star: 3,
+            },
+            {
+                id: '14',
+                imgLink: '/img/chinese.jpeg',
+                courseName: '政治',
+                courseLink: 'http://www.baidu.com',
+                courseDesc: '这是课程简介',
                 stuNum: 4,
                 star: 3,
             },
@@ -139,10 +153,9 @@ const Course = () => {
     const [courseId, setCourseId] = useState('');
     // 课程名、课程信息、学生人数、星星数
     const [courseName, setCourseName] = useState('');
-    const [courseInfo, setCourseInfo] = useState('');
+    const [courseDesc, setCourseDesc] = useState('');
     const [stuNum, setStuNum] = useState(0);
     const [star, setStar] = useState(0);
-
     const text = '确定删除该课程？';
     // 点击卡片，打开对话框
     const openCourseInfo = id => {
@@ -150,11 +163,11 @@ const Course = () => {
         // 过滤出的是个数组，只有一项
         const courseObj = courseData.filter(obj => obj.id === id)[0];
         // 获得该课程的具体信息
-        const { courseName, courseInfo, stuNum, star } = courseObj;
+        const { courseName, courseDesc, stuNum, star } = courseObj;
         // 更新状态
         setCourseId(id);
         setCourseName(courseName);
-        setCourseInfo(courseInfo);
+        setCourseDesc(courseDesc);
         setStuNum(stuNum);
         setStar(star);
         // 先更新状态后，再打开对话框，避免可能出现的白屏
@@ -167,7 +180,7 @@ const Course = () => {
         // 再清空状态
         setCourseId('');
         setCourseName('');
-        setCourseInfo('');
+        setCourseDesc('');
         setStuNum(0);
         setStar(0);
     };
@@ -188,6 +201,7 @@ const Course = () => {
     return (
         <div className="courseLayout">
             <Modal
+                zIndex={9999}
                 visible={modalShow}
                 title={courseName}
                 style={{ top: 200 }}
@@ -201,7 +215,7 @@ const Course = () => {
                     </Button>,
                 ]}
             >
-                <p>{courseInfo}</p>
+                <p>{courseDesc}</p>
                 <p>参与人数：{stuNum}</p>
                 课程评分：
                 <Rate disabled allowHalf value={star} />
@@ -211,12 +225,12 @@ const Course = () => {
                 return (
                     <Card
                         key={obj.id}
-                        hoverable
                         cover={<img alt="图片" src={obj.imgLink} className="coverImg" />}
                         className="courseCard"
                         onClick={() => openCourseInfo(obj.id)}
                     >
-                        <Meta title={obj.courseName} description={obj.teacherName} />
+                        <div className="courseName">{obj.courseName}</div>
+                        <div className="courseDesc">{obj.courseDesc}</div>
                         <Popconfirm
                             placement="bottom"
                             title={text}

@@ -5,20 +5,13 @@ import Admin from './pages/Admin';
 import Welcome from './pages/Welcome';
 
 const App = () => {
-    const [isLogin, setIsLogin] = useState(false);
-    // 判断是否登录过
-    useEffect(() => {
-        // 判断是否已经登录的逻辑
-        // ....
-        setIsLogin(false);
-    }, []);
+    const [isLogin, setIsLogin] = useState(true);
     return (
         <>
             <Header isLogin={isLogin} setIsLogin={setIsLogin} />
             {isLogin ? (
                 <>
                     <Route path="/admin" component={Admin} />
-                    <Redirect to="/admin" />
                 </>
             ) : (
                 <>
