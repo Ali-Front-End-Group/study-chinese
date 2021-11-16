@@ -191,6 +191,7 @@ const Course = () => {
             <Modal
                 visible={modalShow}
                 title={courseName}
+                style={{ top: 200 }}
                 onCancel={closeCourseInfo}
                 footer={[
                     <Button key="back" onClick={closeCourseInfo}>
