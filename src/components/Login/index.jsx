@@ -47,7 +47,7 @@ const Login = () => {
                         </div>
                     </div>
                     {/* <!-- 登录表单 --> */}
-                    <form action="" method="" className="form-horizontal" role="form">
+                    <div action="" method="" className="form-horizontal" role="form">
                         {/* <!-- 登录的用户名组 --> */}
                         <div className="form-group">
                             <label htmlFor="login_userName" className=" col-lg-5 col-md-5 col-xs-5">
@@ -96,7 +96,7 @@ const Login = () => {
                                 />
                             </div>
                         </div>
-                    </form>
+                    </div>
                     {/* <!-- 文字跳转去注册页面 --> */}
                     <span className="tabText" onClick={toggle}>
                         点击这里注册
@@ -130,7 +130,7 @@ const Login = () => {
                         </div>
                     </div>
                     {/* <!-- 注册表单 --> */}
-                    <form action="" method="" className="form-horizontal" role="form">
+                    <div action="" method="" className="form-horizontal" role="form">
                         {/* <!-- 注册的用户名组 --> */}
                         <div className="form-group">
                             <label htmlFor="userName" className="col-lg-5 col-md-5 col-xs-5">
@@ -178,7 +178,7 @@ const Login = () => {
                                 />
                             </div>
                         </div>
-                    </form>
+                    </div>
                     <span className="tabText" onClick={toggle}>
                         点击这里登录
                     </span>
