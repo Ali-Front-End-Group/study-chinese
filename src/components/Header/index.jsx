@@ -1,6 +1,7 @@
 import { MdSpellcheck } from 'react-icons/md';
 import { EnterOutlined } from '@ant-design/icons';
 import { openNotification } from '../../utils/functions';
+import { Popconfirm } from 'antd';
 import List from './List';
 import './index.css';
 
@@ -10,6 +11,7 @@ const Header = ({ isLogin, setIsLogin }) => {
         sessionStorage.removeItem('token');
         openNotification('推出成功！欢迎再次使用！', <EnterOutlined />);
     };
+    const text = '确认要退出吗？';
     return (
         <>
             <header>
@@ -18,9 +20,15 @@ const Header = ({ isLogin, setIsLogin }) => {
                 {isLogin ? (
                     <>
                         <List />
-                        <div className="logoutBtn" onClick={logout}>
-                            退出
-                        </div>
+                        <Popconfirm
+                            placement="bottomLeft"
+                            title={text}
+                            onConfirm={logout}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <div className="logoutBtn">退出</div>
+                        </Popconfirm>
                     </>
                 ) : null}
             </header>

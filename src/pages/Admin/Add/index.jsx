@@ -11,7 +11,7 @@ import qs from 'qs';
 import { nanoid } from 'nanoid';
 import {
     FontColorsOutlined,
-    FileImageOutlined,
+    FundOutlined,
     AudioOutlined,
     QuestionOutlined,
     FolderOpenOutlined,
@@ -115,9 +115,7 @@ const Add = ({ history, location }) => {
                 },
             })
             .then(res => {
-                console.log(res);
                 if (res.data.status === 200) {
-                    console.log(res.data.ret);
                     const copy = [...allCourse];
                     if (contentType === 'text') {
                         copy[index].pinyin = res.data.ret;
@@ -388,7 +386,7 @@ const Add = ({ history, location }) => {
                             <Button
                                 type="primary"
                                 shape="circle"
-                                icon={<FileImageOutlined />}
+                                icon={<FundOutlined />}
                                 onClick={() => addCourse('image')}
                             />
                             <Button
