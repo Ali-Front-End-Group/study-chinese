@@ -59,7 +59,8 @@ const Login = () => {
                 if (res.data.result === 'success') {
                     setName('');
                     setPwd('');
-                    sessionStorage.setItem('token', res.data.data);
+                    localStorage.setItem('token', res.data.data.token);
+                    localStorage.setItem('id', res.data.data.id);
                     // 设置登录状态
                     setIsLogin(true);
                     openNotification('登录成功！欢迎进入不学汉语！', <CheckOutlined />);

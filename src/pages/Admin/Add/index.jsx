@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
-import { Input, Button, Radio, Space, Card, message } from 'antd';
+import { Input, Button, Radio, Space, Card, message, Popconfirm } from 'antd';
 import { BASE_URL, DB_URL, appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
@@ -74,10 +74,6 @@ const Add = ({ history, location }) => {
             );
         }
     }, [isEdit, id]);
-    // 返回
-    const goBack = () => {
-        history.push('/admin/course');
-    };
     // 获得图片url
     const getImg = (character, index) => {
         axios
@@ -89,7 +85,7 @@ const Add = ({ history, location }) => {
             .then(res => {
                 if (res.data.status === 200) {
                     const copy = [...allCourse];
-                    copy[index].url = res.data.url;
+                    copy[index].content = res.data.url;
                     setAllCourse(copy);
                     message.success('成功获得图片url！');
                 }
@@ -104,47 +100,58 @@ const Add = ({ history, location }) => {
             .then(res => {
                 if (res.data.status === 200) {
                     const copy = [...allCourse];
-                    copy[index].url = res.data.array['思悦'];
+                    copy[index].content = res.data.array['思悦'];
                     setAllCourse(copy);
                     message.success('成功获得音频url！');
                 }
             });
     };
-    const getIndex = index => {
-        switch (index) {
-            case 0:
-                return 'A';
-            case 1:
-                return 'B';
-            case 2:
-                return 'C';
-            case 3:
-                return 'D';
-            default:
-                return null;
-        }
+    const getPinyin = (str, index) => {
+        axios
+            .get(`${BASE_URL}/api/get_pinyin`, {
+                params: {
+                    str,
+                },
+            })
+            .then(res => {
+                console.log(res);
+                if (res.data.status === 200) {
+                    const copy = [...allCourse];
+                    copy[index].pinyin = res.data.ret;
+                    setAllCourse(copy);
+                    message.success('成功获得拼音！');
+                }
+            });
     };
     // 添加课程
-    const addCourse = type => {
+    const addCourse = contentType => {
         const id = nanoid();
         let obj;
-        if (type === 'text') {
-            obj = { id, type, zh: '', en: '' };
-        } else if (type === 'ques') {
+        if (contentType === 'text') {
+            obj = { id, contentType, content: '', engText: '', pinyin: [] };
+        } else if (contentType === 'quzzle') {
             obj = {
                 id,
-                type,
-                question: '',
-                ansIndex: 0,
-                ans: {
-                    A: '',
-                    B: '',
-                    C: '',
-                    D: '',
-                },
+                contentType,
+                content: [
+                    {
+                        content: '',
+                        contentType: 'text',
+                        pinyin: [],
+                    },
+                ],
+                answer: 0,
+                choice: [
+                    { id: 'A', content: '', contentType: 'text', pinyin: [] },
+                    { id: 'B', content: '', contentType: 'text', pinyin: [] },
+                    { id: 'C', content: '', contentType: 'text', pinyin: [] },
+                    { id: 'D', content: '', contentType: 'text', pinyin: [] },
+                ],
             };
-        } else {
-            obj = { id, type, url: '' };
+        } else if (contentType === 'image') {
+            obj = { id, contentType, content: '', engText: '' };
+        } else if (contentType === 'voice') {
+            obj = { id, contentType, content: '', engText: 'voice', voiceType: '-1' };
         }
         const newCourse = [...allCourse, obj];
         setAllCourse(newCourse);
@@ -191,7 +198,7 @@ const Add = ({ history, location }) => {
             .then(
                 res => {
                     const copy = [...allCourse];
-                    copy[index].url = res.download_url;
+                    copy[index].content = res.download_url;
                     setAllCourse(copy);
                     message.success('添加图片成功！');
                 },
@@ -228,7 +235,7 @@ const Add = ({ history, location }) => {
             .then(
                 res => {
                     const copy = [...allCourse];
-                    copy[index].url = res.download_url;
+                    copy[index].content = res.download_url;
                     setAllCourse(copy);
                     message.success('添加音频成功！');
                 },
@@ -284,58 +291,80 @@ const Add = ({ history, location }) => {
         }
         // 判断每条信息是否有内容
         for (const obj of allCourse) {
-            if (obj.type === 'text') {
-                if (!obj.zh || !obj.en) {
+            if (obj.contentType === 'text') {
+                if (!obj.content || !obj.engText) {
                     message.warning('文字授课内容请填写完整！');
                     return;
                 }
-            } else if (obj.type === 'img' || obj.type === 'voice') {
-                if (!obj.url) {
-                    message.warning(`${obj.type === 'img' ? '图片' : '音频'}授课内容请填写完整！`);
+            } else if (obj.contentType === 'image' || obj.contentType === 'voice') {
+                if (!obj.content) {
+                    message.warning(
+                        `${obj.contentType === 'image' ? '图片' : '音频'}授课内容请填写完整！`
+                    );
                     return;
                 }
-            } else if (obj.type === 'ques') {
-                if (!obj.question || !obj.ans.A || !obj.ans.B || !obj.ans.C || !obj.ans.D) {
+            } else if (obj.contentType === 'quzzle') {
+                if (
+                    !obj.content.content ||
+                    !obj.choice[0].content ||
+                    !obj.choice[1].content ||
+                    !obj.choice[2].content ||
+                    !obj.choice[3].content
+                ) {
                     message.warning('测试内容请填写完整！');
                     return;
                 }
             }
         }
-
         const data = {
+            user_id: localStorage.getItem('id'),
             title: name,
             update_time: dayjs().format('YYYY-MM-DD'),
             create_time: dayjs().format('YYYY-MM-DD'),
             bio: desc,
             cover: coverLink,
-            content: qs.stringify(allCourse),
+            content: allCourse,
         };
         axios({
             url: `${DB_URL}/course/create`,
             method: 'post',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
             data: qs.stringify(data),
         }).then(
             res => {
-                console.log(res);
-                message.success('添加课程成功！');
+                if (res.data.result === 'success') {
+                    message.success('添加课程成功！');
+                    history.push('/admin/course');
+                } else {
+                    message.error('添加课程失败！');
+                }
             },
-            err => console.log(err)
+            err => message.error('添加课程失败！')
         );
     };
+    const text = '课程信息未保存，确定取消发布吗？';
     return (
         <div className="addBox">
             <div className="addCenter">
                 {/* 左边输入部分 */}
                 <div className="addLeft">
                     <div className="inputBox">
+                        {/* 取消、发布按钮 */}
                         <div className="addBtnBox">
-                            <Button type="primary" danger onClick={goBack} className="backBtn">
-                                取消
-                            </Button>
+                            <Popconfirm
+                                placement="top"
+                                title={text}
+                                onConfirm={() => history.push('/admin/course')}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button type="primary" danger className="backBtn">
+                                    取消
+                                </Button>
+                            </Popconfirm>
                             <Button type="primary" onClick={releaseCourse}>
                                 发布
                             </Button>
@@ -352,7 +381,7 @@ const Add = ({ history, location }) => {
                                 type="primary"
                                 shape="circle"
                                 icon={<FileImageOutlined />}
-                                onClick={() => addCourse('img')}
+                                onClick={() => addCourse('image')}
                             />
                             <Button
                                 type="primary"
@@ -364,7 +393,7 @@ const Add = ({ history, location }) => {
                                 type="primary"
                                 shape="circle"
                                 icon={<QuestionOutlined />}
-                                onClick={() => addCourse('ques')}
+                                onClick={() => addCourse('quzzle')}
                             />
                         </div>
                         {/* 课程名称、课程描述、课程封面 */}
@@ -410,28 +439,29 @@ const Add = ({ history, location }) => {
                         </>
                         {/* 渲染所有课程 */}
                         {allCourse.map((obj, index) => {
-                            if (obj.type === 'text') {
+                            if (obj.contentType === 'text') {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">文字信息：</span>
                                         <br />
                                         <Input
                                             placeholder="请输入中文课程内容..."
-                                            value={obj.zh}
+                                            value={obj.content}
                                             style={{ width: 'calc(100% - 50px)' }}
                                             onChange={e => {
                                                 const copy = [...allCourse];
-                                                copy[index].zh = e.target.value;
+                                                copy[index].content = e.target.value;
                                                 setAllCourse(copy);
                                             }}
+                                            onBlur={() => getPinyin(obj.content, index)}
                                         />
                                         <Input
                                             placeholder="请输入英文课程内容..."
-                                            value={obj.en}
+                                            value={obj.engText}
                                             style={{ width: 'calc(100% - 50px)' }}
                                             onChange={e => {
                                                 const copy = [...allCourse];
-                                                copy[index].en = e.target.value;
+                                                copy[index].engText = e.target.value;
                                                 setAllCourse(copy);
                                             }}
                                         />
@@ -439,13 +469,15 @@ const Add = ({ history, location }) => {
                                             type="primary"
                                             danger
                                             style={{ width: '50px' }}
-                                            onClick={() => deleteCourseById(obj.id)}
+                                            onClick={() => {
+                                                deleteCourseById(obj.id);
+                                            }}
                                         >
                                             <DeleteOutlined />
                                         </Button>
                                     </div>
                                 );
-                            } else if (obj.type === 'img') {
+                            } else if (obj.contentType === 'image') {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">图片地址：</span>
@@ -454,17 +486,17 @@ const Add = ({ history, location }) => {
                                             placeholder="请输入一个汉字，并转化为图片url..."
                                             style={{ width: 'calc(100% - 150px)' }}
                                             maxLength={1}
-                                            value={obj.url}
+                                            value={obj.content}
                                             onChange={e => {
                                                 const copy = [...allCourse];
-                                                copy[index].url = e.target.value;
+                                                copy[index].content = e.target.value;
                                                 setAllCourse(copy);
                                             }}
                                         />
                                         <Button
                                             type="primary"
                                             style={{ width: '50px' }}
-                                            onClick={() => getImg(obj.url, index)}
+                                            onClick={() => getImg(obj.content, index)}
                                         >
                                             <SearchOutlined />
                                         </Button>
@@ -494,7 +526,7 @@ const Add = ({ history, location }) => {
                                         </Button>
                                     </div>
                                 );
-                            } else if (obj.type === 'voice') {
+                            } else if (obj.contentType === 'voice') {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">声音信息：</span>
@@ -502,18 +534,18 @@ const Add = ({ history, location }) => {
                                         <Input
                                             placeholder="请输入中文，并生成语音url..."
                                             style={{ width: 'calc(100% - 150px)' }}
-                                            value={obj.url}
+                                            value={obj.content}
                                             maxLength={36}
                                             onChange={e => {
                                                 const copy = [...allCourse];
-                                                copy[index].url = e.target.value;
+                                                copy[index].content = e.target.value;
                                                 setAllCourse(copy);
                                             }}
                                         />
                                         <Button
                                             type="primary"
                                             style={{ width: '50px' }}
-                                            onClick={() => getVoice(obj.url, index)}
+                                            onClick={() => getVoice(obj.content, index)}
                                         >
                                             <SoundOutlined />
                                         </Button>
@@ -543,19 +575,19 @@ const Add = ({ history, location }) => {
                                         </Button>
                                     </div>
                                 );
-                            } else if (obj.type === 'ques') {
+                            } else if (obj.contentType === 'quzzle') {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">测试题目：</span>
                                         <br />
                                         <Input
                                             placeholder="请输入题目内容..."
-                                            value={obj.question}
+                                            value={obj.content.content}
                                             maxLength={36}
                                             style={{ width: 'calc(100% - 50px)' }}
                                             onChange={e => {
                                                 const copy = [...allCourse];
-                                                copy[index].question = e.target.value;
+                                                copy[index].content.content = e.target.value;
                                                 setAllCourse(copy);
                                             }}
                                         />
@@ -571,10 +603,10 @@ const Add = ({ history, location }) => {
                                         <br />
                                         <Radio.Group
                                             name="radiogroup"
-                                            value={obj.ansIndex}
+                                            value={obj.answer}
                                             onChange={e => {
                                                 const copy = [...allCourse];
-                                                copy[index].ansIndex = e.target.value;
+                                                copy[index].answer = e.target.value;
                                                 setAllCourse(copy);
                                             }}
                                         >
@@ -582,10 +614,11 @@ const Add = ({ history, location }) => {
                                                 <Radio value={0}>
                                                     <Input
                                                         placeholder="请输入选项答案..."
-                                                        value={obj.ans.A}
+                                                        value={obj.choice[0].content}
                                                         onChange={e => {
                                                             const copy = [...allCourse];
-                                                            copy[index].ans.A = e.target.value;
+                                                            copy[index].choice[0].content =
+                                                                e.target.value;
                                                             setAllCourse(copy);
                                                         }}
                                                         maxLength={12}
@@ -594,10 +627,11 @@ const Add = ({ history, location }) => {
                                                 <Radio value={1}>
                                                     <Input
                                                         placeholder="请输入选项答案..."
-                                                        value={obj.ans.B}
+                                                        value={obj.choice[1].content}
                                                         onChange={e => {
                                                             const copy = [...allCourse];
-                                                            copy[index].ans.B = e.target.value;
+                                                            copy[index].choice[1].content =
+                                                                e.target.value;
                                                             setAllCourse(copy);
                                                         }}
                                                         maxLength={12}
@@ -606,10 +640,11 @@ const Add = ({ history, location }) => {
                                                 <Radio value={2}>
                                                     <Input
                                                         placeholder="请输入选项答案..."
-                                                        value={obj.ans.C}
+                                                        value={obj.choice[2].content}
                                                         onChange={e => {
                                                             const copy = [...allCourse];
-                                                            copy[index].ans.C = e.target.value;
+                                                            copy[index].choice[2].content =
+                                                                e.target.value;
                                                             setAllCourse(copy);
                                                         }}
                                                         maxLength={12}
@@ -618,10 +653,11 @@ const Add = ({ history, location }) => {
                                                 <Radio value={3}>
                                                     <Input
                                                         placeholder="请输入选项答案..."
-                                                        value={obj.ans.D}
+                                                        value={obj.choice[3].content}
                                                         onChange={e => {
                                                             const copy = [...allCourse];
-                                                            copy[index].ans.D = e.target.value;
+                                                            copy[index].choice[3].content =
+                                                                e.target.value;
                                                             setAllCourse(copy);
                                                         }}
                                                         maxLength={12}
@@ -670,23 +706,25 @@ const Add = ({ history, location }) => {
                             <div className="mobileBodyScreen">
                                 {/* 渲染可视化预览 */}
                                 {allCourse.map(obj => {
-                                    if (obj.type === 'text') {
-                                        return obj.zh ? (
+                                    if (obj.contentType === 'text') {
+                                        return obj.content ? (
                                             <div className="courseContent" key={obj.id}>
-                                                <div className="contentZh">{obj.zh}</div>
-                                                {obj.en ? (
-                                                    <div className="contentEn">翻译：{obj.en}</div>
+                                                <div className="contentZh">{obj.content}</div>
+                                                {obj.engText ? (
+                                                    <div className="contentEn">
+                                                        翻译：{obj.engText}
+                                                    </div>
                                                 ) : null}
                                             </div>
                                         ) : null;
-                                    } else if (obj.type === 'img') {
-                                        return obj.url ? (
+                                    } else if (obj.contentType === 'image') {
+                                        return obj.content ? (
                                             <div className="courseImg" key={obj.id}>
-                                                <img src={obj.url} alt="请点击按钮" />
+                                                <img src={obj.content} alt="请点击按钮" />
                                             </div>
                                         ) : null;
-                                    } else if (obj.type === 'voice') {
-                                        return obj.url ? (
+                                    } else if (obj.contentType === 'voice') {
+                                        return obj.content ? (
                                             <div
                                                 key={obj.id}
                                                 className="courseVoice"
@@ -703,39 +741,34 @@ const Add = ({ history, location }) => {
                                                     name="media"
                                                     className="voiceVideo"
                                                     id={`${obj.id}+voicePlay`}
-                                                    src={obj.url}
+                                                    src={obj.content}
                                                 ></video>
                                             </div>
                                         ) : null;
-                                    } else if (obj.type === 'ques') {
+                                    } else if (obj.contentType === 'quzzle') {
                                         return (
                                             <div key={obj.id}>
-                                                {obj.question ? (
+                                                {obj.content.content ? (
                                                     <div className="courseTest">
-                                                        小测试：{obj.question}
+                                                        小测试：{obj.content.content}
                                                     </div>
                                                 ) : null}
-                                                {obj.ans.A ||
-                                                obj.ans.B ||
-                                                obj.ans.C ||
-                                                obj.ans.D ? (
+                                                {obj.choice[0].content ||
+                                                obj.choice[1].content ||
+                                                obj.choice[2].content ||
+                                                obj.choice[3].content ? (
                                                     <div className="answer">
-                                                        {[
-                                                            obj.ans.A,
-                                                            obj.ans.B,
-                                                            obj.ans.C,
-                                                            obj.ans.D,
-                                                        ].map((value, index) =>
-                                                            value ? (
+                                                        {obj.choice.map((choiceObj, index) =>
+                                                            choiceObj.content ? (
                                                                 <div
                                                                     className="answerItem"
                                                                     key={index}
                                                                 >
                                                                     <div className="answerItemIndex">
-                                                                        {getIndex(index)}
+                                                                        {choiceObj.id}
                                                                     </div>
                                                                     <div className="answerItemContent">
-                                                                        {value}
+                                                                        {choiceObj.content}
                                                                     </div>
                                                                 </div>
                                                             ) : null

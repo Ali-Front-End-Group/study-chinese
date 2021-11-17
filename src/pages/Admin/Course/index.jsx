@@ -13,11 +13,12 @@ const Course = ({ history }) => {
     const text = '确定删除该课程？';
     // 从数据库获取所有课程信息
     const getAllCourseFromDB = isDelete => {
+        const id = localStorage.getItem('id');
         axios({
-            url: `${DB_URL}/course/list?userId=1`,
+            url: `${DB_URL}/course/list?userId=${id}`,
             method: 'get',
             headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         }).then(
             res => {
@@ -41,7 +42,7 @@ const Course = ({ history }) => {
             url: `${DB_URL}/course/delete`,
             method: 'post',
             headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
             data: {
                 id: `${id}`,
