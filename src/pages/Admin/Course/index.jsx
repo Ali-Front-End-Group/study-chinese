@@ -1,26 +1,15 @@
 import { useState, useEffect } from 'react';
 import AddCourse from '../../../components/AddCourse';
-import { Modal, Button, Card, Popconfirm, message, Rate } from 'antd';
+import { Card, Popconfirm, message } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { DB_URL } from '../../../utils/constant';
 import './index.css';
 
-const Course = () => {
+const Course = ({ history }) => {
     const [courseData, setCourseData] = useState([]);
     // 获取课程列表数据
-    useEffect(() => {
-        getAllCourseFromDB();
-    }, []);
-    // 控制对话框显示
-    const [modalShow, setModalShow] = useState(false);
-    // 课程ID
-    const [courseId, setCourseId] = useState('');
-    // 课程名、课程信息、学生人数、星星数
-    const [courseName, setCourseName] = useState('');
-    const [courseDesc, setCourseDesc] = useState('');
-    const [stuNum, setStuNum] = useState(0);
-    const [star, setStar] = useState(0);
+    useEffect(() => getAllCourseFromDB(false), []);
     const text = '确定删除该课程？';
     // 从数据库获取所有课程信息
     const getAllCourseFromDB = isDelete => {
@@ -33,6 +22,7 @@ const Course = () => {
         }).then(
             res => {
                 if (res.data.result === 'success') {
+                    // console.log(res.data.data.rows);
                     setCourseData(res.data.data.rows);
                     isDelete && message.success('删除课程成功！');
                 } else {
@@ -58,7 +48,6 @@ const Course = () => {
             },
         }).then(
             res => {
-                console.log(res);
                 if (res.data.result === 'success') {
                     getAllCourseFromDB(true);
                 } else {
@@ -70,33 +59,6 @@ const Course = () => {
                 message.warning('删除课程失败！');
             }
         );
-    };
-    // 点击卡片，打开对话框
-    const openCourseInfo = id => {
-        // 根据传入的id，找到某个课程对象
-        // 过滤出的是个数组，只有一项
-        const courseObj = courseData.filter(obj => obj.id === id)[0];
-        // 获得该课程的具体信息
-        const { courseName, courseDesc, stuNum, star } = courseObj;
-        // 更新状态
-        setCourseId(id);
-        setCourseName(courseName);
-        setCourseDesc(courseDesc);
-        setStuNum(stuNum);
-        setStar(star);
-        // 先更新状态后，再打开对话框，避免可能出现的白屏
-        setModalShow(modalShow => !modalShow);
-    };
-    // 点击取消，关闭对话框
-    const closeCourseInfo = () => {
-        // 先关闭对话框
-        setModalShow(modalShow => !modalShow);
-        // 再清空状态
-        setCourseId('');
-        setCourseName('');
-        setCourseDesc('');
-        setStuNum(0);
-        setStar(0);
     };
     // 点击垃圾桶，删除课程
     const deleteCourseById = (e, id) => {
@@ -111,30 +73,10 @@ const Course = () => {
     };
     // 跳转到编辑页面
     const toEditCoursePage = id => {
-        console.log(id, '根据id，跳转到编辑页面');
+        history.push(`/admin/add?id=${id}`);
     };
     return (
         <div className="courseLayout">
-            <Modal
-                zIndex={9999}
-                visible={modalShow}
-                title={courseName}
-                style={{ top: 200 }}
-                onCancel={closeCourseInfo}
-                footer={[
-                    <Button key="back" onClick={closeCourseInfo}>
-                        返回
-                    </Button>,
-                    <Button key="submit" type="primary" onClick={() => toEditCoursePage(courseId)}>
-                        编辑
-                    </Button>,
-                ]}
-            >
-                <p>{courseDesc}</p>
-                <p>参与人数：{stuNum}</p>
-                课程评分：
-                <Rate disabled allowHalf value={star} />
-            </Modal>
             <AddCourse />
             {courseData.map(obj => {
                 return (
@@ -142,7 +84,7 @@ const Course = () => {
                         key={obj.id}
                         cover={<img alt="图片" src={obj.cover} className="coverImg" />}
                         className="courseCard"
-                        onClick={() => openCourseInfo(obj.id)}
+                        onClick={() => toEditCoursePage(obj.id)}
                     >
                         <div className="courseName">{obj.title}</div>
                         <div className="courseDesc">{obj.bio}</div>

@@ -14,7 +14,7 @@ const Header = ({ isLogin, setIsLogin }) => {
         <>
             <header>
                 <MdSpellcheck className="logo" />
-                <span>这是header</span>
+                <span>不学汉语</span>
                 {isLogin ? (
                     <>
                         <List />

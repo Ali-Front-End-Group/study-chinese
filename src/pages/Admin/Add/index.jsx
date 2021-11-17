@@ -21,11 +21,13 @@ import {
 } from '@ant-design/icons';
 import './index.css';
 
-const Add = ({ history }) => {
-    // 返回
-    const goBack = () => {
-        history.push('/admin/course');
-    };
+const Add = ({ history, location }) => {
+    // 课程名、课程描述、课程封面
+    const [name, setName] = useState('');
+    const [desc, setDesc] = useState('');
+    const [coverLink, setCoverLink] = useState('');
+    // 所有课程
+    const [allCourse, setAllCourse] = useState([]);
     // 处理动态时间
     const [time, setTime] = useState('');
     const runPerSed = () => setTime(dayjs().format('HH:mm:ss'));
@@ -39,12 +41,43 @@ const Add = ({ history }) => {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     });
-    // 课程名、课程描述、课程封面
-    const [name, setName] = useState('');
-    const [desc, setDesc] = useState('');
-    const [coverLink, setCoverLink] = useState('');
-    // 所有课程
-    const [allCourse, setAllCourse] = useState([]);
+    // 判断是否是编辑状态
+    const [isEdit, setIsEdit] = useState(false);
+    const [id, setId] = useState('');
+    useEffect(() => {
+        if (!location.search) {
+            setIsEdit(false);
+        } else {
+            setIsEdit(true);
+            setId(location.search.split('?id=')[1]);
+        }
+    }, [location]);
+    // 若是编辑状态，则获得该课程的具体信息
+    useEffect(() => {
+        if (isEdit) {
+            // 是编辑状态，获得此课程的具体信息
+            axios({
+                url: `${DB_URL}/course/detail?id=${id}`,
+                method: 'get',
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            }).then(
+                res => {
+                    if (res.data.result === 'success') {
+                        console.log(decodeURI(res.data.data.content));
+                    }
+                },
+                err => {
+                    console.log(err);
+                }
+            );
+        }
+    }, [isEdit, id]);
+    // 返回
+    const goBack = () => {
+        history.push('/admin/course');
+    };
     // 获得图片url
     const getImg = (character, index) => {
         axios
