@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
 import { Input, Button, Radio, Space, Card, message } from 'antd';
-import { BASE_URL, appTcb } from '../../../utils/constant';
+import { BASE_URL, DB_URL, appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import qs from 'qs';
 import { nanoid } from 'nanoid';
 import {
     FontColorsOutlined,
@@ -267,7 +268,30 @@ const Add = ({ history }) => {
                 }
             }
         }
-        message.success('添加课程成功！');
+
+        const data = {
+            title: name,
+            update_time: dayjs().format('YYYY-MM-DD'),
+            create_time: dayjs().format('YYYY-MM-DD'),
+            bio: desc,
+            cover: coverLink,
+            content: qs.stringify(allCourse),
+        };
+        axios({
+            url: `${DB_URL}/course/create`,
+            method: 'post',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+            data: qs.stringify(data),
+        }).then(
+            res => {
+                console.log(res);
+                message.success('添加课程成功！');
+            },
+            err => console.log(err)
+        );
     };
     return (
         <div className="addBox">

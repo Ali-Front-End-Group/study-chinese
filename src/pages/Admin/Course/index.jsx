@@ -2,150 +2,15 @@ import { useState, useEffect } from 'react';
 import AddCourse from '../../../components/AddCourse';
 import { Modal, Button, Card, Popconfirm, message, Rate } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import { DB_URL } from '../../../utils/constant';
 import './index.css';
 
 const Course = () => {
-    //测试数据
     const [courseData, setCourseData] = useState([]);
+    // 获取课程列表数据
     useEffect(() => {
-        const data = [
-            {
-                id: '00',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '语文',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 7,
-                star: 3.5,
-            },
-            {
-                id: '01',
-                imgLink: '/img/math.jpg',
-                courseName: '数学',
-                courseLink: 'http://www.bilibili.com',
-                courseDesc: '这是课程简介',
-                stuNum: 2,
-                star: 4.5,
-            },
-            {
-                id: '02',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '英语',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 2.5,
-            },
-            {
-                id: '03',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '物理',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3,
-            },
-            {
-                id: '04',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '化学',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3.5,
-            },
-            {
-                id: '05',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '生物',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 2.5,
-            },
-            {
-                id: '06',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '地理',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 5,
-            },
-            {
-                id: '07',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '历史',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 2.5,
-            },
-            {
-                id: '08',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '政治',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3,
-            },
-            {
-                id: '09',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '政治',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3,
-            },
-            {
-                id: '10',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '政治',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3,
-            },
-            {
-                id: '11',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '政治',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3,
-            },
-            {
-                id: '12',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '政治',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3,
-            },
-            {
-                id: '13',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '政治',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3,
-            },
-            {
-                id: '14',
-                imgLink: '/img/chinese.jpeg',
-                courseName: '政治',
-                courseLink: 'http://www.baidu.com',
-                courseDesc: '这是课程简介',
-                stuNum: 4,
-                star: 3,
-            },
-        ];
-        setCourseData(data);
+        getAllCourseFromDB();
     }, []);
     // 控制对话框显示
     const [modalShow, setModalShow] = useState(false);
@@ -157,6 +22,55 @@ const Course = () => {
     const [stuNum, setStuNum] = useState(0);
     const [star, setStar] = useState(0);
     const text = '确定删除该课程？';
+    // 从数据库获取所有课程信息
+    const getAllCourseFromDB = isDelete => {
+        axios({
+            url: `${DB_URL}/course/list?userId=1`,
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        }).then(
+            res => {
+                if (res.data.result === 'success') {
+                    setCourseData(res.data.data.rows);
+                    isDelete && message.success('删除课程成功！');
+                } else {
+                    message.warning('获取课程信息失败！');
+                }
+            },
+            err => {
+                console.log(err);
+                message.warning('获取课程信息失败！');
+            }
+        );
+    };
+    // 从数据库删除指定课程
+    const deleteCourseFromDB = id => {
+        axios({
+            url: `${DB_URL}/course/delete`,
+            method: 'post',
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+            data: {
+                id: `${id}`,
+            },
+        }).then(
+            res => {
+                console.log(res);
+                if (res.data.result === 'success') {
+                    getAllCourseFromDB(true);
+                } else {
+                    message.warning('删除课程失败！');
+                }
+            },
+            err => {
+                console.log(err);
+                message.warning('删除课程失败！');
+            }
+        );
+    };
     // 点击卡片，打开对话框
     const openCourseInfo = id => {
         // 根据传入的id，找到某个课程对象
@@ -188,11 +102,12 @@ const Course = () => {
     const deleteCourseById = (e, id) => {
         // 阻止事件冒泡
         e.stopPropagation();
+        deleteCourseFromDB(id);
         // 将相应id过滤掉
-        const newCourseData = courseData.filter(obj => obj.id !== id);
+        // const newCourseData = courseData.filter(obj => obj.id !== id);
         // 更新状态
-        setCourseData(newCourseData);
-        message.success('课程删除成功！');
+        // setCourseData(newCourseData);
+        // message.success('课程删除成功！');
     };
     // 跳转到编辑页面
     const toEditCoursePage = id => {
@@ -225,12 +140,12 @@ const Course = () => {
                 return (
                     <Card
                         key={obj.id}
-                        cover={<img alt="图片" src={obj.imgLink} className="coverImg" />}
+                        cover={<img alt="图片" src={obj.cover} className="coverImg" />}
                         className="courseCard"
                         onClick={() => openCourseInfo(obj.id)}
                     >
-                        <div className="courseName">{obj.courseName}</div>
-                        <div className="courseDesc">{obj.courseDesc}</div>
+                        <div className="courseName">{obj.title}</div>
+                        <div className="courseDesc">{obj.bio}</div>
                         <Popconfirm
                             placement="bottom"
                             title={text}
