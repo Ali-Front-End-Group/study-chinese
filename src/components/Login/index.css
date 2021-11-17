@@ -1,5 +1,75 @@
-.loginBox {
+.loginRegister {
     width: 400px;
-    height: 700px;
+    height: 268px;
+    transition: all 0.6s;
+    transform-style: preserve-3d;
+    /* perspective: 1000px; */
+    position: relative;
+}
+
+.loginBox,
+.registerBox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 400px;
     background-color: #fff;
+    padding: 14px;
+    border-radius: 12px;
+    transition: all 0.6s;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+.loginBox {
+    z-index: 1;
+    transform: translateZ(200px);
+}
+.registerBox {
+    transform: translateX(200px) rotateY(90deg);
+}
+
+.userInput {
+    height: 50px;
+    width: 100%;
+    border: 1px solid #dddfe2;
+    font-size: 16px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    background-color: #fff;
+    outline: none;
+    margin-bottom: 10px;
+}
+.longBtn,
+.shortBtn {
+    height: 50px;
+    color: #fff;
+    background-color: #1877f2;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s;
+}
+.longBtn:hover {
+    background-color: #3d8aee;
+}
+
+.loginLine {
+    height: 10px;
+    border-bottom: 1px solid #dddfe2;
+}
+.loginBtnBox {
+    height: 50px;
+}
+.shortBtn {
+    margin: auto;
+    width: 120px;
+    background-color: #42b72a;
+    margin-top: 10px;
+}
+.shortBtn:hover {
+    background-color: #6ebd5e;
 }

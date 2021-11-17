@@ -10,7 +10,7 @@ import './index.css';
 
 const Login = () => {
     const { setIsLogin } = useContext(LoginContext);
-    // const [isFront, setIsFront] = useState(true);
+    const [isFront, setIsFront] = useState(true);
     const [name, setName] = useState('');
     const [pwd, setPwd] = useState('');
     const [rname, setRname] = useState('');
@@ -30,6 +30,7 @@ const Login = () => {
             res => {
                 if (res.data.result === 'success') {
                     openNotification('注册成功，请登录！', <CheckOutlined />);
+                    toggle();
                     setRname('');
                     setRpwd('');
                 } else {
@@ -72,24 +73,67 @@ const Login = () => {
             }
         );
     };
-    // const toggle = () => setIsFront(isFront => !isFront);
+    const toggle = () => setIsFront(isFront => !isFront);
     return (
-        <div className="loginBox">
-            账户：
-            <input type="text" value={name} onChange={e => setName(e.target.value)} />
-            <br />
-            密码：
-            <input type="password" value={pwd} onChange={e => setPwd(e.target.value)} />
-            <br />
-            <button onClick={login}>登录</button>
-            <br />
-            账户：
-            <input type="text" value={rname} onChange={e => setRname(e.target.value)} />
-            <br />
-            密码：
-            <input type="password" value={rpwd} onChange={e => setRpwd(e.target.value)} />
-            <br />
-            <button onClick={register}>注册</button>
+        <div className="loginRegister" style={isFront ? {} : { transform: 'rotateY(-90deg)' }}>
+            <div className="loginBox" style={isFront ? {} : { boxShadow: 'none' }}>
+                <input
+                    className="userInput"
+                    type="text"
+                    placeholder="登录用户名"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    onClick={e => e.stopPropagation()}
+                />
+                <br />
+                <input
+                    className="userInput"
+                    type="password"
+                    placeholder="登录密码"
+                    value={pwd}
+                    onChange={e => setPwd(e.target.value)}
+                    onClick={e => e.stopPropagation()}
+                />
+                <br />
+                <div className="longBtn" onClick={login}>
+                    登录
+                </div>
+                <div className="loginLine"></div>
+                <div className="loginBtnBox">
+                    <div className="shortBtn" onClick={toggle}>
+                        去注册
+                    </div>
+                </div>
+            </div>
+            <div className="registerBox" style={isFront ? { boxShadow: 'none' } : {}}>
+                <input
+                    className="userInput"
+                    type="text"
+                    placeholder="注册用户名"
+                    value={rname}
+                    onChange={e => setRname(e.target.value)}
+                    onClick={e => e.stopPropagation()}
+                />
+                <br />
+                <input
+                    className="userInput"
+                    type="password"
+                    placeholder="注册密码"
+                    value={rpwd}
+                    onChange={e => setRpwd(e.target.value)}
+                    onClick={e => e.stopPropagation()}
+                />
+                <br />
+                <div className="longBtn" onClick={register}>
+                    注册
+                </div>
+                <div className="loginLine"></div>
+                <div className="loginBtnBox">
+                    <div className="shortBtn" onClick={toggle}>
+                        去登录
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
