@@ -106,7 +106,8 @@ const Add = ({ history, location }) => {
                 }
             });
     };
-    const getPinyin = (str, index) => {
+    // 获得拼音
+    const getPinyin = (str, index, contentType, value) => {
         axios
             .get(`${BASE_URL}/api/get_pinyin`, {
                 params: {
@@ -116,8 +117,15 @@ const Add = ({ history, location }) => {
             .then(res => {
                 console.log(res);
                 if (res.data.status === 200) {
+                    console.log(res.data.ret);
                     const copy = [...allCourse];
-                    copy[index].pinyin = res.data.ret;
+                    if (contentType === 'text') {
+                        copy[index].pinyin = res.data.ret;
+                    } else if (contentType === 'quzzle') {
+                        copy[index].content.pinyin = res.data.ret;
+                    } else if (contentType === 'choice') {
+                        copy[index].choice[value].pinyin = res.data.ret;
+                    }
                     setAllCourse(copy);
                     message.success('成功获得拼音！');
                 }
@@ -323,7 +331,7 @@ const Add = ({ history, location }) => {
             create_time: dayjs().format('YYYY-MM-DD'),
             bio: desc,
             cover: coverLink,
-            content: allCourse,
+            content: `{"data": ${JSON.stringify(allCourse)}}`,
         };
         axios({
             url: `${DB_URL}/course/create`,
@@ -453,7 +461,7 @@ const Add = ({ history, location }) => {
                                                 copy[index].content = e.target.value;
                                                 setAllCourse(copy);
                                             }}
-                                            onBlur={() => getPinyin(obj.content, index)}
+                                            onBlur={() => getPinyin(obj.content, index, 'text')}
                                         />
                                         <Input
                                             placeholder="请输入英文课程内容..."
@@ -590,6 +598,9 @@ const Add = ({ history, location }) => {
                                                 copy[index].content.content = e.target.value;
                                                 setAllCourse(copy);
                                             }}
+                                            onBlur={() =>
+                                                getPinyin(obj.content.content, index, 'quzzle')
+                                            }
                                         />
                                         <Button
                                             type="primary"
@@ -622,6 +633,14 @@ const Add = ({ history, location }) => {
                                                             setAllCourse(copy);
                                                         }}
                                                         maxLength={12}
+                                                        onBlur={() =>
+                                                            getPinyin(
+                                                                obj.choice[0].content,
+                                                                index,
+                                                                'choice',
+                                                                0
+                                                            )
+                                                        }
                                                     />
                                                 </Radio>
                                                 <Radio value={1}>
@@ -635,6 +654,14 @@ const Add = ({ history, location }) => {
                                                             setAllCourse(copy);
                                                         }}
                                                         maxLength={12}
+                                                        onBlur={() =>
+                                                            getPinyin(
+                                                                obj.choice[1].content,
+                                                                index,
+                                                                'choice',
+                                                                1
+                                                            )
+                                                        }
                                                     />
                                                 </Radio>
                                                 <Radio value={2}>
@@ -648,6 +675,14 @@ const Add = ({ history, location }) => {
                                                             setAllCourse(copy);
                                                         }}
                                                         maxLength={12}
+                                                        onBlur={() =>
+                                                            getPinyin(
+                                                                obj.choice[2].content,
+                                                                index,
+                                                                'choice',
+                                                                2
+                                                            )
+                                                        }
                                                     />
                                                 </Radio>
                                                 <Radio value={3}>
@@ -661,6 +696,14 @@ const Add = ({ history, location }) => {
                                                             setAllCourse(copy);
                                                         }}
                                                         maxLength={12}
+                                                        onBlur={() =>
+                                                            getPinyin(
+                                                                obj.choice[3].content,
+                                                                index,
+                                                                'choice',
+                                                                3
+                                                            )
+                                                        }
                                                     />
                                                 </Radio>
                                             </Space>
