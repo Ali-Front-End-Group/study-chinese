@@ -610,80 +610,88 @@ const Add = ({ history }) => {
                             <AiOutlineEllipsis />
                         </div>
                         <div className="mobileBody">
-                            {/* 渲染可视化预览 */}
-                            {allCourse.map(obj => {
-                                if (obj.type === 'text') {
-                                    return obj.zh ? (
-                                        <div className="courseContent" key={obj.id}>
-                                            <div className="contentZh">{obj.zh}</div>
-                                            {obj.en ? (
-                                                <div className="contentEn">翻译：{obj.en}</div>
-                                            ) : null}
-                                        </div>
-                                    ) : null;
-                                } else if (obj.type === 'img') {
-                                    return obj.url ? (
-                                        <div className="courseImg" key={obj.id}>
-                                            <img src={obj.url} alt="请点击按钮" />
-                                        </div>
-                                    ) : null;
-                                } else if (obj.type === 'voice') {
-                                    return obj.url ? (
-                                        <div
-                                            key={obj.id}
-                                            className="courseVoice"
-                                            onClick={() =>
-                                                document
-                                                    .getElementById(`${obj.id}+voicePlay`)
-                                                    .play()
-                                            }
-                                        >
-                                            <RiVoiceprintFill />
-                                            voice
-                                            <video
-                                                controls
-                                                name="media"
-                                                className="voiceVideo"
-                                                id={`${obj.id}+voicePlay`}
-                                                src={obj.url}
-                                            ></video>
-                                        </div>
-                                    ) : null;
-                                } else if (obj.type === 'ques') {
-                                    return (
-                                        <div key={obj.id}>
-                                            {obj.question ? (
-                                                <div className="courseTest">
-                                                    小测试：{obj.question}
-                                                </div>
-                                            ) : null}
-                                            {obj.ans.A || obj.ans.B || obj.ans.C || obj.ans.D ? (
-                                                <div className="answer">
-                                                    {[
-                                                        obj.ans.A,
-                                                        obj.ans.B,
-                                                        obj.ans.C,
-                                                        obj.ans.D,
-                                                    ].map((value, index) =>
-                                                        value ? (
-                                                            <div className="answerItem" key={index}>
-                                                                <div className="answerItemIndex">
-                                                                    {getIndex(index)}
+                            <div className="mobileBodyScreen">
+                                {/* 渲染可视化预览 */}
+                                {allCourse.map(obj => {
+                                    if (obj.type === 'text') {
+                                        return obj.zh ? (
+                                            <div className="courseContent" key={obj.id}>
+                                                <div className="contentZh">{obj.zh}</div>
+                                                {obj.en ? (
+                                                    <div className="contentEn">翻译：{obj.en}</div>
+                                                ) : null}
+                                            </div>
+                                        ) : null;
+                                    } else if (obj.type === 'img') {
+                                        return obj.url ? (
+                                            <div className="courseImg" key={obj.id}>
+                                                <img src={obj.url} alt="请点击按钮" />
+                                            </div>
+                                        ) : null;
+                                    } else if (obj.type === 'voice') {
+                                        return obj.url ? (
+                                            <div
+                                                key={obj.id}
+                                                className="courseVoice"
+                                                onClick={() =>
+                                                    document
+                                                        .getElementById(`${obj.id}+voicePlay`)
+                                                        .play()
+                                                }
+                                            >
+                                                <RiVoiceprintFill />
+                                                voice
+                                                <video
+                                                    controls
+                                                    name="media"
+                                                    className="voiceVideo"
+                                                    id={`${obj.id}+voicePlay`}
+                                                    src={obj.url}
+                                                ></video>
+                                            </div>
+                                        ) : null;
+                                    } else if (obj.type === 'ques') {
+                                        return (
+                                            <div key={obj.id}>
+                                                {obj.question ? (
+                                                    <div className="courseTest">
+                                                        小测试：{obj.question}
+                                                    </div>
+                                                ) : null}
+                                                {obj.ans.A ||
+                                                obj.ans.B ||
+                                                obj.ans.C ||
+                                                obj.ans.D ? (
+                                                    <div className="answer">
+                                                        {[
+                                                            obj.ans.A,
+                                                            obj.ans.B,
+                                                            obj.ans.C,
+                                                            obj.ans.D,
+                                                        ].map((value, index) =>
+                                                            value ? (
+                                                                <div
+                                                                    className="answerItem"
+                                                                    key={index}
+                                                                >
+                                                                    <div className="answerItemIndex">
+                                                                        {getIndex(index)}
+                                                                    </div>
+                                                                    <div className="answerItemContent">
+                                                                        {value}
+                                                                    </div>
                                                                 </div>
-                                                                <div className="answerItemContent">
-                                                                    {value}
-                                                                </div>
-                                                            </div>
-                                                        ) : null
-                                                    )}
-                                                </div>
-                                            ) : null}
-                                        </div>
-                                    );
-                                } else {
-                                    return null;
-                                }
-                            })}
+                                                            ) : null
+                                                        )}
+                                                    </div>
+                                                ) : null}
+                                            </div>
+                                        );
+                                    } else {
+                                        return null;
+                                    }
+                                })}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,48 +1,43 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { message } from 'antd';
+import { CheckOutlined, CloseOutlined, ExclamationOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { DB_URL, TOKEN } from '../../utils/constant';
+import qs from 'qs';
+import { LoginContext } from '../ContextManager';
+import { DB_URL } from '../../utils/constant';
+import { openNotification } from '../../utils/functions';
 import './index.css';
 
 const Login = () => {
+    const { setIsLogin } = useContext(LoginContext);
     // const [isFront, setIsFront] = useState(true);
     const [name, setName] = useState('');
     const [pwd, setPwd] = useState('');
     const [rname, setRname] = useState('');
-    const [rEmail, setREmail] = useState('');
     const [rpwd, setRpwd] = useState('');
     const register = () => {
         if (!rname || !rpwd) {
             message.warning('请输入账号和密码再注册！');
             return;
         }
+        const data = { username: rname, password: rpwd };
         axios({
             url: `${DB_URL}/register`,
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
             method: 'post',
-            body: {
-                username: rname,
-                password: rpwd,
-                email: rEmail,
-                date_joined: '2021-11-14',
-                nickname: 'jack',
-                avatar: 'afasdf',
-                bio: 'sdfasdfsf',
-                gender: '男',
-            },
+            data: qs.stringify(data),
         }).then(
             res => {
                 if (res.data.result === 'success') {
-                    message.success('注册成功，请登录！');
-                    console.log(res);
+                    openNotification('注册成功，请登录！', <CheckOutlined />);
                     setRname('');
-                    setREmail('');
                     setRpwd('');
                 } else {
-                    message.error('注册失败，请重试！');
+                    openNotification('帐号已存在，请更换一个！', <ExclamationOutlined />);
                 }
             },
             err => {
-                message.error('注册失败，请重试！');
+                openNotification('注册失败，请重试！', <CloseOutlined />);
                 console.log(err);
             }
         );
@@ -52,27 +47,27 @@ const Login = () => {
             message.warning('请输入账号和密码再登录！');
             return;
         }
+        const data = { username: name, password: pwd };
         axios({
             url: `${DB_URL}/login`,
             method: 'post',
-            params: {
-                username: name,
-                password: pwd,
-            },
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: qs.stringify(data),
         }).then(
             res => {
-                // if (res.data.result === 'success') {
-                //     message.success('注册成功，请登录！');
-                //     setRname('');
-                //     setREmail('');
-                //     setRpwd('');
-                // } else {
-                //     message.error('注册失败，请重试！');
-                // }
-                console.log(res);
+                if (res.data.result === 'success') {
+                    setName('');
+                    setPwd('');
+                    sessionStorage.setItem('token', res.data.data);
+                    // 设置登录状态
+                    setIsLogin(true);
+                    openNotification('登录成功！欢迎进入不学汉语！', <CheckOutlined />);
+                } else {
+                    message.error('登录失败，请重试！');
+                }
             },
             err => {
-                message.error('注册失败，请重试！');
+                message.error('登录失败，请重试！');
                 console.log(err);
             }
         );
@@ -90,9 +85,6 @@ const Login = () => {
             <br />
             账户：
             <input type="text" value={rname} onChange={e => setRname(e.target.value)} />
-            <br />
-            邮箱：
-            <input type="text" value={rEmail} onChange={e => setREmail(e.target.value)} />
             <br />
             密码：
             <input type="password" value={rpwd} onChange={e => setRpwd(e.target.value)} />
