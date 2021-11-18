@@ -11,6 +11,7 @@ import qs from 'qs';
 import {nanoid} from 'nanoid';
 import {connect} from 'react-redux';
 import {setAllCourses} from '../../../redux/actions';
+import QRCode from 'qrcode.react';
 import {
     CheckOutlined,
     FontColorsOutlined,
@@ -25,6 +26,7 @@ import {
     VideoCameraOutlined, ArrowLeftOutlined
 } from '@ant-design/icons';
 import './index.css';
+import Modal from "antd/es/modal/Modal";
 
 const Add = ({history, location, userId, allCourses, setAllCourses}) => {
     // 课程名、课程描述、课程封面
@@ -35,6 +37,8 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
     const [allCourse, setAllCourse] = useState([]);
     // 处理动态时间
     const [time, setTime] = useState('');
+    // 模态框的显示
+    const [modalVisible, setModalVisible] = useState(false);
     const runPerSed = () => setTime(dayjs().format('HH:mm:ss'));
     useEffect(() => {
         runPerSed();
@@ -396,7 +400,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                 if (res.data.result === 'success') {
                     getAllCourseFromDB();
                     message.success(`${isEdit ? '更新' : '添加'}课程成功！`);
-                    history.push('/admin/course');
+                    setModalVisible(true);
                 } else {
                     message.error(`${isEdit ? '更新' : '添加'}课程失败！`);
                 }
@@ -416,7 +420,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
             res => {
                 if (res.data.result === 'success') {
                     setAllCourses(res.data.data.rows);
-                    message.success('获取所有课程成功！');
+                    // message.success('获取所有课程成功！');
                 } else {
                     message.warning('获取课程信息失败！');
                 }
@@ -427,10 +431,28 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
             }
         );
     };
+    // 模态框隐藏
+    const handleCancel = () => {
+        setModalVisible(false);
+        history.push('/admin/course');
+    };
     const text = `课程信息未保存，确定取消${isEdit ? '更新' : '发布'}吗？`;
     return (
         <div className="addBox">
             <div className="addCenter">
+                <Modal title="课程二维码" visible={modalVisible}
+                       onCancel={handleCancel}
+                       footer={[
+                           <Button key='back' onClick={handleCancel}>完成</Button> ,]}
+                >
+                    <div style={{textAlign: 'center'}}>
+                        <h3>请将以下二维码发送给学生扫码以开始学习</h3>
+                        <QRCode style={{marginTop: '10px'}}
+                            value={`https://cbapi.musictrack.cn/course/detail?id=${editID}`}
+                            size={200}/>
+                    </div>
+                </Modal>
+
                 {/* 左边输入部分 */}
                 <div className="addLeft">
                     <div className="inputBox">
@@ -446,11 +468,11 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 okText="确认"
                                 cancelText="取消"
                             >
-                                <Button type="primary" icon={<ArrowLeftOutlined />}danger className="backBtn">
+                                <Button type="primary" icon={<ArrowLeftOutlined/>} danger className="backBtn">
                                     取消
                                 </Button>
                             </Popconfirm>
-                            <Button type="primary" icon={<CheckOutlined />}onClick={releaseCourse}>
+                            <Button type="primary" icon={<CheckOutlined/>} onClick={releaseCourse}>
                                 {isEdit ? '更新' : '发布'}
                             </Button>
                         </div>
