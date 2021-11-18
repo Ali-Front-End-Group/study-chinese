@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { FaWifi } from 'react-icons/fa';
-import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
-import { Input, Button, Radio, Space, Card, message, Popconfirm } from 'antd';
-import { BASE_URL, DB_URL, appTcb } from '../../../utils/constant';
-import { RiVoiceprintFill } from 'react-icons/ri';
-import { withRouter } from 'react-router-dom';
+import {useState, useEffect} from 'react';
+import {FaWifi} from 'react-icons/fa';
+import {AiOutlineLeft, AiOutlineEllipsis} from 'react-icons/ai';
+import {Input, Button, Radio, Space, Card, message, Popconfirm} from 'antd';
+import {BASE_URL, DB_URL, appTcb} from '../../../utils/constant';
+import {RiVoiceprintFill} from 'react-icons/ri';
+import {withRouter} from 'react-router-dom';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import qs from 'qs';
-import { nanoid } from 'nanoid';
-import { connect } from 'react-redux';
-import { setAllCourses } from '../../../redux/actions';
+import {nanoid} from 'nanoid';
+import {connect} from 'react-redux';
+import {setAllCourses} from '../../../redux/actions';
 import {
     FontColorsOutlined,
     FundOutlined,
@@ -20,10 +20,11 @@ import {
     DeleteOutlined,
     SearchOutlined,
     SoundOutlined,
+    CommentOutlined,
 } from '@ant-design/icons';
 import './index.css';
 
-const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
+const Add = ({history, location, userId, allCourses, setAllCourses}) => {
     // 课程名、课程描述、课程封面
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
@@ -51,7 +52,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
         setIsEdit(true);
         const ID = location.search.split('?id=')[1];
         const theCourse = allCourses.filter(obj => `${obj.id}` === ID)[0];
-        const { title, bio, cover, content } = theCourse;
+        const {title, bio, cover, content} = theCourse;
         setEditID(ID);
         setName(title);
         setDesc(bio);
@@ -108,6 +109,8 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                         copy[index].content.pinyin = res.data.ret;
                     } else if (contentType === 'choice') {
                         copy[index].choice[value].pinyin = res.data.ret;
+                    } else if (contentType === 'record') {
+                        copy[index].pinyin = res.data.ret;
                     }
                     setAllCourse(copy);
                     message.success('成功获得拼音！');
@@ -119,7 +122,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
         const id = nanoid();
         let obj;
         if (contentType === 'text') {
-            obj = { id, contentType, content: '', engText: '', pinyin: [] };
+            obj = {id, contentType, content: '', engText: '', pinyin: []};
         } else if (contentType === 'quzzle') {
             obj = {
                 id,
@@ -133,16 +136,18 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                 ],
                 answer: 0,
                 choice: [
-                    { id: 'A', content: '', contentType: 'text', pinyin: [] },
-                    { id: 'B', content: '', contentType: 'text', pinyin: [] },
-                    { id: 'C', content: '', contentType: 'text', pinyin: [] },
-                    { id: 'D', content: '', contentType: 'text', pinyin: [] },
+                    {id: 'A', content: '', contentType: 'text', pinyin: []},
+                    {id: 'B', content: '', contentType: 'text', pinyin: []},
+                    {id: 'C', content: '', contentType: 'text', pinyin: []},
+                    {id: 'D', content: '', contentType: 'text', pinyin: []},
                 ],
             };
         } else if (contentType === 'image') {
-            obj = { id, contentType, content: '', engText: '' };
+            obj = {id, contentType, content: '', engText: ''};
         } else if (contentType === 'voice') {
-            obj = { id, contentType, content: '', engText: 'voice', voiceType: '-1' };
+            obj = {id, contentType, content: '', engText: 'voice', voiceType: '-1'};
+        } else if (contentType === 'record') {
+            obj = {id, contentType, content: '', engText: '', pinyin: []};
         }
         const newCourse = [...allCourse, obj];
         setAllCourse(newCourse);
@@ -282,9 +287,11 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
         }
         // 判断每条信息是否有内容
         for (const obj of allCourse) {
-            if (obj.contentType === 'text') {
+            if (obj.contentType === 'text' || obj.contentType === 'record') {
                 if (!obj.content || !obj.engText) {
-                    message.warning('文字授课内容请填写完整！');
+                    message.warning(
+                        `${obj.contentType === 'text' ? '文字授课' : '口语任务'}内容请填写完整！`
+                    );
                     return;
                 }
             } else if (obj.contentType === 'image' || obj.contentType === 'voice') {
@@ -392,32 +399,38 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                             <Button
                                 type="primary"
                                 shape="circle"
-                                icon={<FontColorsOutlined />}
+                                icon={<FontColorsOutlined/>}
                                 onClick={() => addCourse('text')}
                             />
                             <Button
                                 type="primary"
                                 shape="circle"
-                                icon={<FundOutlined />}
+                                icon={<FundOutlined/>}
                                 onClick={() => addCourse('image')}
                             />
                             <Button
                                 type="primary"
                                 shape="circle"
-                                icon={<AudioOutlined />}
+                                icon={<CommentOutlined/>}
+                                onClick={() => addCourse('record')}
+                            />
+                            <Button
+                                type="primary"
+                                shape="circle"
+                                icon={<AudioOutlined/>}
                                 onClick={() => addCourse('voice')}
                             />
                             <Button
                                 type="primary"
                                 shape="circle"
-                                icon={<QuestionOutlined />}
+                                icon={<QuestionOutlined/>}
                                 onClick={() => addCourse('quzzle')}
                             />
                         </div>
                         {/* 课程名称、课程描述、课程封面 */}
                         <>
                             <span className="courseItem">课程名称：</span>
-                            <br />
+                            <br/>
                             <Input
                                 placeholder="请输入课程名..."
                                 value={name}
@@ -425,7 +438,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                 onChange={e => setName(e.target.value)}
                             />
                             <span className="courseItem">课程描述：</span>
-                            <br />
+                            <br/>
                             <Input
                                 placeholder="请输入课程描述..."
                                 value={desc}
@@ -433,19 +446,19 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                 onChange={e => setDesc(e.target.value)}
                             />
                             <span className="courseItem">课程封面：</span>
-                            <br />
+                            <br/>
                             <Input
                                 placeholder="请选择课程封面..."
                                 value={coverLink}
-                                style={{ width: 'calc(100% - 50px)' }}
+                                style={{width: 'calc(100% - 50px)'}}
                                 onChange={e => setCoverLink(e.target.value)}
                             />
                             <Button
                                 type="primary"
-                                style={{ width: '50px' }}
+                                style={{width: '50px'}}
                                 onClick={() => document.getElementById('selectCourseCover').click()}
                             >
-                                <FolderOpenOutlined />
+                                <FolderOpenOutlined/>
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -461,11 +474,11 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">文字信息：</span>
-                                        <br />
+                                        <br/>
                                         <Input
                                             placeholder="请输入中文课程内容..."
                                             value={obj.content}
-                                            style={{ width: 'calc(100% - 50px)' }}
+                                            style={{width: 'calc(100% - 50px)'}}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].content = e.target.value;
@@ -476,7 +489,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         <Input
                                             placeholder="请输入英文课程内容..."
                                             value={obj.engText}
-                                            style={{ width: 'calc(100% - 50px)' }}
+                                            style={{width: 'calc(100% - 50px)'}}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].engText = e.target.value;
@@ -486,12 +499,12 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         <Button
                                             type="primary"
                                             danger
-                                            style={{ width: '50px' }}
+                                            style={{width: '50px'}}
                                             onClick={() => {
                                                 deleteCourseById(obj.id);
                                             }}
                                         >
-                                            <DeleteOutlined />
+                                            <DeleteOutlined/>
                                         </Button>
                                     </div>
                                 );
@@ -499,10 +512,10 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">图片地址：</span>
-                                        <br />
+                                        <br/>
                                         <Input
                                             placeholder="请输入一个汉字，并转化为图片url..."
-                                            style={{ width: 'calc(100% - 150px)' }}
+                                            style={{width: 'calc(100% - 150px)'}}
                                             maxLength={1}
                                             value={obj.content}
                                             onChange={e => {
@@ -513,19 +526,19 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         />
                                         <Button
                                             type="primary"
-                                            style={{ width: '50px' }}
+                                            style={{width: '50px'}}
                                             onClick={() => getImg(obj.content, index)}
                                         >
-                                            <SearchOutlined />
+                                            <SearchOutlined/>
                                         </Button>
                                         <Button
                                             type="primary"
-                                            style={{ width: '50px' }}
+                                            style={{width: '50px'}}
                                             onClick={() =>
                                                 document.getElementById(`${obj.id}`).click()
                                             }
                                         >
-                                            <FolderOpenOutlined />
+                                            <FolderOpenOutlined/>
                                             <input
                                                 type="file"
                                                 accept="image/*"
@@ -537,10 +550,10 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         <Button
                                             type="primary"
                                             danger
-                                            style={{ width: '50px' }}
+                                            style={{width: '50px'}}
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
-                                            <DeleteOutlined />
+                                            <DeleteOutlined/>
                                         </Button>
                                     </div>
                                 );
@@ -548,10 +561,10 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">声音信息：</span>
-                                        <br />
+                                        <br/>
                                         <Input
                                             placeholder="请输入中文，并生成语音url..."
-                                            style={{ width: 'calc(100% - 150px)' }}
+                                            style={{width: 'calc(100% - 150px)'}}
                                             value={obj.content}
                                             maxLength={36}
                                             onChange={e => {
@@ -562,19 +575,19 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         />
                                         <Button
                                             type="primary"
-                                            style={{ width: '50px' }}
+                                            style={{width: '50px'}}
                                             onClick={() => getVoice(obj.content, index)}
                                         >
-                                            <SoundOutlined />
+                                            <SoundOutlined/>
                                         </Button>
                                         <Button
                                             type="primary"
-                                            style={{ width: '50px' }}
+                                            style={{width: '50px'}}
                                             onClick={() =>
                                                 document.getElementById(`${obj.id}`).click()
                                             }
                                         >
-                                            <FolderOpenOutlined />
+                                            <FolderOpenOutlined/>
                                             <input
                                                 type="file"
                                                 accept="audio/*"
@@ -586,10 +599,10 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         <Button
                                             type="primary"
                                             danger
-                                            style={{ width: '50px' }}
+                                            style={{width: '50px'}}
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
-                                            <DeleteOutlined />
+                                            <DeleteOutlined/>
                                         </Button>
                                     </div>
                                 );
@@ -597,12 +610,12 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">测试题目：</span>
-                                        <br />
+                                        <br/>
                                         <Input
                                             placeholder="请输入题目内容..."
                                             value={obj.content.content}
                                             maxLength={36}
-                                            style={{ width: 'calc(100% - 50px)' }}
+                                            style={{width: 'calc(100% - 50px)'}}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].content.content = e.target.value;
@@ -614,14 +627,14 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         />
                                         <Button
                                             type="primary"
-                                            style={{ width: '50px' }}
+                                            style={{width: '50px'}}
                                             danger
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
-                                            <DeleteOutlined />
+                                            <DeleteOutlined/>
                                         </Button>
                                         <span className="courseItem">题目答案：</span>
-                                        <br />
+                                        <br/>
                                         <Radio.Group
                                             name="radiogroup"
                                             value={obj.answer}
@@ -720,6 +733,38 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         </Radio.Group>
                                     </div>
                                 );
+                            } else if (obj.contentType === 'record') {
+                                return (
+                                    <div className="autoItem" key={obj.id}>
+                                        <span className="courseItem">派送口语任务：</span>
+                                        <br/>
+                                        <Input
+                                            maxLength={20}
+                                            placeholder="请输入口语任务内容，仅限中文，字数在20字以内..."
+                                            value={obj.content}
+                                            style={{width: 'calc(100% - 50px)'}}
+                                            onChange={e => {
+                                                const copy = [...allCourse];
+                                                copy[index].content = e.target.value;
+                                                setAllCourse(copy);
+                                            }}
+                                            onBlur={() => {
+                                                obj.content = obj.content.replace(/[^\u4e00-\u9fa5,\.\'\?!:;]/g, '');
+                                                getPinyin(obj.content, index, 'record')
+                                            }}
+                                        />
+                                        <Button
+                                            type="primary"
+                                            danger
+                                            style={{width: '50px'}}
+                                            onClick={() => {
+                                                deleteCourseById(obj.id);
+                                            }}
+                                        >
+                                            <DeleteOutlined/>
+                                        </Button>
+                                    </div>
+                                )
                             } else {
                                 return null;
                             }
@@ -748,12 +793,12 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                         </Card>
                         <div className="mobileTime">
                             <span>{time}</span>
-                            <FaWifi />
+                            <FaWifi/>
                         </div>
                         <div className="mobileTitle">
-                            <AiOutlineLeft />
+                            <AiOutlineLeft/>
                             <span>{name ? name : '未命名课程'}</span>
-                            <AiOutlineEllipsis />
+                            <AiOutlineEllipsis/>
                         </div>
                         <div className="mobileBody">
                             <div className="mobileBodyScreen">
@@ -773,7 +818,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                     } else if (obj.contentType === 'image') {
                                         return obj.content ? (
                                             <div className="courseImg" key={obj.id}>
-                                                <img src={obj.content} alt="请点击按钮" />
+                                                <img src={obj.content} alt="请点击按钮"/>
                                             </div>
                                         ) : null;
                                     } else if (obj.contentType === 'voice') {
@@ -787,7 +832,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                                         .play()
                                                 }
                                             >
-                                                <RiVoiceprintFill />
+                                                <RiVoiceprintFill/>
                                                 voice
                                                 <video
                                                     controls
@@ -830,6 +875,15 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                                 ) : null}
                                             </div>
                                         );
+                                    } else if (obj.contentType === 'record') {
+                                        return obj.content ? (
+                                            <div className="courseContent" key={obj.id}>
+                                                <div className="contentZh">{obj.content}</div>
+                                                <div className="contentEn">
+                                                    派送的口语任务
+                                                </div>
+                                            </div>
+                                        ) : null;
                                     } else {
                                         return null;
                                     }
@@ -849,6 +903,6 @@ export default withRouter(
             userId: state.userId,
             allCourses: state.allCourses,
         }),
-        { setAllCourses }
+        {setAllCourses}
     )(Add)
 );
