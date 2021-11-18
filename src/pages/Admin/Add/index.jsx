@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
-import { Input, Button, Radio, Space, Card, message, Popconfirm, Divider } from 'antd';
-import Modal from 'antd/es/modal/Modal'; // ------------------------------------
+import { Input, Button, Radio, Space, Card, message, Popconfirm, Divider, Modal } from 'antd';
 import { BASE_URL, DB_URL, appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
@@ -112,7 +111,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                     if (contentType === 'text') {
                         copy[index].pinyin = res.data.ret;
                     } else if (contentType === 'quzzle') {
-                        copy[index].content.pinyin = res.data.ret;
+                        copy[index].content[0].pinyin = res.data.ret;
                     } else if (contentType === 'choice') {
                         copy[index].choice[value].pinyin = res.data.ret;
                     } else if (contentType === 'record') {
@@ -360,7 +359,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                 }
             } else if (obj.contentType === 'quzzle') {
                 if (
-                    !obj.content.content ||
+                    !obj.content[0].content ||
                     !obj.choice[0].content ||
                     !obj.choice[1].content ||
                     !obj.choice[2].content ||
@@ -371,6 +370,8 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                 }
             }
         }
+        // console.log(allCourse);
+        // return;
         const data = {
             user_id: userId,
             title: name,
@@ -777,16 +778,16 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                         <br />
                                         <Input
                                             placeholder="请输入题目内容..."
-                                            value={obj.content.content}
+                                            value={obj.content[0].content}
                                             maxLength={36}
                                             style={{ width: 'calc(100% - 38px)' }}
                                             onChange={e => {
                                                 const copy = [...allCourse];
-                                                copy[index].content.content = e.target.value;
+                                                copy[index].content[0].content = e.target.value;
                                                 setAllCourse(copy);
                                             }}
                                             onBlur={() =>
-                                                getPinyin(obj.content.content, index, 'quzzle')
+                                                getPinyin(obj.content[0].content, index, 'quzzle')
                                             }
                                         />
                                         <Button
@@ -1025,9 +1026,9 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                     } else if (obj.contentType === 'quzzle') {
                                         return (
                                             <div key={obj.id}>
-                                                {obj.content.content ? (
+                                                {obj.content[0].content ? (
                                                     <div className="courseTest">
-                                                        小测试：{obj.content.content}
+                                                        小测试：{obj.content[0].content}
                                                     </div>
                                                 ) : null}
                                                 {obj.choice[0].content ||

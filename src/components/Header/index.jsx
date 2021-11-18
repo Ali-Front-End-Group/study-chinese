@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import { EnterOutlined, UploadOutlined } from '@ant-design/icons';
 import { openNotification } from '../../utils/functions';
 import { connect } from 'react-redux';
@@ -19,6 +20,7 @@ const Header = ({
     userInfo,
     setUserInfo,
     setAllCourses,
+    history,
 }) => {
     const { TextArea } = Input;
     const text = '确认要退出吗？';
@@ -121,6 +123,11 @@ const Header = ({
         setBioInput(bio);
         setNicknameInput(nickname);
     };
+    // 去课程页
+    const toCoursePage = () => {
+        if (!isLogin) return;
+        history.push('/admin/course');
+    };
     return (
         <>
             <header>
@@ -185,9 +192,12 @@ const Header = ({
                         </div>
                     </>
                 ) : null}
-                <img src={logoLink} alt="logo" className="headerLogo" />
-                &nbsp;&nbsp;
-                <span>不学汉语</span>
+                <div className="centerLogo" onClick={toCoursePage}>
+                    <img src={logoLink} alt="logo" className="headerLogo" />
+                    &nbsp;
+                    <span>不学汉语</span>
+                </div>
+
                 {isLogin ? (
                     <>
                         <List />
@@ -208,16 +218,18 @@ const Header = ({
     );
 };
 
-export default connect(
-    state => ({
-        isLogin: state.isLogin,
-        userId: state.userId,
-        userInfo: state.userInfo,
-    }),
-    {
-        setIsLogin,
-        setUserId,
-        setUserInfo,
-        setAllCourses,
-    }
-)(Header);
+export default withRouter(
+    connect(
+        state => ({
+            isLogin: state.isLogin,
+            userId: state.userId,
+            userInfo: state.userInfo,
+        }),
+        {
+            setIsLogin,
+            setUserId,
+            setUserInfo,
+            setAllCourses,
+        }
+    )(Header)
+);
