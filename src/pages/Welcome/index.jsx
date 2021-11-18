@@ -1,18 +1,18 @@
-// import { useState, useEffect } from 'react';
 import Login from '../../components/Login';
+import { welcomeBackground } from '../../utils/constant.js';
 import './index.css';
 
 const Welcome = () => {
     return (
-        <div className="welcomeBox">
-            {/* 左边 */}
-            <div className="left">
-                <img style={{ width: ' 500px' }} src="/img/Saly-10_2.png" alt="logo" />
-            </div>
-            {/* 右边 */}
+        <div
+            className="welcomeBox"
+            style={{ background: `url(${welcomeBackground}) 0 / cover fixed` }}
+        >
+            {/* <div className="left"></div>
             <div className="right">
                 <Login />
-            </div>
+            </div> */}
+            <Login />
         </div>
     );
 };
