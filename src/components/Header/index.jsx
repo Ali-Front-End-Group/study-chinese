@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { EnterOutlined, UploadOutlined } from '@ant-design/icons';
 import { openNotification } from '../../utils/functions';
 import { connect } from 'react-redux';
-import { setIsLogin, setUserId } from '../../redux/actions';
+import { setIsLogin, setUserId, setUserInfo, setAllCourses } from '../../redux/actions';
 import { defaultAvatar } from '../../utils/constant';
 import { Popconfirm, Modal, Input, Button, message } from 'antd';
 import { DB_URL, appTcb, logoLink } from '../../utils/constant';
@@ -11,24 +11,36 @@ import { nanoid } from 'nanoid';
 import List from './List';
 import './index.css';
 
-const Header = ({ isLogin, setIsLogin, setUserId, userId }) => {
+const Header = ({
+    isLogin,
+    setIsLogin,
+    userId,
+    setUserId,
+    userInfo,
+    setUserInfo,
+    setAllCourses,
+}) => {
     const { TextArea } = Input;
     const text = '确认要退出吗？';
     const logout = () => {
         setIsLogin(false);
         setUserId('');
+        setUserInfo({ avatar: '', bio: '', nickname: '' });
+        setAllCourses([]);
         openNotification('推出成功！欢迎再次使用！', <EnterOutlined />);
     };
-    const [avatar, setAvatar] = useState(defaultAvatar);
-    const [bio, setBio] = useState('');
-    const [nickname, setNickname] = useState('老师昵称');
     const [avatarInput, setAvatarInput] = useState(defaultAvatar);
     const [bioInput, setBioInput] = useState('');
     const [nicknameInput, setNicknameInput] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
-    useEffect(() => {});
-    // 上传图片;
-    const beforeUploadAvatar = async () => {
+    const { avatar, bio, nickname } = userInfo;
+    useEffect(() => {
+        setAvatarInput(avatar);
+        setBioInput(bio);
+        setNicknameInput(nickname);
+    }, [avatar, bio, nickname]);
+    // 上传图片
+    const beforeUploadAvatar = () => {
         // 获取文件对象
         const imgFile = document.getElementById('selectAvatar').files[0];
         // 文件类型
@@ -54,7 +66,7 @@ const Header = ({ isLogin, setIsLogin, setUserId, userId }) => {
             message.error('图片文件大小不能超过1M！');
             return;
         }
-        await appTcb
+        appTcb
             .uploadFile({
                 // 云存储的路径
                 cloudPath: `avatar/${nanoid()}.${fileEnd}`,
@@ -72,57 +84,52 @@ const Header = ({ isLogin, setIsLogin, setUserId, userId }) => {
     };
     // 更新用户信息
     const updateUserInfo = () => {
-        // axios({
-        //     url: `${DB_URL}/user/update?id=${userId}`,
-        //     method: 'post',
-        //     headers: {
-        //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-        //     },
-        // }).then(
-        //     res => {
-        //         if (res.data.result === 'success') {
-        //             console.log(res.data);
-        //             // message.success('更新个人信息成功！');
-        //         } else {
-        //             // message.warning('更新个人信息失败！');
-        //         }
-        //     },
-        //     err => {
-        //         console.log(err);
-        //         message.warning('更新个人信息失败！');
-        //     }
-        // );
         axios({
-            url: `${DB_URL}/user/detail?id=${userId}`,
-            method: 'get',
+            url: `${DB_URL}/user/update?id=${userId}`,
+            method: 'post',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            data: {
+                avatar: avatarInput,
+                bio: bioInput,
+                nickname: nicknameInput,
             },
         }).then(
             res => {
                 if (res.data.result === 'success') {
-                    console.log(res.data);
-                    // message.success('获取所有课程成功！');
+                    setModalVisible(false);
+                    const { avatar, bio, nickname } = res.data.data;
+                    setUserInfo({ avatar, bio, nickname });
+                    // setAvatarInput(avatar);
+                    // setBioInput(bio);
+                    // setNicknameInput(nickname);
+                    message.success('更新个人信息成功！');
                 } else {
-                    // message.warning('获取课程信息失败！');
+                    message.warning('更新个人信息失败！');
                 }
             },
-            err => {
-                console.log(err);
-                message.warning('获取课程信息失败！');
+            () => {
+                message.warning('更新个人信息失败！');
             }
         );
+    };
+    // 关闭对话框
+    const closeModal = () => {
+        setModalVisible(false);
+        setAvatarInput(avatar);
+        setBioInput(bio);
+        setNicknameInput(nickname);
     };
     return (
         <>
             <header>
-                {/* <MdSpellcheck className="logo" /> */}
                 {isLogin ? (
                     <>
                         <Modal
                             title="教师信息"
                             visible={modalVisible}
-                            onCancel={() => setModalVisible(false)}
+                            onCancel={closeModal}
                             bodyStyle={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -134,7 +141,11 @@ const Header = ({ isLogin, setIsLogin, setUserId, userId }) => {
                             okText="确认"
                             onOk={updateUserInfo}
                         >
-                            <img src={avatarInput} alt="avatar" className="avatarModal" />
+                            <img
+                                src={avatarInput ? avatarInput : defaultAvatar}
+                                alt="avatar"
+                                className="avatarModal"
+                            />
                             <Button
                                 type="primary"
                                 icon={<UploadOutlined />}
@@ -165,15 +176,18 @@ const Header = ({ isLogin, setIsLogin, setUserId, userId }) => {
                             />
                         </Modal>
                         <div className="userInfoBox" onClick={() => setModalVisible(true)}>
-                            <img className="userAvatar" src={avatar} alt="avatar" />
-                            <div className="userNameBox">{nickname}</div>
+                            <img
+                                className="userAvatar"
+                                src={avatar ? avatar : defaultAvatar}
+                                alt="avatar"
+                            />
+                            <div className="userNameBox">{nickname ? nickname : '老师昵称'}</div>
                         </div>
-                        <img src={logoLink} alt="logo" className="headerLogo" />
-                        &nbsp;&nbsp;
-                        <span>不学汉语</span>
                     </>
                 ) : null}
-
+                <img src={logoLink} alt="logo" className="headerLogo" />
+                &nbsp;&nbsp;
+                <span>不学汉语</span>
                 {isLogin ? (
                     <>
                         <List />
@@ -198,9 +212,12 @@ export default connect(
     state => ({
         isLogin: state.isLogin,
         userId: state.userId,
+        userInfo: state.userInfo,
     }),
     {
         setIsLogin,
         setUserId,
+        setUserInfo,
+        setAllCourses,
     }
 )(Header);

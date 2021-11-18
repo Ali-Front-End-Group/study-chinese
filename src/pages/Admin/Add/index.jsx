@@ -1,16 +1,16 @@
-import {useState, useEffect} from 'react';
-import {FaWifi} from 'react-icons/fa';
-import {AiOutlineLeft, AiOutlineEllipsis} from 'react-icons/ai';
-import {Input, Button, Radio, Space, Card, message, Popconfirm, Divider} from 'antd';
-import {BASE_URL, DB_URL, appTcb} from '../../../utils/constant';
-import {RiVoiceprintFill} from 'react-icons/ri';
-import {withRouter} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { FaWifi } from 'react-icons/fa';
+import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
+import { Input, Button, Radio, Space, Card, message, Popconfirm, Divider } from 'antd';
+import { BASE_URL, DB_URL, appTcb } from '../../../utils/constant';
+import { RiVoiceprintFill } from 'react-icons/ri';
+import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import qs from 'qs';
-import {nanoid} from 'nanoid';
-import {connect} from 'react-redux';
-import {setAllCourses} from '../../../redux/actions';
+import { nanoid } from 'nanoid';
+import { connect } from 'react-redux';
+import { setAllCourses } from '../../../redux/actions';
 import {
     CheckOutlined,
     FontColorsOutlined,
@@ -22,11 +22,12 @@ import {
     SearchOutlined,
     SoundOutlined,
     CommentOutlined,
-    VideoCameraOutlined, ArrowLeftOutlined
+    VideoCameraOutlined,
+    ArrowLeftOutlined,
 } from '@ant-design/icons';
 import './index.css';
 
-const Add = ({history, location, userId, allCourses, setAllCourses}) => {
+const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
     // 课程名、课程描述、课程封面
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
@@ -34,12 +35,10 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
     // 所有课程
     const [allCourse, setAllCourse] = useState([]);
     // 处理动态时间
-    const [time, setTime] = useState('');
-    const runPerSed = () => setTime(dayjs().format('HH:mm:ss'));
+    const [time, setTime] = useState(dayjs().format('HH:mm:ss'));
     useEffect(() => {
-        runPerSed();
-        let timer = setTimeout(() => {
-            runPerSed();
+        const timer = setTimeout(() => {
+            setTime(dayjs().format('HH:mm:ss'));
         }, 1000);
         return () => {
             clearTimeout(timer);
@@ -54,7 +53,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
         setIsEdit(true);
         const ID = location.search.split('?id=')[1];
         const theCourse = allCourses.filter(obj => `${obj.id}` === ID)[0];
-        const {title, bio, cover, content} = theCourse;
+        const { title, bio, cover, content } = theCourse;
         setEditID(ID);
         setName(title);
         setDesc(bio);
@@ -96,9 +95,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
     };
     // 获得拼音
     const getPinyin = (str, index, contentType, value) => {
-        if (!str) {
-            return;
-        }
+        if (!str) return;
         axios
             .get(`${BASE_URL}/api/get_pinyin`, {
                 params: {
@@ -127,7 +124,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
         const id = nanoid();
         let obj;
         if (contentType === 'text') {
-            obj = {id, contentType, content: '', engText: '', pinyin: []};
+            obj = { id, contentType, content: '', engText: '', pinyin: [] };
         } else if (contentType === 'quzzle') {
             obj = {
                 id,
@@ -141,20 +138,20 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                 ],
                 answer: 0,
                 choice: [
-                    {id: 'A', content: '', contentType: 'text', pinyin: []},
-                    {id: 'B', content: '', contentType: 'text', pinyin: []},
-                    {id: 'C', content: '', contentType: 'text', pinyin: []},
-                    {id: 'D', content: '', contentType: 'text', pinyin: []},
+                    { id: 'A', content: '', contentType: 'text', pinyin: [] },
+                    { id: 'B', content: '', contentType: 'text', pinyin: [] },
+                    { id: 'C', content: '', contentType: 'text', pinyin: [] },
+                    { id: 'D', content: '', contentType: 'text', pinyin: [] },
                 ],
             };
         } else if (contentType === 'image') {
-            obj = {id, contentType, content: '', engText: ''};
+            obj = { id, contentType, content: '', engText: '' };
         } else if (contentType === 'voice') {
-            obj = {id, contentType, content: '', engText: 'voice', voiceType: '-1'};
+            obj = { id, contentType, content: '', engText: 'voice', voiceType: '-1' };
         } else if (contentType === 'video') {
-            obj = {id, contentType, content: '', engText: ''};
+            obj = { id, contentType, content: '', engText: '' };
         } else if (contentType === 'record') {
-            obj = {id, contentType, content: '', engText: '', pinyin: []};
+            obj = { id, contentType, content: '', pinyin: [] };
         }
         const newCourse = [...allCourse, obj];
         setAllCourse(newCourse);
@@ -254,8 +251,6 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
         // 文件后缀
         const fileEnd = fileType.split('/')[1];
         // 1. 判断是否是常见视频格式
-        // console.log(fileType);
-        // return;
         if (
             !(
                 fileType === 'video/mp4' ||
@@ -340,11 +335,9 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
         }
         // 判断每条信息是否有内容
         for (const obj of allCourse) {
-            if (obj.contentType === 'text' || obj.contentType === 'record') {
+            if (obj.contentType === 'text') {
                 if (!obj.content || !obj.engText) {
-                    message.warning(
-                        `${obj.contentType === 'text' ? '文字授课' : '口语任务'}内容请填写完整！`
-                    );
+                    message.warning('文字授课内容请填写完整！');
                     return;
                 }
             } else if (obj.contentType === 'image' || obj.contentType === 'voice') {
@@ -354,10 +347,10 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                     );
                     return;
                 }
-            } else if (obj.contentType === 'video') {
+            } else if (obj.contentType === 'video' || obj.contentType === 'record') {
                 if (!obj.content) {
                     message.warning(
-                        `视频授课内容请填写完整！`
+                        `${obj.contentType === 'video' ? '视频授课' : '口语任务'}内容请填写完整！`
                     );
                     return;
                 }
@@ -446,19 +439,26 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 okText="确认"
                                 cancelText="取消"
                             >
-                                <Button type="primary" icon={<ArrowLeftOutlined />}danger className="backBtn">
+                                <Button
+                                    type="primary"
+                                    icon={<ArrowLeftOutlined />}
+                                    danger
+                                    className="backBtn"
+                                >
                                     取消
                                 </Button>
                             </Popconfirm>
-                            <Button type="primary" icon={<CheckOutlined />}onClick={releaseCourse}>
+                            <Button type="primary" icon={<CheckOutlined />} onClick={releaseCourse}>
                                 {isEdit ? '更新' : '发布'}
                             </Button>
                         </div>
-                        <Divider orientation="left">课程基本信息</Divider>
+                        <Divider orientation="left" style={{ fontSize: '20px', fontWeight: '700' }}>
+                            课程基本信息
+                        </Divider>
                         {/* 课程名称、课程描述、课程封面 */}
                         <>
                             <span className="courseItem">课程名称：</span>
-                            <br/>
+                            <br />
                             <Input
                                 placeholder="请输入课程名..."
                                 value={name}
@@ -466,7 +466,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 onChange={e => setName(e.target.value)}
                             />
                             <span className="courseItem">课程描述：</span>
-                            <br/>
+                            <br />
                             <Input
                                 placeholder="请输入课程描述..."
                                 value={desc}
@@ -474,19 +474,19 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 onChange={e => setDesc(e.target.value)}
                             />
                             <span className="courseItem">课程封面：</span>
-                            <br/>
+                            <br />
                             <Input
                                 placeholder="请选择课程封面..."
                                 value={coverLink}
-                                style={{width: 'calc(100% - 50px)'}}
+                                style={{ width: 'calc(100% - 38px)' }}
                                 onChange={e => setCoverLink(e.target.value)}
                             />
                             <Button
                                 shape="circle"
-                                style={{marginLeft: '5px'}}
+                                style={{ marginLeft: '6px' }}
                                 onClick={() => document.getElementById('selectCourseCover').click()}
                             >
-                                <CloudUploadOutlined/>
+                                <CloudUploadOutlined />
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -496,59 +496,72 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 />
                             </Button>
                         </>
-                        <Divider orientation="left">添加互动信息</Divider>
+                        <Divider orientation="left" style={{ fontSize: '20px', fontWeight: '700' }}>
+                            添加互动信息
+                        </Divider>
                         {/* 动态添加项目的按钮 */}
                         <div className="addBtns">
                             <Button
-                                icon={<FontColorsOutlined/>}
+                                className="addBtnItem"
+                                icon={<FontColorsOutlined />}
                                 onClick={() => addCourse('text')}
                             >
                                 文字信息
                             </Button>
                             <Button
-                                icon={<FundOutlined/>}
+                                className="addBtnItem"
+                                icon={<FundOutlined />}
                                 onClick={() => addCourse('image')}
                             >
                                 图片信息
                             </Button>
-
                             <Button
-                                icon={<AudioOutlined/>}
+                                className="addBtnItem"
+                                icon={<AudioOutlined />}
                                 onClick={() => addCourse('voice')}
                             >
                                 音频信息
                             </Button>
+                            <br />
                             <Button
-                                icon={<CommentOutlined/>}
+                                className="addBtnItem"
+                                icon={<CommentOutlined />}
                                 onClick={() => addCourse('record')}
                             >
                                 口语任务
                             </Button>
                             <Button
-                                icon={<VideoCameraOutlined/>}
+                                className="addBtnItem"
+                                icon={<VideoCameraOutlined />}
                                 onClick={() => addCourse('video')}
                             >
                                 视频信息
                             </Button>
                             <Button
-                                icon={<QuestionOutlined/>}
+                                className="addBtnItem"
+                                icon={<QuestionOutlined />}
                                 onClick={() => addCourse('quzzle')}
                             >
                                 测验信息
                             </Button>
                         </div>
-                        <Divider orientation="left">课程内容</Divider>
+                        <Divider orientation="left" style={{ fontSize: '20px', fontWeight: '700' }}>
+                            课程内容
+                        </Divider>
                         {/* 渲染所有课程 */}
                         {allCourse.map((obj, index) => {
                             if (obj.contentType === 'text') {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">文字信息：</span>
-                                        <br/>
+                                        <br />
                                         <Input
                                             placeholder="请输入中文内容..."
                                             value={obj.content}
-                                            style={{width: 'calc(100% - 50px)', marginBottom: '5px'}}
+                                            style={{
+                                                width: 'calc(100% - 38px)',
+                                                marginBottom: '5px',
+                                            }}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].content = e.target.value;
@@ -559,7 +572,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         <Input
                                             placeholder="请输入英文内容..."
                                             value={obj.engText}
-                                            style={{width: 'calc(100% - 50px)'}}
+                                            style={{ width: 'calc(100% - 38px)' }}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].engText = e.target.value;
@@ -570,12 +583,12 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             type="primary"
                                             shape="circle"
                                             danger
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() => {
                                                 deleteCourseById(obj.id);
                                             }}
                                         >
-                                            <DeleteOutlined/>
+                                            <DeleteOutlined />
                                         </Button>
                                     </div>
                                 );
@@ -583,10 +596,10 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">图片信息：</span>
-                                        <br/>
+                                        <br />
                                         <Input
                                             placeholder="请输入一个汉字，并转化为图片url..."
-                                            style={{width: 'calc(100% - 150px)'}}
+                                            style={{ width: 'calc(100% - 114px)' }}
                                             maxLength={1}
                                             value={obj.content}
                                             onChange={e => {
@@ -597,19 +610,19 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         />
                                         <Button
                                             shape="circle"
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() => getImg(obj.content, index)}
                                         >
-                                            <SearchOutlined/>
+                                            <SearchOutlined />
                                         </Button>
                                         <Button
                                             shape="circle"
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() =>
                                                 document.getElementById(`${obj.id}`).click()
                                             }
                                         >
-                                            <CloudUploadOutlined/>
+                                            <CloudUploadOutlined />
                                             <input
                                                 type="file"
                                                 accept="image/*"
@@ -622,12 +635,12 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             type="primary"
                                             shape="circle"
                                             danger
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() => {
                                                 deleteCourseById(obj.id);
                                             }}
                                         >
-                                            <DeleteOutlined/>
+                                            <DeleteOutlined />
                                         </Button>
                                     </div>
                                 );
@@ -635,10 +648,10 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">声音信息：</span>
-                                        <br/>
+                                        <br />
                                         <Input
                                             placeholder="请输入中文，并生成语音url..."
-                                            style={{width: 'calc(100% - 150px)'}}
+                                            style={{ width: 'calc(100% - 114px)' }}
                                             value={obj.content}
                                             maxLength={36}
                                             onChange={e => {
@@ -649,19 +662,19 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         />
                                         <Button
                                             shape="circle"
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() => getVoice(obj.content, index)}
                                         >
-                                            <SoundOutlined/>
+                                            <SoundOutlined />
                                         </Button>
                                         <Button
                                             shape="circle"
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() =>
                                                 document.getElementById(`${obj.id}`).click()
                                             }
                                         >
-                                            <CloudUploadOutlined/>
+                                            <CloudUploadOutlined />
                                             <input
                                                 type="file"
                                                 accept="audio/*"
@@ -674,12 +687,12 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             type="primary"
                                             shape="circle"
                                             danger
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() => {
                                                 deleteCourseById(obj.id);
                                             }}
                                         >
-                                            <DeleteOutlined/>
+                                            <DeleteOutlined />
                                         </Button>
                                     </div>
                                 );
@@ -687,10 +700,10 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">视频信息：</span>
-                                        <br/>
+                                        <br />
                                         <Input
                                             placeholder="请输入视频地址..."
-                                            style={{width: 'calc(100% - 150px)'}}
+                                            style={{ width: 'calc(100% - 76px)' }}
                                             // maxLength={1}
                                             value={obj.content}
                                             onChange={e => {
@@ -701,12 +714,12 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         />
                                         <Button
                                             shape="circle"
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() =>
                                                 document.getElementById(`${obj.id}`).click()
                                             }
                                         >
-                                            <CloudUploadOutlined/>
+                                            <CloudUploadOutlined />
                                             <input
                                                 type="file"
                                                 accept=".mp4,.avi,.flv,.wmv"
@@ -719,12 +732,12 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             type="primary"
                                             shape="circle"
                                             danger
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() => {
                                                 deleteCourseById(obj.id);
                                             }}
                                         >
-                                            <DeleteOutlined/>
+                                            <DeleteOutlined />
                                         </Button>
                                     </div>
                                 );
@@ -732,12 +745,12 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">测试题目：</span>
-                                        <br/>
+                                        <br />
                                         <Input
                                             placeholder="请输入题目内容..."
                                             value={obj.content.content}
                                             maxLength={36}
-                                            style={{width: 'calc(100% - 50px)'}}
+                                            style={{ width: 'calc(100% - 38px)' }}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].content.content = e.target.value;
@@ -751,13 +764,13 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             type="primary"
                                             shape="circle"
                                             danger
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
-                                            <DeleteOutlined/>
+                                            <DeleteOutlined />
                                         </Button>
                                         <span className="courseItem">题目答案：</span>
-                                        <br/>
+                                        <br />
                                         <Radio.Group
                                             name="radiogroup"
                                             value={obj.answer}
@@ -860,21 +873,24 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 return (
                                     <div className="autoItem" key={obj.id}>
                                         <span className="courseItem">派送口语任务：</span>
-                                        <br/>
+                                        <br />
                                         <Input
                                             maxLength={20}
                                             placeholder="请输入口语任务内容，仅限中文，字数在20字以内..."
                                             value={obj.content}
-                                            style={{width: 'calc(100% - 50px)'}}
+                                            style={{ width: 'calc(100% - 38px)' }}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].content = e.target.value;
                                                 setAllCourse(copy);
                                             }}
                                             onBlur={() => {
-                                                obj.content = obj.content.replace(/[^\u4e00-\u9fa5,\.\'\?!:;]/g, '');
+                                                obj.content = obj.content.replace(
+                                                    /[^\u4e00-\u9fa5,.'?!:;]/g,
+                                                    ''
+                                                );
                                                 if (obj.content) {
-                                                    getPinyin(obj.content, index, 'record')
+                                                    getPinyin(obj.content, index, 'record');
                                                 }
                                             }}
                                         />
@@ -882,15 +898,15 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             type="primary"
                                             shape="circle"
                                             danger
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '6px' }}
                                             onClick={() => {
                                                 deleteCourseById(obj.id);
                                             }}
                                         >
-                                            <DeleteOutlined/>
+                                            <DeleteOutlined />
                                         </Button>
                                     </div>
-                                )
+                                );
                             } else {
                                 return null;
                             }
@@ -919,12 +935,12 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                         </Card>
                         <div className="mobileTime">
                             <span>{time}</span>
-                            <FaWifi/>
+                            <FaWifi />
                         </div>
                         <div className="mobileTitle">
-                            <AiOutlineLeft/>
+                            <AiOutlineLeft />
                             <span>{name ? name : '未命名课程'}</span>
-                            <AiOutlineEllipsis/>
+                            <AiOutlineEllipsis />
                         </div>
                         <div className="mobileBody">
                             <div className="mobileBodyScreen">
@@ -944,7 +960,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                     } else if (obj.contentType === 'image') {
                                         return obj.content ? (
                                             <div className="courseImg" key={obj.id}>
-                                                <img src={obj.content} alt="请点击按钮"/>
+                                                <img src={obj.content} alt="请点击按钮" />
                                             </div>
                                         ) : null;
                                     } else if (obj.contentType === 'voice') {
@@ -958,7 +974,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                                         .play()
                                                 }
                                             >
-                                                <RiVoiceprintFill/>
+                                                <RiVoiceprintFill />
                                                 声音信息
                                                 <video
                                                     controls
@@ -971,7 +987,11 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         ) : null;
                                     } else if (obj.contentType === 'video') {
                                         return obj.content ? (
-                                            <video controls="controls" className="courseVideo" src={obj.content}/>
+                                            <video
+                                                controls="controls"
+                                                className="courseVideo"
+                                                src={obj.content}
+                                            />
                                         ) : null;
                                     } else if (obj.contentType === 'quzzle') {
                                         return (
@@ -1009,9 +1029,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         return obj.content ? (
                                             <div className="courseContent" key={obj.id}>
                                                 <div className="contentZh">{obj.content}</div>
-                                                <div className="contentEn">
-                                                    派送的口语任务
-                                                </div>
+                                                <div className="contentEn">(派送的口语任务)</div>
                                             </div>
                                         ) : null;
                                     } else {
@@ -1033,6 +1051,6 @@ export default withRouter(
             userId: state.userId,
             allCourses: state.allCourses,
         }),
-        {setAllCourses}
+        { setAllCourses }
     )(Add)
 );

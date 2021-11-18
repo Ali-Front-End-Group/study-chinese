@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { setAllCourses } from '../../../redux/actions';
 import { DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { DB_URL } from '../../../utils/constant';
+import { DB_URL, courseBackground } from '../../../utils/constant';
 import './index.css';
 
 const Course = ({ history, userId, allCourses, setAllCourses }) => {
@@ -74,34 +74,39 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
         history.push(`/admin/add?id=${id}`);
     };
     return (
-        <div className="courseLayout">
-            <AddCourse />
-            {allCourses.map(obj => {
-                return (
-                    <Card
-                        key={obj.id}
-                        cover={<img alt="图片" src={obj.cover} className="coverImg" />}
-                        className="courseCard"
-                        onClick={() => toEditCoursePage(obj.id)}
-                    >
-                        <div className="courseName">{obj.title}</div>
-                        <div className="courseDesc">{obj.bio}</div>
-                        <Popconfirm
-                            placement="bottom"
-                            title={text}
-                            onConfirm={e => deleteCourseById(e, obj.id)}
-                            onCancel={e => e.stopPropagation()}
-                            okText="删除"
-                            cancelText="取消"
-                            onClick={e => e.stopPropagation()}
+        <div
+            className="CourseBox"
+            style={{ background: `url(${courseBackground}) 0 / cover fixed` }}
+        >
+            <div className="courseLayout">
+                <AddCourse />
+                {allCourses.map(obj => {
+                    return (
+                        <Card
+                            key={obj.id}
+                            cover={<img alt="图片" src={obj.cover} className="coverImg" />}
+                            className="courseCard"
+                            onClick={() => toEditCoursePage(obj.id)}
                         >
-                            <div className="deleteCourseBtn">
-                                <DeleteOutlined />
-                            </div>
-                        </Popconfirm>
-                    </Card>
-                );
-            })}
+                            <div className="courseName">{obj.title}</div>
+                            <div className="courseDesc">{obj.bio}</div>
+                            <Popconfirm
+                                placement="bottom"
+                                title={text}
+                                onConfirm={e => deleteCourseById(e, obj.id)}
+                                onCancel={e => e.stopPropagation()}
+                                okText="删除"
+                                cancelText="取消"
+                                onClick={e => e.stopPropagation()}
+                            >
+                                <div className="deleteCourseBtn">
+                                    <DeleteOutlined />
+                                </div>
+                            </Popconfirm>
+                        </Card>
+                    );
+                })}
+            </div>
         </div>
     );
 };

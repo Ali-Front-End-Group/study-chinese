@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { message } from 'antd';
 import { CheckOutlined, CloseOutlined, ExclamationOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import { setIsLogin, setUserId, setAllCourses } from '../../redux/actions';
+import { setIsLogin, setUserId, setAllCourses, setUserInfo } from '../../redux/actions';
 import axios from 'axios';
 import qs from 'qs';
 import { DB_URL } from '../../utils/constant';
 import { openNotification } from '../../utils/functions';
 import './index.css';
 
-const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
+const Login = ({ setIsLogin, setUserId, setAllCourses, setUserInfo }) => {
     const [isFront, setIsFront] = useState(true);
     const [name, setName] = useState('');
     const [pwd, setPwd] = useState('');
@@ -38,9 +38,8 @@ const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
                     openNotification('帐号已存在，请更换一个！', <ExclamationOutlined />);
                 }
             },
-            err => {
+            () => {
                 openNotification('注册失败，请重试！', <CloseOutlined />);
-                console.log(err);
             }
         );
     };
@@ -59,17 +58,16 @@ const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
         }).then(
             res => {
                 if (res.data.result === 'success') {
-                    console.log(res.data);
-                    setName('');
-                    setPwd('');
-                    const TOKEN = res.data.data.token;
-                    const ID = res.data.data.id;
-                    getAllCourseFromDB(ID, TOKEN);
-                    setUserId(ID);
-                    localStorage.setItem('token', TOKEN);
+                    const { nickname, bio, avatar, token, id } = res.data.data;
+                    setUserInfo({ nickname, bio, avatar });
+                    getAllCourseFromDB(id, token);
+                    setUserId(id);
+                    localStorage.setItem('token', token);
                     // 设置登录状态
                     setIsLogin(true);
                     openNotification('登录成功！欢迎进入不学汉语！', <CheckOutlined />);
+                    setName('');
+                    setPwd('');
                 } else {
                     message.error('登录失败，请重试！');
                 }
@@ -182,4 +180,5 @@ export default connect(() => ({}), {
     setIsLogin,
     setUserId,
     setAllCourses,
+    setUserInfo,
 })(Login);

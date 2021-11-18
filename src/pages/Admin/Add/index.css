@@ -32,11 +32,8 @@
     margin-right: 20px;
 }
 
-.addBtns {
-    height: 50px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+.addBtnItem {
+    margin-bottom: 6px;
 }
 
 .addBtns Button {
@@ -127,6 +124,20 @@
     border-radius: 0 0 20px 20px;
 }
 
+/* 设置滚动条的样式 */
+.mobileBodyScreen::-webkit-scrollbar {
+    width: 10px;
+}
+/* 滚动槽 */
+.mobileBodyScreen::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+}
+/* 滚动条滑块 */
+.mobileBodyScreen::-webkit-scrollbar-thumb {
+    background-color: rgb(197, 197, 197);
+    border-radius: 12px;
+}
+
 .courseContent {
     padding: 10px;
     width: 80%;
@@ -167,7 +178,7 @@
     justify-content: space-between;
     align-items: center;
     border-radius: 12px;
-    width: 80px;
+    width: 110px;
     user-select: none;
     margin-bottom: 10px;
     transition: all 0.3s;

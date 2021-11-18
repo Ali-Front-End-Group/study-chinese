@@ -1,3 +1,9 @@
+.CourseBox {
+    min-height: calc(100vh - 60px);
+    background-size: cover;
+    /* background-color: rgb(209, 209, 209); */
+}
+
 .courseLayout {
     width: 1300px;
     min-height: calc(100vh - 60px);
@@ -17,10 +23,11 @@
     height: 280px;
     overflow: hidden;
     position: relative;
-    background-color: rgb(214, 252, 245);
+    background-color: #f5f5f5;
     transition: all 0.3s;
     cursor: pointer;
     user-select: none;
+    opacity: 0.9;
 }
 .courseCard:hover {
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);

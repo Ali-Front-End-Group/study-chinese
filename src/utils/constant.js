@@ -11,8 +11,13 @@ export const appTcb = tcb.init({
 });
 
 // 默认用户头像
-export const defaultAvatar = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20201204121004.jpg';
+export const defaultAvatar = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118192629.jpg';
 
 // logo
-export const logoLink =
-    'https://7374-study-chinese-5gkh7t4aa5273394-1304393382.tcb.qcloud.la/avatar/XcDg9CIuc1saMhagfUiti.jpeg';
+export const logoLink = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118183107.jpg';
+
+// export const courseBackground =
+//     'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118183058.png';
+
+export const courseBackground =
+    'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118194626.png';

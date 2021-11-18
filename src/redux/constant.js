@@ -6,3 +6,6 @@ export const SET_USER_ID = 'setUserId';
 
 // 所有课程
 export const SET_ALL_COURSES = 'setAllCourses';
+
+// 用户个人信息
+export const SET_USER_INFO = 'setUserInfo';
