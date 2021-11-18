@@ -1,30 +1,34 @@
-import { useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { LoginContext } from './components/ContextManager';
+import { connect } from 'react-redux';
+import { setIsLogin } from './redux/actions';
 import Header from './components/Header';
 import Admin from './pages/Admin';
 import Welcome from './pages/Welcome';
 
-const App = () => {
-    const [isLogin, setIsLogin] = useState(false);
+const App = ({ isLogin, setIsLogin }) => {
     return (
         <>
-            <Header isLogin={isLogin} setIsLogin={setIsLogin} />
-            <LoginContext.Provider value={{ setIsLogin }}>
-                {isLogin ? (
-                    <>
-                        <Route path="/admin" component={Admin} />
-                        <Redirect to="/admin" />
-                    </>
-                ) : (
-                    <>
-                        <Route path="/" component={Welcome} />
-                        <Redirect to="/" />
-                    </>
-                )}
-            </LoginContext.Provider>
+            <Header />
+            {isLogin ? (
+                <>
+                    <Route path="/admin" component={Admin} />
+                    <Redirect to="/admin" />
+                </>
+            ) : (
+                <>
+                    <Route path="/" component={Welcome} />
+                    <Redirect to="/" />
+                </>
+            )}
         </>
     );
 };
 
-export default App;
+export default connect(
+    state => ({
+        isLogin: state.isLogin,
+    }),
+    {
+        setIsLogin,
+    }
+)(App);

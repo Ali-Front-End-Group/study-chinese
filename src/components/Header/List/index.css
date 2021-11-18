@@ -4,7 +4,7 @@
     top: 50%;
     transform: translate(0, -50%);
     height: 40px;
-    width: 300px;
+    width: 240px;
     /* background-color: rgb(168, 144, 144); */
     display: flex;
     justify-content: space-evenly;

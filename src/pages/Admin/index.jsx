@@ -1,6 +1,4 @@
-// import { useState, useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import Home from './Home';
 import Help from './Help';
 import Course from './Course';
 import Add from './Add';
@@ -12,8 +10,7 @@ const Admin = () => (
             <Route path="/admin/add" component={Add} />
             <Route path="/admin/course" component={Course} />
             <Route path="/admin/help" component={Help} />
-            <Route path="/admin/" component={Home} />
-            <Redirect to="/admin/" />
+            <Redirect to="/admin/course" />
         </Switch>
     </div>
 );

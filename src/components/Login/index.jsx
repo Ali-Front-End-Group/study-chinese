@@ -1,15 +1,15 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { message } from 'antd';
 import { CheckOutlined, CloseOutlined, ExclamationOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import { setIsLogin, setUserId, setAllCourses } from '../../redux/actions';
 import axios from 'axios';
 import qs from 'qs';
-import { LoginContext } from '../ContextManager';
 import { DB_URL } from '../../utils/constant';
 import { openNotification } from '../../utils/functions';
 import './index.css';
 
-const Login = () => {
-    const { setIsLogin } = useContext(LoginContext);
+const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
     const [isFront, setIsFront] = useState(true);
     const [name, setName] = useState('');
     const [pwd, setPwd] = useState('');
@@ -59,8 +59,11 @@ const Login = () => {
                 if (res.data.result === 'success') {
                     setName('');
                     setPwd('');
-                    localStorage.setItem('token', res.data.data.token);
-                    localStorage.setItem('id', res.data.data.id);
+                    const TOKEN = res.data.data.token;
+                    const ID = res.data.data.id;
+                    getAllCourseFromDB(ID, TOKEN);
+                    setUserId(ID);
+                    localStorage.setItem('token', TOKEN);
                     // 设置登录状态
                     setIsLogin(true);
                     openNotification('登录成功！欢迎进入不学汉语！', <CheckOutlined />);
@@ -71,6 +74,28 @@ const Login = () => {
             err => {
                 message.error('登录失败，请重试！');
                 console.log(err);
+            }
+        );
+    };
+    // 从数据库获取所有课程信息
+    const getAllCourseFromDB = (ID, TOKEN) => {
+        axios({
+            url: `${DB_URL}/course/list?userId=${ID}`,
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${TOKEN}`,
+            },
+        }).then(
+            res => {
+                if (res.data.result === 'success') {
+                    setAllCourses(res.data.data.rows);
+                } else {
+                    message.warning('获取课程信息失败！');
+                }
+            },
+            err => {
+                console.log(err);
+                message.warning('获取课程信息失败！');
             }
         );
     };
@@ -139,4 +164,8 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default connect(() => ({}), {
+    setIsLogin,
+    setUserId,
+    setAllCourses,
+})(Login);

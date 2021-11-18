@@ -9,6 +9,8 @@ import dayjs from 'dayjs';
 import axios from 'axios';
 import qs from 'qs';
 import { nanoid } from 'nanoid';
+import { connect } from 'react-redux';
+import { setAllCourses } from '../../../redux/actions';
 import {
     FontColorsOutlined,
     FundOutlined,
@@ -21,7 +23,7 @@ import {
 } from '@ant-design/icons';
 import './index.css';
 
-const Add = ({ history, location }) => {
+const Add = ({ history, location, userId, setAllCourses }) => {
     // 课程名、课程描述、课程封面
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
@@ -60,7 +62,7 @@ const Add = ({ history, location }) => {
                 url: `${DB_URL}/course/detail?id=${id}`,
                 method: 'get',
                 headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             }).then(
                 res => {
@@ -323,7 +325,7 @@ const Add = ({ history, location }) => {
             }
         }
         const data = {
-            user_id: localStorage.getItem('id'),
+            user_id: userId,
             title: name,
             update_time: dayjs().format('YYYY-MM-DD'),
             create_time: dayjs().format('YYYY-MM-DD'),
@@ -342,6 +344,7 @@ const Add = ({ history, location }) => {
         }).then(
             res => {
                 if (res.data.result === 'success') {
+                    getAllCourseFromDB();
                     message.success('添加课程成功！');
                     history.push('/admin/course');
                 } else {
@@ -349,6 +352,29 @@ const Add = ({ history, location }) => {
                 }
             },
             err => message.error('添加课程失败！')
+        );
+    };
+    // 从数据库获取所有课程信息
+    const getAllCourseFromDB = () => {
+        axios({
+            url: `${DB_URL}/course/list?userId=${userId}`,
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        }).then(
+            res => {
+                if (res.data.result === 'success') {
+                    setAllCourses(res.data.data.rows);
+                    message.success('获取所有课程成功！');
+                } else {
+                    message.warning('获取课程信息失败！');
+                }
+            },
+            err => {
+                console.log(err);
+                message.warning('获取课程信息失败！');
+            }
         );
     };
     const text = '课程信息未保存，确定取消发布吗？';
@@ -831,4 +857,11 @@ const Add = ({ history, location }) => {
     );
 };
 
-export default withRouter(Add);
+export default withRouter(
+    connect(
+        state => ({
+            userId: state.userId,
+        }),
+        { setAllCourses }
+    )(Add)
+);

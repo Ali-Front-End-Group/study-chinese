@@ -1104,7 +1104,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.1", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.4", "@babel/runtime@^7.11.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.1", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.4", "@babel/runtime@^7.11.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.16.3"
   resolved "https://registry.npmmirror.com/@babel/runtime/download/@babel/runtime-7.16.3.tgz?cache=0&sync_timestamp=1636494819594&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.16.3.tgz"
   integrity sha512-WBwekcqacdY2e9AF/Q7WLFUWmdJGJTkbjqTjoMDgXkVZ3ZRUvOPsLb5KdwISoQVsbP+DQzVZW4Zhci0DvpbNTQ==
@@ -1838,6 +1838,14 @@
   dependencies:
     "@types/node" "*"
 
+"@types/hoist-non-react-statics@^3.3.0":
+  version "3.3.1"
+  resolved "https://registry.nlark.com/@types/hoist-non-react-statics/download/@types/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
+  integrity sha1-ESSq/lEYy1kZd66xzqrtEHDrA58=
+  dependencies:
+    "@types/react" "*"
+    hoist-non-react-statics "^3.3.0"
+
 "@types/html-minifier-terser@^5.0.0":
   version "5.1.1"
   resolved "https://registry.nlark.com/@types/html-minifier-terser/download/@types/html-minifier-terser-5.1.1.tgz"
@@ -1905,10 +1913,34 @@
   resolved "https://registry.npmmirror.com/@types/prettier/download/@types/prettier-2.2.1.tgz?cache=0&sync_timestamp=1636770733471&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fprettier%2Fdownload%2F%40types%2Fprettier-2.2.1.tgz"
   integrity "sha1-N04xZF1Yyxigez7Njp3t5N6yzM0= sha512-DxZZbyMAM9GWEzXL+BMZROWz9oo6A9EilwwOMET2UVu2uZTqMWS5S69KVtuVKaRjCUpcrOXRalet86/OpG4kqw=="
 
+"@types/prop-types@*":
+  version "15.7.4"
+  resolved "https://registry.nlark.com/@types/prop-types/download/@types/prop-types-15.7.4.tgz?cache=0&sync_timestamp=1629708737049&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fprop-types%2Fdownload%2F%40types%2Fprop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
+  integrity sha1-/PcgXCXf95Xuea8eMNosl5CAjxE=
+
 "@types/q@^1.5.1":
   version "1.5.4"
   resolved "https://registry.nlark.com/@types/q/download/@types/q-1.5.4.tgz?cache=0&sync_timestamp=1629708830339&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fq%2Fdownload%2F%40types%2Fq-1.5.4.tgz"
   integrity "sha1-FZJUFOCtLNdlv+9YhC9+JqesyyQ= sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug=="
+
+"@types/react-redux@^7.1.20":
+  version "7.1.20"
+  resolved "https://registry.npmmirror.com/@types/react-redux/download/@types/react-redux-7.1.20.tgz#42f0e61ababb621e12c66c96dda94c58423bd7df"
+  integrity sha1-QvDmGrq7Yh4SxmyW3alMWEI7198=
+  dependencies:
+    "@types/hoist-non-react-statics" "^3.3.0"
+    "@types/react" "*"
+    hoist-non-react-statics "^3.3.0"
+    redux "^4.0.0"
+
+"@types/react@*":
+  version "17.0.35"
+  resolved "https://registry.npmmirror.com/@types/react/download/@types/react-17.0.35.tgz?cache=0&sync_timestamp=1637013905386&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Freact%2Fdownload%2F%40types%2Freact-17.0.35.tgz#217164cf830267d56cd1aec09dcf25a541eedd4c"
+  integrity sha512-r3C8/TJuri/SLZiiwwxQoLAoavaczARfT9up9b4Jr65+ErAUX3MIkU0oMOQnrpfgHme8zIqZLX7O5nnjm5Wayw==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
 
 "@types/resolve@0.0.8":
   version "0.0.8"
@@ -1916,6 +1948,11 @@
   integrity "sha1-8mB00jjgJlnjI84aE9BB7uKA4ZQ= sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ=="
   dependencies:
     "@types/node" "*"
+
+"@types/scheduler@*":
+  version "0.16.2"
+  resolved "https://registry.nlark.com/@types/scheduler/download/@types/scheduler-0.16.2.tgz?cache=0&sync_timestamp=1629709152024&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fscheduler%2Fdownload%2F%40types%2Fscheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
+  integrity sha1-GmL4lSVyPd4kuhsBsJK/XfitTTk=
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -4068,6 +4105,11 @@ cssstyle@^2.2.0:
   dependencies:
     cssom "~0.3.6"
 
+csstype@^3.0.2:
+  version "3.0.10"
+  resolved "https://registry.npmmirror.com/csstype/download/csstype-3.0.10.tgz?cache=0&sync_timestamp=1636974751397&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fcsstype%2Fdownload%2Fcsstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
+  integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
+
 customize-cra@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/customize-cra/download/customize-cra-1.0.0.tgz"
@@ -5669,7 +5711,7 @@ hmac-drbg@^1.0.1:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoist-non-react-statics@^3.1.0:
+hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-3.3.2.tgz?cache=0&sync_timestamp=1596721617088&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fhoist-non-react-statics%2Fdownload%2Fhoist-non-react-statics-3.3.2.tgz"
   integrity "sha1-7OCsr3HWLClpwuxZ/v9CpLGoW0U= sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw=="
@@ -9666,6 +9708,23 @@ react-is@^17.0.1:
   resolved "https://registry.npmmirror.com/react-is/download/react-is-17.0.1.tgz"
   integrity "sha1-WzUxvXamRaTJ+25pPtNkGeMwEzk= sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA=="
 
+react-is@^17.0.2:
+  version "17.0.2"
+  resolved "https://registry.npmmirror.com/react-is/download/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
+  integrity sha1-5pHUqOnHiTZWVVOas3J2Kw77VPA=
+
+react-redux@^7.2.6:
+  version "7.2.6"
+  resolved "https://registry.npmmirror.com/react-redux/download/react-redux-7.2.6.tgz#49633a24fe552b5f9caf58feb8a138936ddfe9aa"
+  integrity sha1-SWM6JP5VK1+cr1j+uKE4k23f6ao=
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+    "@types/react-redux" "^7.1.20"
+    hoist-non-react-statics "^3.3.2"
+    loose-envify "^1.4.0"
+    prop-types "^15.7.2"
+    react-is "^17.0.2"
+
 react-refresh@^0.8.3:
   version "0.8.3"
   resolved "https://registry.npmmirror.com/react-refresh/download/react-refresh-0.8.3.tgz?cache=0&sync_timestamp=1636734515235&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Freact-refresh%2Fdownload%2Freact-refresh-0.8.3.tgz"
@@ -9862,6 +9921,23 @@ redent@^3.0.0:
   dependencies:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
+
+redux-devtools-extension@^2.13.9:
+  version "2.13.9"
+  resolved "https://registry.npm.taobao.org/redux-devtools-extension/download/redux-devtools-extension-2.13.9.tgz?cache=0&sync_timestamp=1615042238538&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fredux-devtools-extension%2Fdownload%2Fredux-devtools-extension-2.13.9.tgz#6b764e8028b507adcb75a1cae790f71e6be08ae7"
+  integrity sha1-a3ZOgCi1B63LdaHK55D3Hmvgiuc=
+
+redux-thunk@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.npmmirror.com/redux-thunk/download/redux-thunk-2.4.0.tgz#ac89e1d6b9bdb9ee49ce69a69071be41bbd82d67"
+  integrity sha1-rInh1rm9ue5JzmmmkHG+QbvYLWc=
+
+redux@^4.0.0, redux@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.npmmirror.com/redux/download/redux-4.1.2.tgz?cache=0&sync_timestamp=1635663041213&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fredux%2Fdownload%2Fredux-4.1.2.tgz#140f35426d99bb4729af760afcf79eaaac407104"
+  integrity sha1-FA81Qm2Zu0cpr3YK/PeeqqxAcQQ=
+  dependencies:
+    "@babel/runtime" "^7.9.2"
 
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"

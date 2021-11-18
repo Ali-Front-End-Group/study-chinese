@@ -1,0 +1,8 @@
+// 登录状态
+export const SET_IS_LOGIN = 'setIsLogin';
+
+// 用户ID
+export const SET_USER_ID = 'setUserId';
+
+// 所有课程
+export const SET_ALL_COURSES = 'setAllCourses';

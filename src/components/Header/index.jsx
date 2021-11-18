@@ -1,14 +1,16 @@
 import { MdSpellcheck } from 'react-icons/md';
 import { EnterOutlined } from '@ant-design/icons';
 import { openNotification } from '../../utils/functions';
+import { connect } from 'react-redux';
+import { setIsLogin, setUserId } from '../../redux/actions';
 import { Popconfirm } from 'antd';
 import List from './List';
 import './index.css';
 
-const Header = ({ isLogin, setIsLogin }) => {
+const Header = ({ isLogin, setIsLogin, setUserId }) => {
     const logout = () => {
         setIsLogin(false);
-        sessionStorage.removeItem('token');
+        setUserId('');
         openNotification('推出成功！欢迎再次使用！', <EnterOutlined />);
     };
     const text = '确认要退出吗？';
@@ -37,4 +39,12 @@ const Header = ({ isLogin, setIsLogin }) => {
     );
 };
 
-export default Header;
+export default connect(
+    state => ({
+        isLogin: state.isLogin,
+    }),
+    {
+        setIsLogin,
+        setUserId,
+    }
+)(Header);

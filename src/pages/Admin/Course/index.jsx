@@ -1,21 +1,18 @@
-import { useState, useEffect } from 'react';
 import AddCourse from '../../../components/AddCourse';
 import { Card, Popconfirm, message } from 'antd';
+import { connect } from 'react-redux';
+import { setAllCourses } from '../../../redux/actions';
 import { DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { DB_URL } from '../../../utils/constant';
 import './index.css';
 
-const Course = ({ history }) => {
-    const [courseData, setCourseData] = useState([]);
-    // 获取课程列表数据
-    useEffect(() => getAllCourseFromDB(false), []);
+const Course = ({ history, userId, allCourses, setAllCourses }) => {
     const text = '确定删除该课程？';
     // 从数据库获取所有课程信息
-    const getAllCourseFromDB = isDelete => {
-        const id = localStorage.getItem('id');
+    const getAllCourseFromDB = () => {
         axios({
-            url: `${DB_URL}/course/list?userId=${id}`,
+            url: `${DB_URL}/course/list?userId=${userId}`,
             method: 'get',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -23,9 +20,8 @@ const Course = ({ history }) => {
         }).then(
             res => {
                 if (res.data.result === 'success') {
-                    // console.log(res.data.data.rows);
-                    setCourseData(res.data.data.rows);
-                    isDelete && message.success('删除课程成功！');
+                    setAllCourses(res.data.data.rows);
+                    message.success('获取所有课程成功！');
                 } else {
                     message.warning('获取课程信息失败！');
                 }
@@ -50,7 +46,8 @@ const Course = ({ history }) => {
         }).then(
             res => {
                 if (res.data.result === 'success') {
-                    getAllCourseFromDB(true);
+                    message.success('删除课程成功！');
+                    getAllCourseFromDB();
                 } else {
                     message.warning('删除课程失败！');
                 }
@@ -79,7 +76,7 @@ const Course = ({ history }) => {
     return (
         <div className="courseLayout">
             <AddCourse />
-            {courseData.map(obj => {
+            {allCourses.map(obj => {
                 return (
                     <Card
                         key={obj.id}
@@ -109,4 +106,10 @@ const Course = ({ history }) => {
     );
 };
 
-export default Course;
+export default connect(
+    state => ({
+        userId: state.userId,
+        allCourses: state.allCourses,
+    }),
+    { setAllCourses }
+)(Course);
