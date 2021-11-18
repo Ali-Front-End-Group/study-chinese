@@ -23,7 +23,7 @@ import {
 } from '@ant-design/icons';
 import './index.css';
 
-const Add = ({ history, location, userId, setAllCourses }) => {
+const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
     // 课程名、课程描述、课程封面
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
@@ -45,37 +45,20 @@ const Add = ({ history, location, userId, setAllCourses }) => {
     });
     // 判断是否是编辑状态
     const [isEdit, setIsEdit] = useState(false);
-    const [id, setId] = useState('');
+    const [editID, setEditID] = useState('');
     useEffect(() => {
-        if (!location.search) {
-            setIsEdit(false);
-        } else {
-            setIsEdit(true);
-            setId(location.search.split('?id=')[1]);
-        }
+        if (!location.search) return;
+        setIsEdit(true);
+        const ID = location.search.split('?id=')[1];
+        const theCourse = allCourses.filter(obj => `${obj.id}` === ID)[0];
+        const { title, bio, cover, content } = theCourse;
+        setEditID(ID);
+        setName(title);
+        setDesc(bio);
+        setCoverLink(cover);
+        setAllCourse(JSON.parse(content).data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
-    // 若是编辑状态，则获得该课程的具体信息
-    useEffect(() => {
-        if (isEdit) {
-            // 是编辑状态，获得此课程的具体信息
-            axios({
-                url: `${DB_URL}/course/detail?id=${id}`,
-                method: 'get',
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            }).then(
-                res => {
-                    if (res.data.result === 'success') {
-                        console.log(decodeURI(res.data.data.content));
-                    }
-                },
-                err => {
-                    console.log(err);
-                }
-            );
-        }
-    }, [isEdit, id]);
     // 获得图片url
     const getImg = (character, index) => {
         axios
@@ -285,7 +268,7 @@ const Add = ({ history, location, userId, setAllCourses }) => {
                 () => message.error('上传失败，请重试！')
             );
     };
-    // 发布课程
+    // 发布课程 / 更新课程
     const releaseCourse = () => {
         // 检验是否填写课程基本信息
         if (!name || !desc || !coverLink) {
@@ -334,7 +317,7 @@ const Add = ({ history, location, userId, setAllCourses }) => {
             content: `{"data": ${JSON.stringify(allCourse)}}`,
         };
         axios({
-            url: `${DB_URL}/course/create`,
+            url: isEdit ? `${DB_URL}/course/update?id=${editID}` : `${DB_URL}/course/create`,
             method: 'post',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
@@ -345,13 +328,13 @@ const Add = ({ history, location, userId, setAllCourses }) => {
             res => {
                 if (res.data.result === 'success') {
                     getAllCourseFromDB();
-                    message.success('添加课程成功！');
+                    message.success(`${isEdit ? '更新' : '添加'}课程成功！`);
                     history.push('/admin/course');
                 } else {
-                    message.error('添加课程失败！');
+                    message.error(`${isEdit ? '更新' : '添加'}课程失败！`);
                 }
             },
-            err => message.error('添加课程失败！')
+            () => message.error(`${isEdit ? '更新' : '添加'}课程失败！`)
         );
     };
     // 从数据库获取所有课程信息
@@ -377,7 +360,7 @@ const Add = ({ history, location, userId, setAllCourses }) => {
             }
         );
     };
-    const text = '课程信息未保存，确定取消发布吗？';
+    const text = `课程信息未保存，确定取消${isEdit ? '更新' : '发布'}吗？`;
     return (
         <div className="addBox">
             <div className="addCenter">
@@ -389,7 +372,10 @@ const Add = ({ history, location, userId, setAllCourses }) => {
                             <Popconfirm
                                 placement="top"
                                 title={text}
-                                onConfirm={() => history.push('/admin/course')}
+                                onConfirm={() => {
+                                    message.info(`课程未${isEdit ? '更新' : '发布'}！`);
+                                    history.push('/admin/course');
+                                }}
                                 okText="确认"
                                 cancelText="取消"
                             >
@@ -398,7 +384,7 @@ const Add = ({ history, location, userId, setAllCourses }) => {
                                 </Button>
                             </Popconfirm>
                             <Button type="primary" onClick={releaseCourse}>
-                                发布
+                                {isEdit ? '更新' : '发布'}
                             </Button>
                         </div>
                         {/* 动态添加项目的按钮 */}
@@ -861,6 +847,7 @@ export default withRouter(
     connect(
         state => ({
             userId: state.userId,
+            allCourses: state.allCourses,
         }),
         { setAllCourses }
     )(Add)
