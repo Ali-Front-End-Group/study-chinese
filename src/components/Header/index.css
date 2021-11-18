@@ -13,6 +13,7 @@ header {
     font-size: 30px;
     z-index: 999;
     user-select: none;
+    font-family: '楷体';
 }
 
 .placeholderBox {
