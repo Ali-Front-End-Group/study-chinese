@@ -12,18 +12,49 @@ header {
     color: #fff;
     font-size: 30px;
     z-index: 999;
+    user-select: none;
 }
 
 .placeholderBox {
     height: 60px;
 }
 
-.logo {
-    font-size: 48px;
+.userInfoBox {
     position: absolute;
-    left: 10px;
+    left: 5px;
     top: 50%;
     transform: translate(0, -50%);
+    height: 50px;
+    width: 160px;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+.userInfoBox:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.userAvatar {
+    position: absolute;
+    left: 3px;
+    top: 50%;
+    transform: translate(0, -50%);
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    -webkit-user-drag: none;
+}
+.userNameBox {
+    height: 50px;
+    width: 110px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
 }
 
 .logoutBtn {
@@ -38,7 +69,6 @@ header {
     right: 10px;
     top: 50%;
     transform: translate(0, -50%);
-    user-select: none;
     border-radius: 14px;
     transition: all 0.3s;
 }
@@ -46,4 +76,17 @@ header {
 .logoutBtn:hover {
     background-color: rgb(14, 126, 218);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.avatarModal {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    -webkit-user-drag: none;
+}
+
+.headerLogo {
+    -webkit-user-drag: none;
+    width: 40px;
+    height: 40px;
 }

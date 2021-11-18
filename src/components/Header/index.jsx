@@ -1,24 +1,179 @@
-import { MdSpellcheck } from 'react-icons/md';
-import { EnterOutlined } from '@ant-design/icons';
+import { useState, useEffect } from 'react';
+import { EnterOutlined, UploadOutlined } from '@ant-design/icons';
 import { openNotification } from '../../utils/functions';
 import { connect } from 'react-redux';
 import { setIsLogin, setUserId } from '../../redux/actions';
-import { Popconfirm } from 'antd';
+import { defaultAvatar } from '../../utils/constant';
+import { Popconfirm, Modal, Input, Button, message } from 'antd';
+import { DB_URL, appTcb, logoLink } from '../../utils/constant';
+import axios from 'axios';
+import { nanoid } from 'nanoid';
 import List from './List';
 import './index.css';
 
-const Header = ({ isLogin, setIsLogin, setUserId }) => {
+const Header = ({ isLogin, setIsLogin, setUserId, userId }) => {
+    const { TextArea } = Input;
+    const text = '确认要退出吗？';
     const logout = () => {
         setIsLogin(false);
         setUserId('');
         openNotification('推出成功！欢迎再次使用！', <EnterOutlined />);
     };
-    const text = '确认要退出吗？';
+    const [avatar, setAvatar] = useState(defaultAvatar);
+    const [bio, setBio] = useState('');
+    const [nickname, setNickname] = useState('老师昵称');
+    const [avatarInput, setAvatarInput] = useState(defaultAvatar);
+    const [bioInput, setBioInput] = useState('');
+    const [nicknameInput, setNicknameInput] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    useEffect(() => {});
+    // 上传图片;
+    const beforeUploadAvatar = async () => {
+        // 获取文件对象
+        const imgFile = document.getElementById('selectAvatar').files[0];
+        // 文件类型
+        const fileType = imgFile.type;
+        // 文件后缀
+        const fileEnd = fileType.split('/')[1];
+        // 1. 判断是否是图片
+        if (
+            !(
+                fileType === 'image/png' ||
+                fileType === 'image/bmp' ||
+                fileType === 'image/jpeg' ||
+                fileType === 'image/gif'
+            )
+        ) {
+            // 不是图片文件，提醒用户，中止操作
+            message.error('请选择图片文件！');
+            return;
+        }
+        // 2. 判断图片大小是否>1M
+        if (imgFile.size / 1024 / 1024 > 1) {
+            // 图片大于1M，提醒用户，中止操作
+            message.error('图片文件大小不能超过1M！');
+            return;
+        }
+        await appTcb
+            .uploadFile({
+                // 云存储的路径
+                cloudPath: `avatar/${nanoid()}.${fileEnd}`,
+                // 需要上传的文件，File 类型
+                filePath: imgFile,
+            })
+            .then(
+                res => {
+                    console.log(res.download_url);
+                    setAvatarInput(res.download_url);
+                    message.success('上传图片成功！');
+                },
+                () => message.error('上传失败，请重试！')
+            );
+    };
+    // 更新用户信息
+    const updateUserInfo = () => {
+        // axios({
+        //     url: `${DB_URL}/user/update?id=${userId}`,
+        //     method: 'post',
+        //     headers: {
+        //         Authorization: `Bearer ${localStorage.getItem('token')}`,
+        //     },
+        // }).then(
+        //     res => {
+        //         if (res.data.result === 'success') {
+        //             console.log(res.data);
+        //             // message.success('更新个人信息成功！');
+        //         } else {
+        //             // message.warning('更新个人信息失败！');
+        //         }
+        //     },
+        //     err => {
+        //         console.log(err);
+        //         message.warning('更新个人信息失败！');
+        //     }
+        // );
+        axios({
+            url: `${DB_URL}/user/detail?id=${userId}`,
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        }).then(
+            res => {
+                if (res.data.result === 'success') {
+                    console.log(res.data);
+                    // message.success('获取所有课程成功！');
+                } else {
+                    // message.warning('获取课程信息失败！');
+                }
+            },
+            err => {
+                console.log(err);
+                message.warning('获取课程信息失败！');
+            }
+        );
+    };
     return (
         <>
             <header>
-                <MdSpellcheck className="logo" />
-                <span>不学汉语</span>
+                {/* <MdSpellcheck className="logo" /> */}
+                {isLogin ? (
+                    <>
+                        <Modal
+                            title="教师信息"
+                            visible={modalVisible}
+                            onCancel={() => setModalVisible(false)}
+                            bodyStyle={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                height: '350px',
+                            }}
+                            cancelText="取消"
+                            okText="确认"
+                            onOk={updateUserInfo}
+                        >
+                            <img src={avatarInput} alt="avatar" className="avatarModal" />
+                            <Button
+                                type="primary"
+                                icon={<UploadOutlined />}
+                                shape="circle"
+                                onClick={() => document.getElementById('selectAvatar').click()}
+                            >
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="selectFile"
+                                    id="selectAvatar"
+                                    onChange={beforeUploadAvatar}
+                                />
+                            </Button>
+                            <Input
+                                placeholder="请输入昵称..."
+                                value={nicknameInput}
+                                onChange={e => setNicknameInput(e.target.value)}
+                                maxLength={6}
+                            />
+                            <TextArea
+                                placeholder="请输入个人描述..."
+                                rows={3}
+                                style={{ resize: 'none' }}
+                                value={bioInput}
+                                onChange={e => setBioInput(e.target.value)}
+                                maxLength={70}
+                            />
+                        </Modal>
+                        <div className="userInfoBox" onClick={() => setModalVisible(true)}>
+                            <img className="userAvatar" src={avatar} alt="avatar" />
+                            <div className="userNameBox">{nickname}</div>
+                        </div>
+                        <img src={logoLink} alt="logo" className="headerLogo" />
+                        &nbsp;&nbsp;
+                        <span>不学汉语</span>
+                    </>
+                ) : null}
+
                 {isLogin ? (
                     <>
                         <List />
@@ -42,6 +197,7 @@ const Header = ({ isLogin, setIsLogin, setUserId }) => {
 export default connect(
     state => ({
         isLogin: state.isLogin,
+        userId: state.userId,
     }),
     {
         setIsLogin,

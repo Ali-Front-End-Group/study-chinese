@@ -15,6 +15,7 @@ const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
     const [pwd, setPwd] = useState('');
     const [rname, setRname] = useState('');
     const [rpwd, setRpwd] = useState('');
+    // 注册
     const register = () => {
         if (!rname || !rpwd) {
             message.warning('请输入账号和密码再注册！');
@@ -43,6 +44,7 @@ const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
             }
         );
     };
+    // 登录
     const login = () => {
         if (!name || !pwd) {
             message.warning('请输入账号和密码再登录！');
@@ -57,6 +59,7 @@ const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
         }).then(
             res => {
                 if (res.data.result === 'success') {
+                    console.log(res.data);
                     setName('');
                     setPwd('');
                     const TOKEN = res.data.data.token;
@@ -99,7 +102,16 @@ const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
             }
         );
     };
+    // 切换登录/注册
     const toggle = () => setIsFront(isFront => !isFront);
+    // 回车登录
+    const enterLogin = e => {
+        if (e.key === 'Enter') login();
+    };
+    // 回车注册
+    const enterRegister = e => {
+        if (e.key === 'Enter') register();
+    };
     return (
         <div className="loginRegister" style={isFront ? {} : { transform: 'rotateY(-90deg)' }}>
             <div className="loginBox" style={isFront ? {} : { boxShadow: 'none' }}>
@@ -119,6 +131,7 @@ const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
                     value={pwd}
                     onChange={e => setPwd(e.target.value)}
                     onClick={e => e.stopPropagation()}
+                    onKeyDown={e => enterLogin(e)}
                 />
                 <br />
                 <div className="longBtn" onClick={login}>
@@ -148,6 +161,7 @@ const Login = ({ setIsLogin, setUserId, setAllCourses }) => {
                     value={rpwd}
                     onChange={e => setRpwd(e.target.value)}
                     onClick={e => e.stopPropagation()}
+                    onKeyDown={e => enterRegister(e)}
                 />
                 <br />
                 <div className="longBtn" onClick={register}>
