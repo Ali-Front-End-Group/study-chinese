@@ -393,6 +393,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
             res => {
                 if (res.data.result === 'success') {
                     getAllCourseFromDB();
+                    setEditID(res.data.data.id);
                     message.success(`${isEdit ? '更新' : '添加'}课程成功！`);
                     // history.push('/admin/course');
                     setModalVisible(true);
