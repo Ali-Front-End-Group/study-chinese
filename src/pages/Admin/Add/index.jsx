@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {FaWifi} from 'react-icons/fa';
 import {AiOutlineLeft, AiOutlineEllipsis} from 'react-icons/ai';
-import {Input, Button, Radio, Space, Card, message, Popconfirm} from 'antd';
+import {Input, Button, Radio, Space, Card, message, Popconfirm, Divider} from 'antd';
 import {BASE_URL, DB_URL, appTcb} from '../../../utils/constant';
 import {RiVoiceprintFill} from 'react-icons/ri';
 import {withRouter} from 'react-router-dom';
@@ -12,15 +12,17 @@ import {nanoid} from 'nanoid';
 import {connect} from 'react-redux';
 import {setAllCourses} from '../../../redux/actions';
 import {
+    CheckOutlined,
     FontColorsOutlined,
     FundOutlined,
     AudioOutlined,
     QuestionOutlined,
-    FolderOpenOutlined,
+    CloudUploadOutlined,
     DeleteOutlined,
     SearchOutlined,
     SoundOutlined,
     CommentOutlined,
+    VideoCameraOutlined, ArrowLeftOutlined
 } from '@ant-design/icons';
 import './index.css';
 
@@ -94,6 +96,9 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
     };
     // 获得拼音
     const getPinyin = (str, index, contentType, value) => {
+        if (!str) {
+            return;
+        }
         axios
             .get(`${BASE_URL}/api/get_pinyin`, {
                 params: {
@@ -146,6 +151,8 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
             obj = {id, contentType, content: '', engText: ''};
         } else if (contentType === 'voice') {
             obj = {id, contentType, content: '', engText: 'voice', voiceType: '-1'};
+        } else if (contentType === 'video') {
+            obj = {id, contentType, content: '', engText: ''};
         } else if (contentType === 'record') {
             obj = {id, contentType, content: '', engText: '', pinyin: []};
         }
@@ -238,6 +245,52 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                 () => message.error('上传失败，请重试！')
             );
     };
+    // 上传视频
+    const beforeUploadVideo = async (id, index) => {
+        // 获取文件对象
+        const videoFile = document.getElementById(`${id}`).files[0];
+        // 文件类型
+        const fileType = videoFile.type;
+        // 文件后缀
+        const fileEnd = fileType.split('/')[1];
+        // 1. 判断是否是常见视频格式
+        // console.log(fileType);
+        // return;
+        if (
+            !(
+                fileType === 'video/mp4' ||
+                fileType === 'video/avi' ||
+                fileType === 'video/flv' ||
+                fileType === 'video/wmv'
+            )
+        ) {
+            // 不是声音文件，提醒用户，中止操作
+            message.error('请选择支持格式视频文件！目前支持MP4、AVI、FLV、WMV格式！');
+            return;
+        }
+        // 2. 判断视频大小是否>20M
+        if (videoFile.size / 1024 / 1024 > 20) {
+            // 视频大于20M，提醒用户，中止操作
+            message.error('视频文件大小不能超过20M！');
+            return;
+        }
+        await appTcb
+            .uploadFile({
+                // 云存储的路径
+                cloudPath: `video/${nanoid()}.${fileEnd}`,
+                // 需要上传的文件，File 类型
+                filePath: videoFile,
+            })
+            .then(
+                res => {
+                    const copy = [...allCourse];
+                    copy[index].content = res.download_url;
+                    setAllCourse(copy);
+                    message.success('添加视频成功！');
+                },
+                () => message.error('上传失败，请重试！')
+            );
+    };
     // 上传课程封面
     const beforeUploadCover = async id => {
         // 获取文件对象
@@ -298,6 +351,13 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                 if (!obj.content) {
                     message.warning(
                         `${obj.contentType === 'image' ? '图片' : '音频'}授课内容请填写完整！`
+                    );
+                    return;
+                }
+            } else if (obj.contentType === 'video') {
+                if (!obj.content) {
+                    message.warning(
+                        `视频授课内容请填写完整！`
                     );
                     return;
                 }
@@ -386,47 +446,15 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 okText="确认"
                                 cancelText="取消"
                             >
-                                <Button type="primary" danger className="backBtn">
+                                <Button type="primary" icon={<ArrowLeftOutlined />}danger className="backBtn">
                                     取消
                                 </Button>
                             </Popconfirm>
-                            <Button type="primary" onClick={releaseCourse}>
+                            <Button type="primary" icon={<CheckOutlined />}onClick={releaseCourse}>
                                 {isEdit ? '更新' : '发布'}
                             </Button>
                         </div>
-                        {/* 动态添加项目的按钮 */}
-                        <div className="addBtns">
-                            <Button
-                                type="primary"
-                                shape="circle"
-                                icon={<FontColorsOutlined/>}
-                                onClick={() => addCourse('text')}
-                            />
-                            <Button
-                                type="primary"
-                                shape="circle"
-                                icon={<FundOutlined/>}
-                                onClick={() => addCourse('image')}
-                            />
-                            <Button
-                                type="primary"
-                                shape="circle"
-                                icon={<CommentOutlined/>}
-                                onClick={() => addCourse('record')}
-                            />
-                            <Button
-                                type="primary"
-                                shape="circle"
-                                icon={<AudioOutlined/>}
-                                onClick={() => addCourse('voice')}
-                            />
-                            <Button
-                                type="primary"
-                                shape="circle"
-                                icon={<QuestionOutlined/>}
-                                onClick={() => addCourse('quzzle')}
-                            />
-                        </div>
+                        <Divider orientation="left">课程基本信息</Divider>
                         {/* 课程名称、课程描述、课程封面 */}
                         <>
                             <span className="courseItem">课程名称：</span>
@@ -454,11 +482,11 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 onChange={e => setCoverLink(e.target.value)}
                             />
                             <Button
-                                type="primary"
-                                style={{width: '50px'}}
+                                shape="circle"
+                                style={{marginLeft: '5px'}}
                                 onClick={() => document.getElementById('selectCourseCover').click()}
                             >
-                                <FolderOpenOutlined/>
+                                <CloudUploadOutlined/>
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -468,6 +496,48 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                 />
                             </Button>
                         </>
+                        <Divider orientation="left">添加互动信息</Divider>
+                        {/* 动态添加项目的按钮 */}
+                        <div className="addBtns">
+                            <Button
+                                icon={<FontColorsOutlined/>}
+                                onClick={() => addCourse('text')}
+                            >
+                                文字信息
+                            </Button>
+                            <Button
+                                icon={<FundOutlined/>}
+                                onClick={() => addCourse('image')}
+                            >
+                                图片信息
+                            </Button>
+
+                            <Button
+                                icon={<AudioOutlined/>}
+                                onClick={() => addCourse('voice')}
+                            >
+                                音频信息
+                            </Button>
+                            <Button
+                                icon={<CommentOutlined/>}
+                                onClick={() => addCourse('record')}
+                            >
+                                口语任务
+                            </Button>
+                            <Button
+                                icon={<VideoCameraOutlined/>}
+                                onClick={() => addCourse('video')}
+                            >
+                                视频信息
+                            </Button>
+                            <Button
+                                icon={<QuestionOutlined/>}
+                                onClick={() => addCourse('quzzle')}
+                            >
+                                测验信息
+                            </Button>
+                        </div>
+                        <Divider orientation="left">课程内容</Divider>
                         {/* 渲染所有课程 */}
                         {allCourse.map((obj, index) => {
                             if (obj.contentType === 'text') {
@@ -476,9 +546,9 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         <span className="courseItem">文字信息：</span>
                                         <br/>
                                         <Input
-                                            placeholder="请输入中文课程内容..."
+                                            placeholder="请输入中文内容..."
                                             value={obj.content}
-                                            style={{width: 'calc(100% - 50px)'}}
+                                            style={{width: 'calc(100% - 50px)', marginBottom: '5px'}}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].content = e.target.value;
@@ -487,7 +557,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             onBlur={() => getPinyin(obj.content, index, 'text')}
                                         />
                                         <Input
-                                            placeholder="请输入英文课程内容..."
+                                            placeholder="请输入英文内容..."
                                             value={obj.engText}
                                             style={{width: 'calc(100% - 50px)'}}
                                             onChange={e => {
@@ -498,8 +568,9 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         />
                                         <Button
                                             type="primary"
+                                            shape="circle"
                                             danger
-                                            style={{width: '50px'}}
+                                            style={{marginLeft: '5px'}}
                                             onClick={() => {
                                                 deleteCourseById(obj.id);
                                             }}
@@ -511,7 +582,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                             } else if (obj.contentType === 'image') {
                                 return (
                                     <div className="autoItem" key={obj.id}>
-                                        <span className="courseItem">图片地址：</span>
+                                        <span className="courseItem">图片信息：</span>
                                         <br/>
                                         <Input
                                             placeholder="请输入一个汉字，并转化为图片url..."
@@ -525,20 +596,20 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             }}
                                         />
                                         <Button
-                                            type="primary"
-                                            style={{width: '50px'}}
+                                            shape="circle"
+                                            style={{marginLeft: '5px'}}
                                             onClick={() => getImg(obj.content, index)}
                                         >
                                             <SearchOutlined/>
                                         </Button>
                                         <Button
-                                            type="primary"
-                                            style={{width: '50px'}}
+                                            shape="circle"
+                                            style={{marginLeft: '5px'}}
                                             onClick={() =>
                                                 document.getElementById(`${obj.id}`).click()
                                             }
                                         >
-                                            <FolderOpenOutlined/>
+                                            <CloudUploadOutlined/>
                                             <input
                                                 type="file"
                                                 accept="image/*"
@@ -549,9 +620,12 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         </Button>
                                         <Button
                                             type="primary"
+                                            shape="circle"
                                             danger
-                                            style={{width: '50px'}}
-                                            onClick={() => deleteCourseById(obj.id)}
+                                            style={{marginLeft: '5px'}}
+                                            onClick={() => {
+                                                deleteCourseById(obj.id);
+                                            }}
                                         >
                                             <DeleteOutlined/>
                                         </Button>
@@ -574,20 +648,20 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             }}
                                         />
                                         <Button
-                                            type="primary"
-                                            style={{width: '50px'}}
+                                            shape="circle"
+                                            style={{marginLeft: '5px'}}
                                             onClick={() => getVoice(obj.content, index)}
                                         >
                                             <SoundOutlined/>
                                         </Button>
                                         <Button
-                                            type="primary"
-                                            style={{width: '50px'}}
+                                            shape="circle"
+                                            style={{marginLeft: '5px'}}
                                             onClick={() =>
                                                 document.getElementById(`${obj.id}`).click()
                                             }
                                         >
-                                            <FolderOpenOutlined/>
+                                            <CloudUploadOutlined/>
                                             <input
                                                 type="file"
                                                 accept="audio/*"
@@ -598,9 +672,57 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         </Button>
                                         <Button
                                             type="primary"
+                                            shape="circle"
                                             danger
-                                            style={{width: '50px'}}
-                                            onClick={() => deleteCourseById(obj.id)}
+                                            style={{marginLeft: '5px'}}
+                                            onClick={() => {
+                                                deleteCourseById(obj.id);
+                                            }}
+                                        >
+                                            <DeleteOutlined/>
+                                        </Button>
+                                    </div>
+                                );
+                            } else if (obj.contentType === 'video') {
+                                return (
+                                    <div className="autoItem" key={obj.id}>
+                                        <span className="courseItem">视频信息：</span>
+                                        <br/>
+                                        <Input
+                                            placeholder="请输入视频地址..."
+                                            style={{width: 'calc(100% - 150px)'}}
+                                            // maxLength={1}
+                                            value={obj.content}
+                                            onChange={e => {
+                                                const copy = [...allCourse];
+                                                copy[index].content = e.target.value;
+                                                setAllCourse(copy);
+                                            }}
+                                        />
+                                        <Button
+                                            shape="circle"
+                                            style={{marginLeft: '5px'}}
+                                            onClick={() =>
+                                                document.getElementById(`${obj.id}`).click()
+                                            }
+                                        >
+                                            <CloudUploadOutlined/>
+                                            <input
+                                                type="file"
+                                                accept=".mp4,.avi,.flv,.wmv"
+                                                id={obj.id}
+                                                className="selectFile"
+                                                onChange={() => beforeUploadVideo(obj.id, index)}
+                                            />
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            shape="circle"
+                                            danger
+                                            style={{marginLeft: '5px'}}
+                                            onClick={() => {
+                                                deleteCourseById(obj.id);
+                                            }}
                                         >
                                             <DeleteOutlined/>
                                         </Button>
@@ -627,8 +749,9 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                         />
                                         <Button
                                             type="primary"
-                                            style={{width: '50px'}}
+                                            shape="circle"
                                             danger
+                                            style={{marginLeft: '5px'}}
                                             onClick={() => deleteCourseById(obj.id)}
                                         >
                                             <DeleteOutlined/>
@@ -750,13 +873,16 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                             }}
                                             onBlur={() => {
                                                 obj.content = obj.content.replace(/[^\u4e00-\u9fa5,\.\'\?!:;]/g, '');
-                                                getPinyin(obj.content, index, 'record')
+                                                if (obj.content) {
+                                                    getPinyin(obj.content, index, 'record')
+                                                }
                                             }}
                                         />
                                         <Button
                                             type="primary"
+                                            shape="circle"
                                             danger
-                                            style={{width: '50px'}}
+                                            style={{marginLeft: '5px'}}
                                             onClick={() => {
                                                 deleteCourseById(obj.id);
                                             }}
@@ -833,7 +959,7 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                                 }
                                             >
                                                 <RiVoiceprintFill/>
-                                                voice
+                                                声音信息
                                                 <video
                                                     controls
                                                     name="media"
@@ -842,6 +968,10 @@ const Add = ({history, location, userId, allCourses, setAllCourses}) => {
                                                     src={obj.content}
                                                 ></video>
                                             </div>
+                                        ) : null;
+                                    } else if (obj.contentType === 'video') {
+                                        return obj.content ? (
+                                            <video controls="controls" className="courseVideo" src={obj.content}/>
                                         ) : null;
                                     } else if (obj.contentType === 'quzzle') {
                                         return (
