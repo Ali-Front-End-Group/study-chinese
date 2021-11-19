@@ -1,15 +1,15 @@
-import AddCourse from '../../../components/AddCourse';
+// import AddCourse from '../../../components/AddCourse';
 import { Card, Popconfirm, message } from 'antd';
 import { connect } from 'react-redux';
-import { setAllCourses } from '../../../redux/actions';
-import { DeleteOutlined } from '@ant-design/icons';
+// import { setAllCourses } from '../../../redux/actions';
+// import { DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { DB_URL, courseBackground } from '../../../utils/constant';
 import './index.css';
-import {useState} from "react";
+import { useState, useEffect } from 'react';
 
 const Square = ({ history }) => {
-    const [courses, setCourses] = useState([]);
+    const [course, setCourse] = useState([]);
     // 从数据库获取所有课程信息
     const getAllCourse = () => {
         axios({
@@ -21,7 +21,7 @@ const Square = ({ history }) => {
         }).then(
             res => {
                 if (res.data.result === 'success') {
-                    setCourses(res.data.data.rows);
+                    setCourse(res.data.data.rows);
                 } else {
                     message.warning('获取课程信息失败！');
                 }
@@ -32,6 +32,10 @@ const Square = ({ history }) => {
             }
         );
     };
+
+    useEffect(() => {
+        getAllCourse();
+    }, []);
     // getAllCourse();
     // 跳转到编辑页面
     const toEditCoursePage = id => {
@@ -43,7 +47,7 @@ const Square = ({ history }) => {
             style={{ background: `url(${courseBackground}) 0 / cover fixed` }}
         >
             <div className="courseLayout">
-                {courses.map(obj => {
+                {course.map(obj => {
                     return (
                         <Card
                             key={obj.id}
@@ -61,5 +65,4 @@ const Square = ({ history }) => {
     );
 };
 
-export default connect(() => ({}), {
-})(Square);
+export default connect(() => ({}), {})(Square);

@@ -21,3 +21,7 @@ export const welcomeBackground =
 
 export const courseBackground =
     'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118194626.png';
+
+export const about_img = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119103942.png';
+
+export const Inner_bg = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119105910.png';
