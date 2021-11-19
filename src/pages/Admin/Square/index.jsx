@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import QRCode from 'qrcode.react';
-import { Card, Modal, Button } from 'antd';
+import { Modal, Button } from 'antd';
 import { courseBackground } from '../../../utils/constant';
 
 const Square = ({ allCourses }) => {

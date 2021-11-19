@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
-import { Input, Button, Radio, Space, message, Popconfirm, Divider, Modal } from 'antd';
+import { Input, Button, Radio, Space, message, Popconfirm, Divider, Modal, Tooltip } from 'antd';
 import { BASE_URL, DB_URL, appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
@@ -623,15 +623,18 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                                 }}
                                                 onBlur={() => getPinyin(obj.content, index, 'text')}
                                             />
-                                            <Button
-                                                type="primary"
-                                                shape="circle"
-                                                danger
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() => deleteCourseById(obj.id)}
-                                            >
-                                                <DeleteOutlined />
-                                            </Button>
+                                            <Tooltip placement="top" title="删除">
+                                                <Button
+                                                    type="primary"
+                                                    shape="circle"
+                                                    danger
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() => deleteCourseById(obj.id)}
+                                                >
+                                                    <DeleteOutlined />
+                                                </Button>
+                                            </Tooltip>
+
                                             <Input
                                                 placeholder="请输入英文内容..."
                                                 value={obj.engText}
@@ -660,38 +663,46 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                                     setAllCourse(copy);
                                                 }}
                                             />
-                                            <Button
-                                                shape="circle"
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() => getImg(obj.content, index)}
-                                            >
-                                                <SearchOutlined />
-                                            </Button>
-                                            <Button
-                                                shape="circle"
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() =>
-                                                    document.getElementById(`${obj.id}`).click()
-                                                }
-                                            >
-                                                <CloudUploadOutlined />
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    id={obj.id}
-                                                    className="selectFile"
-                                                    onChange={() => beforeUploadImg(obj.id, index)}
-                                                />
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                shape="circle"
-                                                danger
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() => deleteCourseById(obj.id)}
-                                            >
-                                                <DeleteOutlined />
-                                            </Button>
+                                            <Tooltip placement="top" title="转图">
+                                                <Button
+                                                    shape="circle"
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() => getImg(obj.content, index)}
+                                                >
+                                                    <SearchOutlined />
+                                                </Button>
+                                            </Tooltip>
+                                            <Tooltip placement="top" title="本地上传">
+                                                <Button
+                                                    shape="circle"
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() =>
+                                                        document.getElementById(`${obj.id}`).click()
+                                                    }
+                                                >
+                                                    <CloudUploadOutlined />
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        id={obj.id}
+                                                        className="selectFile"
+                                                        onChange={() =>
+                                                            beforeUploadImg(obj.id, index)
+                                                        }
+                                                    />
+                                                </Button>
+                                            </Tooltip>
+                                            <Tooltip placement="top" title="删除">
+                                                <Button
+                                                    type="primary"
+                                                    shape="circle"
+                                                    danger
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() => deleteCourseById(obj.id)}
+                                                >
+                                                    <DeleteOutlined />
+                                                </Button>
+                                            </Tooltip>
                                         </div>
                                     );
                                 } else if (obj.contentType === 'voice') {
@@ -710,40 +721,46 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                                     setAllCourse(copy);
                                                 }}
                                             />
-                                            <Button
-                                                shape="circle"
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() => getVoice(obj.content, index)}
-                                            >
-                                                <SoundOutlined />
-                                            </Button>
-                                            <Button
-                                                shape="circle"
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() =>
-                                                    document.getElementById(`${obj.id}`).click()
-                                                }
-                                            >
-                                                <CloudUploadOutlined />
-                                                <input
-                                                    type="file"
-                                                    accept="audio/*"
-                                                    id={obj.id}
-                                                    className="selectFile"
-                                                    onChange={() =>
-                                                        beforeUploadVoice(obj.id, index)
+                                            <Tooltip placement="top" title="转语音">
+                                                <Button
+                                                    shape="circle"
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() => getVoice(obj.content, index)}
+                                                >
+                                                    <SoundOutlined />
+                                                </Button>
+                                            </Tooltip>
+                                            <Tooltip placement="top" title="本地上传">
+                                                <Button
+                                                    shape="circle"
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() =>
+                                                        document.getElementById(`${obj.id}`).click()
                                                     }
-                                                />
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                shape="circle"
-                                                danger
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() => deleteCourseById(obj.id)}
-                                            >
-                                                <DeleteOutlined />
-                                            </Button>
+                                                >
+                                                    <CloudUploadOutlined />
+                                                    <input
+                                                        type="file"
+                                                        accept="audio/*"
+                                                        id={obj.id}
+                                                        className="selectFile"
+                                                        onChange={() =>
+                                                            beforeUploadVoice(obj.id, index)
+                                                        }
+                                                    />
+                                                </Button>
+                                            </Tooltip>
+                                            <Tooltip placement="top" title="删除">
+                                                <Button
+                                                    type="primary"
+                                                    shape="circle"
+                                                    danger
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() => deleteCourseById(obj.id)}
+                                                >
+                                                    <DeleteOutlined />
+                                                </Button>
+                                            </Tooltip>
                                         </div>
                                     );
                                 } else if (obj.contentType === 'video') {
@@ -762,33 +779,37 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                                     setAllCourse(copy);
                                                 }}
                                             />
-                                            <Button
-                                                shape="circle"
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() =>
-                                                    document.getElementById(`${obj.id}`).click()
-                                                }
-                                            >
-                                                <CloudUploadOutlined />
-                                                <input
-                                                    type="file"
-                                                    accept=".mp4,.avi,.flv,.wmv"
-                                                    id={obj.id}
-                                                    className="selectFile"
-                                                    onChange={() =>
-                                                        beforeUploadVideo(obj.id, index)
+                                            <Tooltip placement="top" title="本地上传">
+                                                <Button
+                                                    shape="circle"
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() =>
+                                                        document.getElementById(`${obj.id}`).click()
                                                     }
-                                                />
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                shape="circle"
-                                                danger
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() => deleteCourseById(obj.id)}
-                                            >
-                                                <DeleteOutlined />
-                                            </Button>
+                                                >
+                                                    <CloudUploadOutlined />
+                                                    <input
+                                                        type="file"
+                                                        accept=".mp4,.avi,.flv,.wmv"
+                                                        id={obj.id}
+                                                        className="selectFile"
+                                                        onChange={() =>
+                                                            beforeUploadVideo(obj.id, index)
+                                                        }
+                                                    />
+                                                </Button>
+                                            </Tooltip>
+                                            <Tooltip placement="top" title="删除">
+                                                <Button
+                                                    type="primary"
+                                                    shape="circle"
+                                                    danger
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() => deleteCourseById(obj.id)}
+                                                >
+                                                    <DeleteOutlined />
+                                                </Button>
+                                            </Tooltip>
                                         </div>
                                     );
                                 } else if (obj.contentType === 'quzzle') {
@@ -814,15 +835,17 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                                     )
                                                 }
                                             />
-                                            <Button
-                                                type="primary"
-                                                shape="circle"
-                                                danger
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() => deleteCourseById(obj.id)}
-                                            >
-                                                <DeleteOutlined />
-                                            </Button>
+                                            <Tooltip placement="top" title="删除">
+                                                <Button
+                                                    type="primary"
+                                                    shape="circle"
+                                                    danger
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() => deleteCourseById(obj.id)}
+                                                >
+                                                    <DeleteOutlined />
+                                                </Button>
+                                            </Tooltip>
                                             <span className="courseItem">题目答案：</span>
                                             <br />
                                             <Radio.Group
@@ -948,15 +971,17 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                                     }
                                                 }}
                                             />
-                                            <Button
-                                                type="primary"
-                                                shape="circle"
-                                                danger
-                                                style={{ marginLeft: '6px' }}
-                                                onClick={() => deleteCourseById(obj.id)}
-                                            >
-                                                <DeleteOutlined />
-                                            </Button>
+                                            <Tooltip placement="top" title="删除">
+                                                <Button
+                                                    type="primary"
+                                                    shape="circle"
+                                                    danger
+                                                    style={{ marginLeft: '6px' }}
+                                                    onClick={() => deleteCourseById(obj.id)}
+                                                >
+                                                    <DeleteOutlined />
+                                                </Button>
+                                            </Tooltip>
                                         </div>
                                     );
                                 } else {

@@ -1,5 +1,5 @@
 import AddCourse from '../../../components/AddCourse';
-import { Card, Popconfirm, message } from 'antd';
+import { Popconfirm, message } from 'antd';
 import { connect } from 'react-redux';
 import { setAllCourses } from '../../../redux/actions';
 import { DeleteOutlined } from '@ant-design/icons';

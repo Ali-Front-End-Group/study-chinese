@@ -28,8 +28,10 @@ export const welcomeBackground =
     'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118183058.png';
 
 // 课程页面背景
+// export const courseBackground =
+//     'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118194626.png';
 export const courseBackground =
-    'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118194626.png';
+    'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119190810.jpg';
 
 // 关于页面背景
 export const about_img = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119150906.jpg';
