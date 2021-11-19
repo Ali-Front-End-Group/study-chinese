@@ -1,10 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import QRCode from 'qrcode.react';
+import { nanoid } from 'nanoid';
 import { Modal, Button } from 'antd';
 import { courseBackground } from '../../../utils/constant';
 
 const Square = ({ allCourses }) => {
+    const [courses, setCourses] = useState([]);
+    useEffect(() => {
+        const copy = [...allCourses];
+        const num = copy.length % 5;
+        if (num >= 2 && num <= 4) {
+            for (let i = 0; i < 5 - num; i++) {
+                copy.push({});
+            }
+        }
+        setCourses(copy);
+    }, [allCourses]);
     // 选中的课程ID
     const [theID, setTheID] = useState('');
     // 打开对话框
@@ -40,27 +52,33 @@ const Square = ({ allCourses }) => {
                 </div>
             </Modal>
             <div className="courseLayout">
-                {allCourses.map(obj => (
-                    <div
-                        className="courseCard"
-                        key={obj.id}
-                        onClick={() => {
-                            setTheID(obj.id);
-                            setModalShow(true);
-                        }}
-                    >
-                        <div
-                            className="courseCardImgBox"
-                            style={{
-                                backgroundImage: `url(${obj.cover})`,
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'center center',
-                            }}
-                        ></div>
-                        <div className="courseCardTitle">{obj.title}</div>
-                        <div className="courseCardDesc">{obj.bio}</div>
-                    </div>
-                ))}
+                {courses.map(obj => {
+                    if (JSON.stringify(obj) !== '{}') {
+                        return (
+                            <div
+                                className="courseCard"
+                                key={obj.id}
+                                onClick={() => {
+                                    setTheID(obj.id);
+                                    setModalShow(true);
+                                }}
+                            >
+                                <div
+                                    className="courseCardImgBox"
+                                    style={{
+                                        backgroundImage: `url(${obj.cover})`,
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'center center',
+                                    }}
+                                ></div>
+                                <div className="courseCardTitle">{obj.title}</div>
+                                <div className="courseCardDesc">{obj.bio}</div>
+                            </div>
+                        );
+                    } else {
+                        return <div className="courseCardNull" key={nanoid()}></div>;
+                    }
+                })}
             </div>
         </div>
     );

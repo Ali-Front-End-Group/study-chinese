@@ -524,22 +524,24 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                     style={{ width: 'calc(100% - 38px)' }}
                                     onChange={e => setCoverLink(e.target.value)}
                                 />
-                                <Button
-                                    shape="circle"
-                                    style={{ marginLeft: '6px' }}
-                                    onClick={() =>
-                                        document.getElementById('selectCourseCover').click()
-                                    }
-                                >
-                                    <CloudUploadOutlined />
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        className="selectFile"
-                                        id="selectCourseCover"
-                                        onChange={() => beforeUploadCover('selectCourseCover')}
-                                    />
-                                </Button>
+                                <Tooltip placement="top" title="本地上传">
+                                    <Button
+                                        shape="circle"
+                                        style={{ marginLeft: '6px' }}
+                                        onClick={() =>
+                                            document.getElementById('selectCourseCover').click()
+                                        }
+                                    >
+                                        <CloudUploadOutlined />
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="selectFile"
+                                            id="selectCourseCover"
+                                            onChange={() => beforeUploadCover('selectCourseCover')}
+                                        />
+                                    </Button>
+                                </Tooltip>
                             </>
                             <Divider
                                 orientation="left"

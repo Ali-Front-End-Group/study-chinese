@@ -1,13 +1,26 @@
+import { useState, useEffect } from 'react';
 import AddCourse from '../../../components/AddCourse';
 import { Popconfirm, message } from 'antd';
 import { connect } from 'react-redux';
 import { setAllCourses } from '../../../redux/actions';
 import { DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import { nanoid } from 'nanoid';
 import { DB_URL, courseBackground } from '../../../utils/constant';
 import './index.css';
 
 const Course = ({ history, userId, allCourses, setAllCourses }) => {
+    const [courses, setCourses] = useState([]);
+    useEffect(() => {
+        const myCourses = allCourses.filter(obj => `${obj.user_id}` === userId);
+        const num = (myCourses.length + 1) % 5;
+        if (num >= 2 && num <= 4) {
+            for (let i = 0; i < 5 - num; i++) {
+                myCourses.push({});
+            }
+        }
+        setCourses(myCourses);
+    }, [allCourses, userId]);
     const text = '确定删除该课程？';
     // 从数据库获取所有课程信息
     const getAllCourseFromDB = () => {
@@ -82,39 +95,43 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
                 {/* 添加课程卡片 */}
                 <AddCourse />
                 {/* 渲染课程卡片列表 */}
-                {allCourses
-                    .filter(obj => `${obj.user_id}` === userId)
-                    .map(obj => (
-                        <div
-                            className="courseCard"
-                            key={obj.id}
-                            onClick={() => toEditCoursePage(obj.id)}
-                        >
-                            <Popconfirm
-                                placement="bottom"
-                                title={text}
-                                onConfirm={e => deleteCourseById(e, obj.id)}
-                                onCancel={e => e.stopPropagation()}
-                                okText="删除"
-                                cancelText="取消"
-                                onClick={e => e.stopPropagation()}
-                            >
-                                <div className="deleteCourseBtn">
-                                    <DeleteOutlined />
-                                </div>
-                            </Popconfirm>
+                {courses.map(obj => {
+                    if (JSON.stringify(obj) !== '{}') {
+                        return (
                             <div
-                                className="courseCardImgBox"
-                                style={{
-                                    backgroundImage: `url(${obj.cover})`,
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundPosition: 'center center',
-                                }}
-                            ></div>
-                            <div className="courseCardTitle">{obj.title}</div>
-                            <div className="courseCardDesc">{obj.bio}</div>
-                        </div>
-                    ))}
+                                className="courseCard"
+                                key={obj.id}
+                                onClick={() => toEditCoursePage(obj.id)}
+                            >
+                                <Popconfirm
+                                    placement="bottom"
+                                    title={text}
+                                    onConfirm={e => deleteCourseById(e, obj.id)}
+                                    onCancel={e => e.stopPropagation()}
+                                    okText="删除"
+                                    cancelText="取消"
+                                    onClick={e => e.stopPropagation()}
+                                >
+                                    <div className="deleteCourseBtn">
+                                        <DeleteOutlined />
+                                    </div>
+                                </Popconfirm>
+                                <div
+                                    className="courseCardImgBox"
+                                    style={{
+                                        backgroundImage: `url(${obj.cover})`,
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'center center',
+                                    }}
+                                ></div>
+                                <div className="courseCardTitle">{obj.title}</div>
+                                <div className="courseCardDesc">{obj.bio}</div>
+                            </div>
+                        );
+                    } else {
+                        return <div className="courseCardNull" key={nanoid()}></div>;
+                    }
+                })}
             </div>
         </div>
     );

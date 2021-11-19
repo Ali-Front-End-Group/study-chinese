@@ -1,8 +1,6 @@
 .CourseBox {
     min-height: calc(100vh - 60px);
     background-size: cover;
-    /* background-color: rgb(209, 209, 209); */
-    padding-bottom: 20px;
 }
 
 .courseLayout {
@@ -15,7 +13,7 @@
     align-items: center;
     align-content: flex-start;
     /* background-color: #fff; */
-    opacity: 0.9;
+    padding-top: 20px;
 }
 
 /* ———————————————————————————————————————————————— */
@@ -29,7 +27,8 @@
     user-select: none;
     border-radius: 20px;
     overflow: hidden;
-    margin-top: 22px;
+    margin-bottom: 22px;
+    border: 2px #ccc solid;
 }
 .courseCard:hover {
     transform: scale(1.04);
@@ -104,4 +103,14 @@
 }
 .deleteCourseBtn:hover {
     background-color: red;
+}
+
+.courseCardNull {
+    width: 17%;
+}
+.courseCard:after {
+    display: block;
+    width: 100%;
+    padding-top: 116%;
+    content: '';
 }
