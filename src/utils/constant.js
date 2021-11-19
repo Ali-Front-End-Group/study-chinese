@@ -16,6 +16,9 @@ export const defaultAvatar = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/
 // logo
 export const logoLink = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118183107.jpg';
 
+// 课程卡片页面添加图
+export const addCourseImg = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119184151.png';
+
 // 欢迎页面背景
 // export const welcomeBackground = [
 //     'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119132717.png',

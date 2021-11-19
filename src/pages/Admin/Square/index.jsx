@@ -41,18 +41,25 @@ const Square = ({ allCourses }) => {
             </Modal>
             <div className="courseLayout">
                 {allCourses.map(obj => (
-                    <Card
-                        key={obj.id}
-                        cover={<img alt="图片" src={obj.cover} className="coverImg" />}
+                    <div
                         className="courseCard"
+                        key={obj.id}
                         onClick={() => {
                             setTheID(obj.id);
                             setModalShow(true);
                         }}
                     >
-                        <div className="courseName">{obj.title}</div>
-                        <div className="courseDesc">{obj.bio}</div>
-                    </Card>
+                        <div
+                            className="courseCardImgBox"
+                            style={{
+                                backgroundImage: `url(${obj.cover})`,
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'center center',
+                            }}
+                        ></div>
+                        <div className="courseCardTitle">{obj.title}</div>
+                        <div className="courseCardDesc">{obj.bio}</div>
+                    </div>
                 ))}
             </div>
         </div>

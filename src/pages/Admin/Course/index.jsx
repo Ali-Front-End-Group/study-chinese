@@ -85,14 +85,11 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
                 {allCourses
                     .filter(obj => `${obj.user_id}` === userId)
                     .map(obj => (
-                        <Card
-                            key={obj.id}
-                            cover={<img alt="图片" src={obj.cover} className="coverImg" />}
+                        <div
                             className="courseCard"
+                            key={obj.id}
                             onClick={() => toEditCoursePage(obj.id)}
                         >
-                            <div className="courseName">{obj.title}</div>
-                            <div className="courseDesc">{obj.bio}</div>
                             <Popconfirm
                                 placement="bottom"
                                 title={text}
@@ -106,7 +103,17 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
                                     <DeleteOutlined />
                                 </div>
                             </Popconfirm>
-                        </Card>
+                            <div
+                                className="courseCardImgBox"
+                                style={{
+                                    backgroundImage: `url(${obj.cover})`,
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center center',
+                                }}
+                            ></div>
+                            <div className="courseCardTitle">{obj.title}</div>
+                            <div className="courseCardDesc">{obj.bio}</div>
+                        </div>
                     ))}
             </div>
         </div>

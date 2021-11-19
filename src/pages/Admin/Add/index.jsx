@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
-import { Input, Button, Radio, Space, Card, message, Popconfirm, Divider, Modal } from 'antd';
+import { Input, Button, Radio, Space, message, Popconfirm, Divider, Modal } from 'antd';
 import { BASE_URL, DB_URL, appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
@@ -570,7 +570,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                 >
                                     音频信息
                                 </Button>
-                                <br />
+                                {/* <br /> */}
                                 <Button
                                     className="addBtnItem"
                                     icon={<CommentOutlined />}

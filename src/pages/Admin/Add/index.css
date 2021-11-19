@@ -14,12 +14,10 @@
     margin: auto;
     width: 90%;
     display: flex;
-    /* background-color: rgb(167, 157, 157); */
 }
 
 .addLeft {
     flex: 1.5;
-    /* background-color: rgb(238, 241, 11); */
 }
 
 .addLeft,
@@ -79,26 +77,44 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 360px;
-    height: 760px;
+    width: 46%;
     background-color: #ededed;
     border-radius: 24px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+.mobileBox:after {
+    display: block;
+    width: 100%;
+    padding-top: 211.11%;
+    content: '';
+    position: relative;
 }
 
 .mobileTime {
-    padding: 0 16px;
-    height: 34px;
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0 6%;
+    height: 4.6%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-weight: 700;
     user-select: none;
+    z-index: 10;
 }
 
 .mobileTitle {
+    position: absolute;
+    top: 4.6%;
+    left: 0;
+    right: 0;
     user-select: none;
-    height: 44px;
+    /* height: 44px; */
+    height: 6%;
     padding: 0 12px;
     display: flex;
     justify-content: space-between;
@@ -106,16 +122,22 @@
     font-weight: 700;
     font-size: 18px;
     border-bottom: 1px solid #dbdbdb;
+    z-index: 10;
 }
 
 .mobileTitle span {
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .mobileBody {
-    height: 682px;
-    padding: 12px;
+    position: absolute;
+    top: 10.6%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 2%;
     user-select: none;
+    z-index: 10;
 }
 
 .mobileBody::-webkit-scrollbar {
@@ -123,7 +145,7 @@
 }
 
 .mobileBodyScreen {
-    height: calc(682px - 12px * 2);
+    height: 100%;
     overflow-y: auto;
     border-radius: 0 0 20px 20px;
 }
@@ -152,7 +174,7 @@
 }
 
 .contentZh {
-    font-size: 22px;
+    font-size: 18px;
 }
 
 .contentEn {
@@ -160,17 +182,22 @@
 }
 
 .courseImg {
-    width: 160px;
-    height: 160px;
+    width: 44%;
+    height: 0;
+    padding-top: 44%;
     background-color: #fff;
     border-radius: 12px;
-    padding: 10px;
     margin-bottom: 10px;
+    position: relative;
 }
 
 .courseImg img {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .courseVoice {
