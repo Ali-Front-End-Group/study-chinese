@@ -62,21 +62,21 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80px;
-    height: 40px;
-    background-color: rgb(43, 142, 223);
+    width: 44px;
+    height: 44px;
+    background-color: rgb(53, 95, 112);
     font-size: 24px;
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translate(0, -50%);
-    border-radius: 14px;
+    border-radius: 50%;
     transition: all 0.3s;
 }
 
 .logoutBtn:hover {
-    background-color: rgb(14, 126, 218);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    background-color: rgb(241, 63, 63);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6) inset;
 }
 
 .avatarModal {

@@ -1,10 +1,10 @@
 .list {
     position: absolute;
-    right: 120px;
+    right: 80px;
     top: 50%;
     transform: translate(0, -50%);
     height: 40px;
-    width: 240px;
+    width: 220px;
     /* background-color: rgb(168, 144, 144); */
     display: flex;
     justify-content: space-evenly;
@@ -18,12 +18,20 @@
     user-select: none;
     height: 36px;
     line-height: 36px;
-    background-color: rgb(82, 150, 177);
-    border-radius: 14px;
+    background-color: rgb(71, 127, 150);
+    border-radius: 10px;
     transition: all 0.3s;
+    cursor: default;
+    color: #fff;
 }
 
 .listItem:hover {
-    background-color: rgb(56, 216, 221);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    background-color: rgb(27, 104, 107);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6) inset;
+    color: #fff;
+}
+.activePage {
+    background-color: rgb(27, 104, 107);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6) inset;
+    color: #fff;
 }

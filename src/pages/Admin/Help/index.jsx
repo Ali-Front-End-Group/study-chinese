@@ -1,11 +1,4 @@
-import {
-    logoLink,
-    about_img,
-    appName,
-    groupMember,
-    appDescription,
-    contact,
-} from '../../../utils/constant';
+import { logoLink, appName, groupMember, appDescription, contact } from '../../../utils/constant';
 import s from './index.module.css';
 
 const Help = () => (
@@ -36,7 +29,7 @@ const Help = () => (
         <div className={s.right}>
             <div style={{ textAlign: 'center' }}>
                 <img
-                    src={about_img}
+                    src="/img/aboutBG.png"
                     style={{ width: '1000px', height: '293px', marginBottom: '40px' }}
                 />
             </div>

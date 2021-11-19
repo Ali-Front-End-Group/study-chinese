@@ -1,21 +1,26 @@
-import { withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './index.css';
 
-const List = ({ history }) => {
+const List = () => {
     const route = [
         { id: 0, page: '课程', to: '/admin/course' },
         { id: 1, page: '广场', to: '/admin/square' },
-        { id: 2, page: '帮助和关于', to: '/admin/help' },
+        { id: 2, page: '关于', to: '/admin/help' },
     ];
     return (
         <div className="list">
             {route.map(obj => (
-                <div className="listItem" key={obj.id} onClick={() => history.push(obj.to)}>
+                <NavLink
+                    activeClassName="activePage"
+                    className="listItem"
+                    to={obj.to}
+                    key={obj.key}
+                >
                     {obj.page}
-                </div>
+                </NavLink>
             ))}
         </div>
     );
 };
 
-export default withRouter(List);
+export default List;

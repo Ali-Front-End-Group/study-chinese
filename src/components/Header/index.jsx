@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { EnterOutlined, UploadOutlined } from '@ant-design/icons';
+import { EnterOutlined, UploadOutlined, CloseOutlined } from '@ant-design/icons';
 import { openNotification } from '../../utils/functions';
 import { connect } from 'react-redux';
 import { setIsLogin, setUserId, setUserInfo, setAllCourses } from '../../redux/actions';
@@ -208,7 +208,9 @@ const Header = ({
                             okText="确认"
                             cancelText="取消"
                         >
-                            <div className="logoutBtn">退出</div>
+                            <div className="logoutBtn">
+                                <CloseOutlined />
+                            </div>
                         </Popconfirm>
                     </>
                 ) : null}

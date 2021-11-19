@@ -22,7 +22,7 @@ export const welcomeBackground =
 export const courseBackground =
     'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211118194626.png';
 
-export const about_img = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119103942.png';
+// export const about_img = 'https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119103942.png';
 
 // 帮助页面的一些信息
 export const appName = '「不学汉语」';
