@@ -1,6 +1,6 @@
 import { SET_USER_INFO } from '../constant';
 
-const initState = { avatar: '', bio: '', nickname: '' };
+const initState = { id: '', avatar: '', bio: '', nickname: '' };
 
 export default function addReducer(preState = initState, action) {
     const { type, data } = action;

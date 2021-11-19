@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { EnterOutlined, UploadOutlined, CloseOutlined } from '@ant-design/icons';
 import { openNotification } from '../../utils/functions';
 import { connect } from 'react-redux';
-import { setIsLogin, setUserId, setUserInfo, setAllCourses } from '../../redux/actions';
+import { setIsLogin, setUserInfo, setAllCourses } from '../../redux/actions';
 import { defaultAvatar } from '../../utils/constant';
 import { Popconfirm, Modal, Input, Button, message } from 'antd';
 import { DB_URL, appTcb, logoLink } from '../../utils/constant';
@@ -12,25 +12,9 @@ import { nanoid } from 'nanoid';
 import List from './List';
 import './index.css';
 
-const Header = ({
-    isLogin,
-    setIsLogin,
-    userId,
-    setUserId,
-    userInfo,
-    setUserInfo,
-    setAllCourses,
-    history,
-}) => {
+const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, history }) => {
     const { TextArea } = Input;
     const text = '确认要退出吗？';
-    const logout = () => {
-        setIsLogin(false);
-        setUserId('');
-        setUserInfo({ avatar: '', bio: '', nickname: '' });
-        setAllCourses([]);
-        openNotification('推出成功！欢迎再次使用！', <EnterOutlined />);
-    };
     const [avatarInput, setAvatarInput] = useState(defaultAvatar);
     const [bioInput, setBioInput] = useState('');
     const [nicknameInput, setNicknameInput] = useState('');
@@ -87,7 +71,7 @@ const Header = ({
     // 更新用户信息
     const updateUserInfo = () => {
         axios({
-            url: `${DB_URL}/user/update?id=${userId}`,
+            url: `${DB_URL}/user/update?id=${userInfo.id}`,
             method: 'post',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -127,6 +111,13 @@ const Header = ({
     const toCoursePage = () => {
         if (!isLogin) return;
         history.push('/admin/course');
+    };
+    // 退出登录
+    const logout = () => {
+        setIsLogin(false);
+        setUserInfo({ id: '', avatar: '', bio: '', nickname: '' });
+        setAllCourses([]);
+        openNotification('推出成功！欢迎再次使用！', <EnterOutlined />);
     };
     return (
         <>
@@ -224,12 +215,10 @@ export default withRouter(
     connect(
         state => ({
             isLogin: state.isLogin,
-            userId: state.userId,
             userInfo: state.userInfo,
         }),
         {
             setIsLogin,
-            setUserId,
             setUserInfo,
             setAllCourses,
         }

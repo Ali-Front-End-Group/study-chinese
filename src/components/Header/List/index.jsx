@@ -10,12 +10,7 @@ const List = () => {
     return (
         <div className="list">
             {route.map(obj => (
-                <NavLink
-                    activeClassName="activePage"
-                    className="listItem"
-                    to={obj.to}
-                    key={obj.key}
-                >
+                <NavLink activeClassName="activePage" className="listItem" to={obj.to} key={obj.id}>
                     {obj.page}
                 </NavLink>
             ))}

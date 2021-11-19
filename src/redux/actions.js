@@ -1,14 +1,8 @@
-import { SET_IS_LOGIN, SET_USER_ID, SET_ALL_COURSES, SET_USER_INFO } from './constant';
+import { SET_IS_LOGIN, SET_ALL_COURSES, SET_USER_INFO } from './constant';
 
 // 登入
 export const setIsLogin = data => ({
     type: SET_IS_LOGIN,
-    data,
-});
-
-// 修改用户ID
-export const setUserId = data => ({
-    type: SET_USER_ID,
     data,
 });
 

@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { message } from 'antd';
 import { CheckOutlined, CloseOutlined, ExclamationOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import { setIsLogin, setUserId, setAllCourses, setUserInfo } from '../../redux/actions';
+import { setIsLogin } from '../../redux/actions';
 import axios from 'axios';
 import qs from 'qs';
 import { DB_URL } from '../../utils/constant';
 import { openNotification } from '../../utils/functions';
 import './index.css';
 
-const Login = ({ setIsLogin, setUserId, setAllCourses, setUserInfo }) => {
+const Login = ({ setIsLogin }) => {
     const [isFront, setIsFront] = useState(true);
     const [name, setName] = useState('');
     const [pwd, setPwd] = useState('');
@@ -58,48 +58,19 @@ const Login = ({ setIsLogin, setUserId, setAllCourses, setUserInfo }) => {
         }).then(
             res => {
                 if (res.data.result === 'success') {
-                    const { nickname, bio, avatar, token, id } = res.data.data;
-                    setUserInfo({ nickname, bio, avatar });
-                    getAllCourseFromDB(id, token);
-                    setUserId(id);
+                    const { token, id } = res.data.data;
                     localStorage.setItem('token', token);
-                    // 设置登录状态
-                    setIsLogin(true);
+                    localStorage.setItem('id', id);
                     openNotification('登录成功！欢迎进入不学汉语！', <CheckOutlined />);
-                    setName('');
-                    setPwd('');
+                    setIsLogin(true);
                 } else {
                     message.error('登录失败，请重试！');
                 }
             },
-            err => {
-                message.error('登录失败，请重试！');
-                console.log(err);
-            }
+            () => message.error('登录失败，请重试！')
         );
     };
-    // 从数据库获取所有课程信息
-    const getAllCourseFromDB = (ID, TOKEN) => {
-        axios({
-            url: `${DB_URL}/course/list?userId=${ID}`,
-            method: 'get',
-            headers: {
-                Authorization: `Bearer ${TOKEN}`,
-            },
-        }).then(
-            res => {
-                if (res.data.result === 'success') {
-                    setAllCourses(res.data.data.rows);
-                } else {
-                    message.warning('获取课程信息失败！');
-                }
-            },
-            err => {
-                console.log(err);
-                message.warning('获取课程信息失败！');
-            }
-        );
-    };
+
     // 切换登录/注册
     const toggle = () => setIsFront(isFront => !isFront);
     // 回车登录
@@ -178,7 +149,4 @@ const Login = ({ setIsLogin, setUserId, setAllCourses, setUserInfo }) => {
 
 export default connect(() => ({}), {
     setIsLogin,
-    setUserId,
-    setAllCourses,
-    setUserInfo,
 })(Login);

@@ -82,8 +82,9 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
                 {/* 添加课程卡片 */}
                 <AddCourse />
                 {/* 渲染课程卡片列表 */}
-                {allCourses.map(obj => {
-                    return (
+                {allCourses
+                    .filter(obj => `${obj.user_id}` === userId)
+                    .map(obj => (
                         <Card
                             key={obj.id}
                             cover={<img alt="图片" src={obj.cover} className="coverImg" />}
@@ -106,8 +107,7 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
                                 </div>
                             </Popconfirm>
                         </Card>
-                    );
-                })}
+                    ))}
             </div>
         </div>
     );
@@ -115,7 +115,7 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
 
 export default connect(
     state => ({
-        userId: state.userId,
+        userId: state.userInfo.id,
         allCourses: state.allCourses,
     }),
     { setAllCourses }

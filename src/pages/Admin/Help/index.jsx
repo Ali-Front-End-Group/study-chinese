@@ -29,6 +29,7 @@ const Help = () => (
         <div className={s.right}>
             <div style={{ textAlign: 'center' }}>
                 <img
+                    alt="BG"
                     src="/img/aboutBG.png"
                     style={{ width: '1000px', height: '293px', marginBottom: '40px' }}
                 />
