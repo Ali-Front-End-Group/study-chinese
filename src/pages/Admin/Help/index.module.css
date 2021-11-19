@@ -4,11 +4,7 @@
     font-family: '微软雅黑';
     min-height: calc(100vh - 60px);
     background-color: #f2f2f2;
-    padding-top: 140px;
-}
-
-.HelpBox img {
-    -webkit-user-drag: none;
+    padding-top: 80px;
 }
 
 .left {

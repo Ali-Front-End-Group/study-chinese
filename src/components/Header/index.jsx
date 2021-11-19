@@ -118,7 +118,7 @@ const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, his
         setAllCourses([]);
         sessionStorage.removeItem('id');
         sessionStorage.removeItem('token');
-        openNotification('推出成功！欢迎再次使用！', <EnterOutlined />);
+        openNotification('退出成功！欢迎再次使用！', <EnterOutlined />);
     };
     return (
         <>

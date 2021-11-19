@@ -61,7 +61,7 @@ const Login = ({ setIsLogin }) => {
                     const { token, id } = res.data.data;
                     sessionStorage.setItem('token', token);
                     sessionStorage.setItem('id', id);
-                    openNotification('登录成功！欢迎进入不学汉语！', <CheckOutlined />);
+                    openNotification('登录成功！欢迎进入「不学汉语」！', <CheckOutlined />);
                     setIsLogin(true);
                 } else {
                     message.error('登录失败，请重试！');

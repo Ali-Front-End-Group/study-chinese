@@ -16,29 +16,11 @@ body,
     width: 100%;
 }
 
-body::-webkit-scrollbar {
-    display: none;
-}
+body::-webkit-scrollbar,
 div::-webkit-scrollbar {
     display: none;
 }
 
-/* input {
-    background: none;
-    outline: none;
-    border: 0px;
-    border-radius: 0;
-} */
-
-/* div {
-    box-sizing: border-box;
-} */
-
-/* a,
-a:link,
-a:visited,
-a:hover,
-a:active,
-a:focus {
-    text-decoration: none !important;
-} */
+img {
+    -webkit-user-drag: none;
+}
