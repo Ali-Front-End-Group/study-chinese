@@ -461,502 +461,515 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                 {/* 左边输入部分 */}
                 <div className="addLeft">
                     <div className="inputBox">
-                        {/* 取消、发布按钮 */}
-                        <div className="addBtnBox">
-                            <Popconfirm
-                                placement="top"
-                                title={text}
-                                onConfirm={() => {
-                                    message.info(`课程未${isEdit ? '更新' : '发布'}！`);
-                                    history.push('/admin/course');
-                                }}
-                                okText="确认"
-                                cancelText="取消"
-                            >
+                        {/* 必填内容 */}
+                        <div className="requiredBox">
+                            {/* 取消、发布按钮 */}
+                            <div className="addBtnBox">
+                                <Popconfirm
+                                    placement="top"
+                                    title={text}
+                                    onConfirm={() => {
+                                        message.info(`课程未${isEdit ? '更新' : '发布'}！`);
+                                        history.push('/admin/course');
+                                    }}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button
+                                        type="primary"
+                                        icon={<ArrowLeftOutlined />}
+                                        danger
+                                        className="backBtn"
+                                    >
+                                        取消
+                                    </Button>
+                                </Popconfirm>
                                 <Button
                                     type="primary"
-                                    icon={<ArrowLeftOutlined />}
-                                    danger
-                                    className="backBtn"
+                                    icon={<CheckOutlined />}
+                                    onClick={releaseCourse}
                                 >
-                                    取消
+                                    {isEdit ? '更新' : '发布'}
                                 </Button>
-                            </Popconfirm>
-                            <Button type="primary" icon={<CheckOutlined />} onClick={releaseCourse}>
-                                {isEdit ? '更新' : '发布'}
-                            </Button>
-                        </div>
-                        <Divider orientation="left" style={{ fontSize: '20px', fontWeight: '700' }}>
-                            课程基本信息
-                        </Divider>
-                        {/* 课程名称、课程描述、课程封面 */}
-                        <>
-                            <span className="courseItem">课程名称：</span>
-                            <br />
-                            <Input
-                                placeholder="请输入课程名..."
-                                value={name}
-                                maxLength={10}
-                                onChange={e => setName(e.target.value)}
-                            />
-                            <span className="courseItem">课程描述：</span>
-                            <br />
-                            <Input
-                                placeholder="请输入课程描述..."
-                                value={desc}
-                                maxLength={26}
-                                onChange={e => setDesc(e.target.value)}
-                            />
-                            <span className="courseItem">课程封面：</span>
-                            <br />
-                            <Input
-                                placeholder="请选择课程封面..."
-                                value={coverLink}
-                                style={{ width: 'calc(100% - 38px)' }}
-                                onChange={e => setCoverLink(e.target.value)}
-                            />
-                            <Button
-                                shape="circle"
-                                style={{ marginLeft: '6px' }}
-                                onClick={() => document.getElementById('selectCourseCover').click()}
+                            </div>
+                            <Divider
+                                orientation="left"
+                                style={{ fontSize: '20px', fontWeight: '700' }}
                             >
-                                <CloudUploadOutlined />
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="selectFile"
-                                    id="selectCourseCover"
-                                    onChange={() => beforeUploadCover('selectCourseCover')}
+                                课程基本信息
+                            </Divider>
+                            {/* 课程名称、课程描述、课程封面 */}
+                            <>
+                                <span className="courseItem">课程名称：</span>
+                                <br />
+                                <Input
+                                    placeholder="请输入课程名..."
+                                    value={name}
+                                    maxLength={10}
+                                    onChange={e => setName(e.target.value)}
                                 />
-                            </Button>
-                        </>
-                        <Divider orientation="left" style={{ fontSize: '20px', fontWeight: '700' }}>
-                            添加互动信息
-                        </Divider>
-                        {/* 动态添加项目的按钮 */}
-                        <div className="addBtns">
-                            <Button
-                                className="addBtnItem"
-                                icon={<FontColorsOutlined />}
-                                onClick={() => addCourse('text')}
+                                <span className="courseItem">课程描述：</span>
+                                <br />
+                                <Input
+                                    placeholder="请输入课程描述..."
+                                    value={desc}
+                                    maxLength={26}
+                                    onChange={e => setDesc(e.target.value)}
+                                />
+                                <span className="courseItem">课程封面：</span>
+                                <br />
+                                <Input
+                                    placeholder="请选择课程封面..."
+                                    value={coverLink}
+                                    style={{ width: 'calc(100% - 38px)' }}
+                                    onChange={e => setCoverLink(e.target.value)}
+                                />
+                                <Button
+                                    shape="circle"
+                                    style={{ marginLeft: '6px' }}
+                                    onClick={() =>
+                                        document.getElementById('selectCourseCover').click()
+                                    }
+                                >
+                                    <CloudUploadOutlined />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="selectFile"
+                                        id="selectCourseCover"
+                                        onChange={() => beforeUploadCover('selectCourseCover')}
+                                    />
+                                </Button>
+                            </>
+                            <Divider
+                                orientation="left"
+                                style={{ fontSize: '20px', fontWeight: '700' }}
                             >
-                                文字信息
-                            </Button>
-                            <Button
-                                className="addBtnItem"
-                                icon={<FundOutlined />}
-                                onClick={() => addCourse('image')}
+                                添加互动信息
+                            </Divider>
+                            {/* 动态添加项目的按钮 */}
+                            <div className="addBtns">
+                                <Button
+                                    className="addBtnItem"
+                                    icon={<FontColorsOutlined />}
+                                    onClick={() => addCourse('text')}
+                                >
+                                    文字信息
+                                </Button>
+                                <Button
+                                    className="addBtnItem"
+                                    icon={<FundOutlined />}
+                                    onClick={() => addCourse('image')}
+                                >
+                                    图片信息
+                                </Button>
+                                <Button
+                                    className="addBtnItem"
+                                    icon={<AudioOutlined />}
+                                    onClick={() => addCourse('voice')}
+                                >
+                                    音频信息
+                                </Button>
+                                <br />
+                                <Button
+                                    className="addBtnItem"
+                                    icon={<CommentOutlined />}
+                                    onClick={() => addCourse('record')}
+                                >
+                                    口语任务
+                                </Button>
+                                <Button
+                                    className="addBtnItem"
+                                    icon={<VideoCameraOutlined />}
+                                    onClick={() => addCourse('video')}
+                                >
+                                    视频信息
+                                </Button>
+                                <Button
+                                    className="addBtnItem"
+                                    icon={<QuestionOutlined />}
+                                    onClick={() => addCourse('quzzle')}
+                                >
+                                    测验信息
+                                </Button>
+                            </div>
+                            <Divider
+                                orientation="left"
+                                style={{ fontSize: '20px', fontWeight: '700' }}
                             >
-                                图片信息
-                            </Button>
-                            <Button
-                                className="addBtnItem"
-                                icon={<AudioOutlined />}
-                                onClick={() => addCourse('voice')}
-                            >
-                                音频信息
-                            </Button>
-                            <br />
-                            <Button
-                                className="addBtnItem"
-                                icon={<CommentOutlined />}
-                                onClick={() => addCourse('record')}
-                            >
-                                口语任务
-                            </Button>
-                            <Button
-                                className="addBtnItem"
-                                icon={<VideoCameraOutlined />}
-                                onClick={() => addCourse('video')}
-                            >
-                                视频信息
-                            </Button>
-                            <Button
-                                className="addBtnItem"
-                                icon={<QuestionOutlined />}
-                                onClick={() => addCourse('quzzle')}
-                            >
-                                测验信息
-                            </Button>
+                                课程内容
+                            </Divider>
                         </div>
-                        <Divider orientation="left" style={{ fontSize: '20px', fontWeight: '700' }}>
-                            课程内容
-                        </Divider>
-                        {/* 渲染所有课程 */}
-                        {allCourse.map((obj, index) => {
-                            if (obj.contentType === 'text') {
-                                return (
-                                    <div className="autoItem" key={obj.id}>
-                                        <span className="courseItem">文字信息：</span>
-                                        <br />
-                                        <Input
-                                            placeholder="请输入中文内容..."
-                                            value={obj.content}
-                                            style={{
-                                                width: 'calc(100% - 38px)',
-                                                marginBottom: '5px',
-                                            }}
-                                            onChange={e => {
-                                                const copy = [...allCourse];
-                                                copy[index].content = e.target.value;
-                                                setAllCourse(copy);
-                                            }}
-                                            onBlur={() => getPinyin(obj.content, index, 'text')}
-                                        />
-                                        <Button
-                                            type="primary"
-                                            shape="circle"
-                                            danger
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() => deleteCourseById(obj.id)}
-                                        >
-                                            <DeleteOutlined />
-                                        </Button>
-                                        <Input
-                                            placeholder="请输入英文内容..."
-                                            value={obj.engText}
-                                            style={{ width: 'calc(100% - 38px)' }}
-                                            onChange={e => {
-                                                const copy = [...allCourse];
-                                                copy[index].engText = e.target.value;
-                                                setAllCourse(copy);
-                                            }}
-                                        />
-                                    </div>
-                                );
-                            } else if (obj.contentType === 'image') {
-                                return (
-                                    <div className="autoItem" key={obj.id}>
-                                        <span className="courseItem">图片信息：</span>
-                                        <br />
-                                        <Input
-                                            placeholder="请输入一个汉字，并转化为图片url..."
-                                            style={{ width: 'calc(100% - 114px)' }}
-                                            maxLength={1}
-                                            value={obj.content}
-                                            onChange={e => {
-                                                const copy = [...allCourse];
-                                                copy[index].content = e.target.value;
-                                                setAllCourse(copy);
-                                            }}
-                                        />
-                                        <Button
-                                            shape="circle"
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() => getImg(obj.content, index)}
-                                        >
-                                            <SearchOutlined />
-                                        </Button>
-                                        <Button
-                                            shape="circle"
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() =>
-                                                document.getElementById(`${obj.id}`).click()
-                                            }
-                                        >
-                                            <CloudUploadOutlined />
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                id={obj.id}
-                                                className="selectFile"
-                                                onChange={() => beforeUploadImg(obj.id, index)}
+                        {/* 选填内容 */}
+                        <div className="optionalBox">
+                            {/* 渲染所有课程 */}
+                            {allCourse.map((obj, index) => {
+                                if (obj.contentType === 'text') {
+                                    return (
+                                        <div className="autoItem" key={obj.id}>
+                                            <span className="courseItem">文字信息：</span>
+                                            <br />
+                                            <Input
+                                                placeholder="请输入中文内容..."
+                                                value={obj.content}
+                                                style={{
+                                                    width: 'calc(100% - 38px)',
+                                                    marginBottom: '5px',
+                                                }}
+                                                onChange={e => {
+                                                    const copy = [...allCourse];
+                                                    copy[index].content = e.target.value;
+                                                    setAllCourse(copy);
+                                                }}
+                                                onBlur={() => getPinyin(obj.content, index, 'text')}
                                             />
-                                        </Button>
-                                        <Button
-                                            type="primary"
-                                            shape="circle"
-                                            danger
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() => deleteCourseById(obj.id)}
-                                        >
-                                            <DeleteOutlined />
-                                        </Button>
-                                    </div>
-                                );
-                            } else if (obj.contentType === 'voice') {
-                                return (
-                                    <div className="autoItem" key={obj.id}>
-                                        <span className="courseItem">声音信息：</span>
-                                        <br />
-                                        <Input
-                                            placeholder="请输入中文，并生成语音url..."
-                                            style={{ width: 'calc(100% - 114px)' }}
-                                            value={obj.content}
-                                            maxLength={55}
-                                            onChange={e => {
-                                                const copy = [...allCourse];
-                                                copy[index].content = e.target.value;
-                                                setAllCourse(copy);
-                                            }}
-                                        />
-                                        <Button
-                                            shape="circle"
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() => getVoice(obj.content, index)}
-                                        >
-                                            <SoundOutlined />
-                                        </Button>
-                                        <Button
-                                            shape="circle"
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() =>
-                                                document.getElementById(`${obj.id}`).click()
-                                            }
-                                        >
-                                            <CloudUploadOutlined />
-                                            <input
-                                                type="file"
-                                                accept="audio/*"
-                                                id={obj.id}
-                                                className="selectFile"
-                                                onChange={() => beforeUploadVoice(obj.id, index)}
+                                            <Button
+                                                type="primary"
+                                                shape="circle"
+                                                danger
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() => deleteCourseById(obj.id)}
+                                            >
+                                                <DeleteOutlined />
+                                            </Button>
+                                            <Input
+                                                placeholder="请输入英文内容..."
+                                                value={obj.engText}
+                                                style={{ width: 'calc(100% - 38px)' }}
+                                                onChange={e => {
+                                                    const copy = [...allCourse];
+                                                    copy[index].engText = e.target.value;
+                                                    setAllCourse(copy);
+                                                }}
                                             />
-                                        </Button>
-                                        <Button
-                                            type="primary"
-                                            shape="circle"
-                                            danger
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() => deleteCourseById(obj.id)}
-                                        >
-                                            <DeleteOutlined />
-                                        </Button>
-                                    </div>
-                                );
-                            } else if (obj.contentType === 'video') {
-                                return (
-                                    <div className="autoItem" key={obj.id}>
-                                        <span className="courseItem">视频信息：</span>
-                                        <br />
-                                        <Input
-                                            placeholder="请输入视频地址..."
-                                            style={{ width: 'calc(100% - 76px)' }}
-                                            // maxLength={1}
-                                            value={obj.content}
-                                            onChange={e => {
-                                                const copy = [...allCourse];
-                                                copy[index].content = e.target.value;
-                                                setAllCourse(copy);
-                                            }}
-                                        />
-                                        <Button
-                                            shape="circle"
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() =>
-                                                document.getElementById(`${obj.id}`).click()
-                                            }
-                                        >
-                                            <CloudUploadOutlined />
-                                            <input
-                                                type="file"
-                                                accept=".mp4,.avi,.flv,.wmv"
-                                                id={obj.id}
-                                                className="selectFile"
-                                                onChange={() => beforeUploadVideo(obj.id, index)}
+                                        </div>
+                                    );
+                                } else if (obj.contentType === 'image') {
+                                    return (
+                                        <div className="autoItem" key={obj.id}>
+                                            <span className="courseItem">图片信息：</span>
+                                            <br />
+                                            <Input
+                                                placeholder="请输入一个汉字，并转化为图片url..."
+                                                style={{ width: 'calc(100% - 114px)' }}
+                                                maxLength={1}
+                                                value={obj.content}
+                                                onChange={e => {
+                                                    const copy = [...allCourse];
+                                                    copy[index].content = e.target.value;
+                                                    setAllCourse(copy);
+                                                }}
                                             />
-                                        </Button>
-                                        <Button
-                                            type="primary"
-                                            shape="circle"
-                                            danger
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() => deleteCourseById(obj.id)}
-                                        >
-                                            <DeleteOutlined />
-                                        </Button>
-                                    </div>
-                                );
-                            } else if (obj.contentType === 'quzzle') {
-                                return (
-                                    <div className="autoItem" key={obj.id}>
-                                        <span className="courseItem">测试题目：</span>
-                                        <br />
-                                        <Input
-                                            placeholder="请输入题目内容..."
-                                            value={obj.content[0].content}
-                                            maxLength={36}
-                                            style={{ width: 'calc(100% - 38px)' }}
-                                            onChange={e => {
-                                                const copy = [...allCourse];
-                                                copy[index].content[0].content = e.target.value;
-                                                setAllCourse(copy);
-                                            }}
-                                            onBlur={() =>
-                                                getPinyin(obj.content[0].content, index, 'quzzle')
-                                            }
-                                        />
-                                        <Button
-                                            type="primary"
-                                            shape="circle"
-                                            danger
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() => deleteCourseById(obj.id)}
-                                        >
-                                            <DeleteOutlined />
-                                        </Button>
-                                        <span className="courseItem">题目答案：</span>
-                                        <br />
-                                        <Radio.Group
-                                            name="radiogroup"
-                                            value={obj.answer}
-                                            onChange={e => {
-                                                const copy = [...allCourse];
-                                                copy[index].answer = e.target.value;
-                                                setAllCourse(copy);
-                                            }}
-                                        >
-                                            <Space direction="vertical">
-                                                <Radio value={0}>
-                                                    <Input
-                                                        placeholder="请输入选项答案..."
-                                                        value={obj.choice[0].content}
-                                                        onChange={e => {
-                                                            const copy = [...allCourse];
-                                                            copy[index].choice[0].content =
-                                                                e.target.value;
-                                                            setAllCourse(copy);
-                                                        }}
-                                                        maxLength={12}
-                                                        onBlur={() =>
-                                                            getPinyin(
-                                                                obj.choice[0].content,
-                                                                index,
-                                                                'choice',
-                                                                0
-                                                            )
-                                                        }
-                                                    />
-                                                </Radio>
-                                                <Radio value={1}>
-                                                    <Input
-                                                        placeholder="请输入选项答案..."
-                                                        value={obj.choice[1].content}
-                                                        onChange={e => {
-                                                            const copy = [...allCourse];
-                                                            copy[index].choice[1].content =
-                                                                e.target.value;
-                                                            setAllCourse(copy);
-                                                        }}
-                                                        maxLength={12}
-                                                        onBlur={() =>
-                                                            getPinyin(
-                                                                obj.choice[1].content,
-                                                                index,
-                                                                'choice',
-                                                                1
-                                                            )
-                                                        }
-                                                    />
-                                                </Radio>
-                                                <Radio value={2}>
-                                                    <Input
-                                                        placeholder="请输入选项答案..."
-                                                        value={obj.choice[2].content}
-                                                        onChange={e => {
-                                                            const copy = [...allCourse];
-                                                            copy[index].choice[2].content =
-                                                                e.target.value;
-                                                            setAllCourse(copy);
-                                                        }}
-                                                        maxLength={12}
-                                                        onBlur={() =>
-                                                            getPinyin(
-                                                                obj.choice[2].content,
-                                                                index,
-                                                                'choice',
-                                                                2
-                                                            )
-                                                        }
-                                                    />
-                                                </Radio>
-                                                <Radio value={3}>
-                                                    <Input
-                                                        placeholder="请输入选项答案..."
-                                                        value={obj.choice[3].content}
-                                                        onChange={e => {
-                                                            const copy = [...allCourse];
-                                                            copy[index].choice[3].content =
-                                                                e.target.value;
-                                                            setAllCourse(copy);
-                                                        }}
-                                                        maxLength={12}
-                                                        onBlur={() =>
-                                                            getPinyin(
-                                                                obj.choice[3].content,
-                                                                index,
-                                                                'choice',
-                                                                3
-                                                            )
-                                                        }
-                                                    />
-                                                </Radio>
-                                            </Space>
-                                        </Radio.Group>
-                                    </div>
-                                );
-                            } else if (obj.contentType === 'record') {
-                                return (
-                                    <div className="autoItem" key={obj.id}>
-                                        <span className="courseItem">派送口语任务：</span>
-                                        <br />
-                                        <Input
-                                            maxLength={20}
-                                            placeholder="请输入口语任务内容，仅限中文，字数在20字以内..."
-                                            value={obj.content}
-                                            style={{ width: 'calc(100% - 38px)' }}
-                                            onChange={e => {
-                                                const copy = [...allCourse];
-                                                copy[index].content = e.target.value;
-                                                setAllCourse(copy);
-                                            }}
-                                            onBlur={() => {
-                                                obj.content = obj.content.replace(
-                                                    /[^\u4e00-\u9fa5,.'?!:;]/g,
-                                                    ''
-                                                );
-                                                if (obj.content) {
-                                                    getPinyin(obj.content, index, 'record');
+                                            <Button
+                                                shape="circle"
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() => getImg(obj.content, index)}
+                                            >
+                                                <SearchOutlined />
+                                            </Button>
+                                            <Button
+                                                shape="circle"
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() =>
+                                                    document.getElementById(`${obj.id}`).click()
                                                 }
-                                            }}
-                                        />
-                                        <Button
-                                            type="primary"
-                                            shape="circle"
-                                            danger
-                                            style={{ marginLeft: '6px' }}
-                                            onClick={() => deleteCourseById(obj.id)}
-                                        >
-                                            <DeleteOutlined />
-                                        </Button>
-                                    </div>
-                                );
-                            } else {
-                                return null;
-                            }
-                        })}
+                                            >
+                                                <CloudUploadOutlined />
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    id={obj.id}
+                                                    className="selectFile"
+                                                    onChange={() => beforeUploadImg(obj.id, index)}
+                                                />
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                shape="circle"
+                                                danger
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() => deleteCourseById(obj.id)}
+                                            >
+                                                <DeleteOutlined />
+                                            </Button>
+                                        </div>
+                                    );
+                                } else if (obj.contentType === 'voice') {
+                                    return (
+                                        <div className="autoItem" key={obj.id}>
+                                            <span className="courseItem">声音信息：</span>
+                                            <br />
+                                            <Input
+                                                placeholder="请输入中文，并生成语音url..."
+                                                style={{ width: 'calc(100% - 114px)' }}
+                                                value={obj.content}
+                                                maxLength={55}
+                                                onChange={e => {
+                                                    const copy = [...allCourse];
+                                                    copy[index].content = e.target.value;
+                                                    setAllCourse(copy);
+                                                }}
+                                            />
+                                            <Button
+                                                shape="circle"
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() => getVoice(obj.content, index)}
+                                            >
+                                                <SoundOutlined />
+                                            </Button>
+                                            <Button
+                                                shape="circle"
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() =>
+                                                    document.getElementById(`${obj.id}`).click()
+                                                }
+                                            >
+                                                <CloudUploadOutlined />
+                                                <input
+                                                    type="file"
+                                                    accept="audio/*"
+                                                    id={obj.id}
+                                                    className="selectFile"
+                                                    onChange={() =>
+                                                        beforeUploadVoice(obj.id, index)
+                                                    }
+                                                />
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                shape="circle"
+                                                danger
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() => deleteCourseById(obj.id)}
+                                            >
+                                                <DeleteOutlined />
+                                            </Button>
+                                        </div>
+                                    );
+                                } else if (obj.contentType === 'video') {
+                                    return (
+                                        <div className="autoItem" key={obj.id}>
+                                            <span className="courseItem">视频信息：</span>
+                                            <br />
+                                            <Input
+                                                placeholder="请输入视频地址..."
+                                                style={{ width: 'calc(100% - 76px)' }}
+                                                // maxLength={1}
+                                                value={obj.content}
+                                                onChange={e => {
+                                                    const copy = [...allCourse];
+                                                    copy[index].content = e.target.value;
+                                                    setAllCourse(copy);
+                                                }}
+                                            />
+                                            <Button
+                                                shape="circle"
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() =>
+                                                    document.getElementById(`${obj.id}`).click()
+                                                }
+                                            >
+                                                <CloudUploadOutlined />
+                                                <input
+                                                    type="file"
+                                                    accept=".mp4,.avi,.flv,.wmv"
+                                                    id={obj.id}
+                                                    className="selectFile"
+                                                    onChange={() =>
+                                                        beforeUploadVideo(obj.id, index)
+                                                    }
+                                                />
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                shape="circle"
+                                                danger
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() => deleteCourseById(obj.id)}
+                                            >
+                                                <DeleteOutlined />
+                                            </Button>
+                                        </div>
+                                    );
+                                } else if (obj.contentType === 'quzzle') {
+                                    return (
+                                        <div className="autoItem" key={obj.id}>
+                                            <span className="courseItem">测试题目：</span>
+                                            <br />
+                                            <Input
+                                                placeholder="请输入题目内容..."
+                                                value={obj.content[0].content}
+                                                maxLength={36}
+                                                style={{ width: 'calc(100% - 38px)' }}
+                                                onChange={e => {
+                                                    const copy = [...allCourse];
+                                                    copy[index].content[0].content = e.target.value;
+                                                    setAllCourse(copy);
+                                                }}
+                                                onBlur={() =>
+                                                    getPinyin(
+                                                        obj.content[0].content,
+                                                        index,
+                                                        'quzzle'
+                                                    )
+                                                }
+                                            />
+                                            <Button
+                                                type="primary"
+                                                shape="circle"
+                                                danger
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() => deleteCourseById(obj.id)}
+                                            >
+                                                <DeleteOutlined />
+                                            </Button>
+                                            <span className="courseItem">题目答案：</span>
+                                            <br />
+                                            <Radio.Group
+                                                name="radiogroup"
+                                                value={obj.answer}
+                                                onChange={e => {
+                                                    const copy = [...allCourse];
+                                                    copy[index].answer = e.target.value;
+                                                    setAllCourse(copy);
+                                                }}
+                                            >
+                                                <Space direction="vertical">
+                                                    <Radio value={0}>
+                                                        <Input
+                                                            placeholder="请输入选项答案..."
+                                                            value={obj.choice[0].content}
+                                                            onChange={e => {
+                                                                const copy = [...allCourse];
+                                                                copy[index].choice[0].content =
+                                                                    e.target.value;
+                                                                setAllCourse(copy);
+                                                            }}
+                                                            maxLength={12}
+                                                            onBlur={() =>
+                                                                getPinyin(
+                                                                    obj.choice[0].content,
+                                                                    index,
+                                                                    'choice',
+                                                                    0
+                                                                )
+                                                            }
+                                                        />
+                                                    </Radio>
+                                                    <Radio value={1}>
+                                                        <Input
+                                                            placeholder="请输入选项答案..."
+                                                            value={obj.choice[1].content}
+                                                            onChange={e => {
+                                                                const copy = [...allCourse];
+                                                                copy[index].choice[1].content =
+                                                                    e.target.value;
+                                                                setAllCourse(copy);
+                                                            }}
+                                                            maxLength={12}
+                                                            onBlur={() =>
+                                                                getPinyin(
+                                                                    obj.choice[1].content,
+                                                                    index,
+                                                                    'choice',
+                                                                    1
+                                                                )
+                                                            }
+                                                        />
+                                                    </Radio>
+                                                    <Radio value={2}>
+                                                        <Input
+                                                            placeholder="请输入选项答案..."
+                                                            value={obj.choice[2].content}
+                                                            onChange={e => {
+                                                                const copy = [...allCourse];
+                                                                copy[index].choice[2].content =
+                                                                    e.target.value;
+                                                                setAllCourse(copy);
+                                                            }}
+                                                            maxLength={12}
+                                                            onBlur={() =>
+                                                                getPinyin(
+                                                                    obj.choice[2].content,
+                                                                    index,
+                                                                    'choice',
+                                                                    2
+                                                                )
+                                                            }
+                                                        />
+                                                    </Radio>
+                                                    <Radio value={3}>
+                                                        <Input
+                                                            placeholder="请输入选项答案..."
+                                                            value={obj.choice[3].content}
+                                                            onChange={e => {
+                                                                const copy = [...allCourse];
+                                                                copy[index].choice[3].content =
+                                                                    e.target.value;
+                                                                setAllCourse(copy);
+                                                            }}
+                                                            maxLength={12}
+                                                            onBlur={() =>
+                                                                getPinyin(
+                                                                    obj.choice[3].content,
+                                                                    index,
+                                                                    'choice',
+                                                                    3
+                                                                )
+                                                            }
+                                                        />
+                                                    </Radio>
+                                                </Space>
+                                            </Radio.Group>
+                                        </div>
+                                    );
+                                } else if (obj.contentType === 'record') {
+                                    return (
+                                        <div className="autoItem" key={obj.id}>
+                                            <span className="courseItem">派送口语任务：</span>
+                                            <br />
+                                            <Input
+                                                maxLength={20}
+                                                placeholder="请输入口语任务内容，仅限中文，字数在20字以内..."
+                                                value={obj.content}
+                                                style={{ width: 'calc(100% - 38px)' }}
+                                                onChange={e => {
+                                                    const copy = [...allCourse];
+                                                    copy[index].content = e.target.value;
+                                                    setAllCourse(copy);
+                                                }}
+                                                onBlur={() => {
+                                                    obj.content = obj.content.replace(
+                                                        /[^\u4e00-\u9fa5,.'?!:;]/g,
+                                                        ''
+                                                    );
+                                                    if (obj.content) {
+                                                        getPinyin(obj.content, index, 'record');
+                                                    }
+                                                }}
+                                            />
+                                            <Button
+                                                type="primary"
+                                                shape="circle"
+                                                danger
+                                                style={{ marginLeft: '6px' }}
+                                                onClick={() => deleteCourseById(obj.id)}
+                                            >
+                                                <DeleteOutlined />
+                                            </Button>
+                                        </div>
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })}
+                        </div>
                     </div>
                 </div>
                 {/* 右边预览 */}
                 <div className="addRight">
                     {/* 手机 */}
                     <div className="mobileBox">
-                        {/* 卡片 */}
-                        <Card
-                            cover={
-                                coverLink ? (
-                                    <img
-                                        alt="请选择图片或输入正确的图片url..."
-                                        src={coverLink}
-                                        className="coverImg"
-                                    />
-                                ) : null
-                            }
-                            className="courseCardPre"
-                        >
-                            <div className="courseName">{name}</div>
-                            <div className="courseDesc">{desc}</div>
-                        </Card>
                         <div className="mobileTime">
                             <span>{time}</span>
                             <FaWifi />
