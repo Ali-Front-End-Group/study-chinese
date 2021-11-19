@@ -388,7 +388,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
             method: 'post',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
             data: qs.stringify(data),
         }).then(
@@ -409,10 +409,10 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
     // 从数据库获取所有课程信息
     const getAllCourseFromDB = () => {
         axios({
-            url: `${DB_URL}/course/list?userId=${userId}`,
+            url: `${DB_URL}/course/listAll`,
             method: 'get',
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
         }).then(
             res => {
@@ -1072,7 +1072,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
 export default withRouter(
     connect(
         state => ({
-            userId: state.userId,
+            userId: state.userInfo.id,
             allCourses: state.allCourses,
         }),
         { setAllCourses }

@@ -59,8 +59,8 @@ const Login = ({ setIsLogin }) => {
             res => {
                 if (res.data.result === 'success') {
                     const { token, id } = res.data.data;
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('id', id);
+                    sessionStorage.setItem('token', token);
+                    sessionStorage.setItem('id', id);
                     openNotification('登录成功！欢迎进入不学汉语！', <CheckOutlined />);
                     setIsLogin(true);
                 } else {

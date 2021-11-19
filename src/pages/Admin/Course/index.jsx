@@ -12,10 +12,10 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
     // 从数据库获取所有课程信息
     const getAllCourseFromDB = () => {
         axios({
-            url: `${DB_URL}/course/list?userId=${userId}`,
+            url: `${DB_URL}/course/listAll`,
             method: 'get',
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
         }).then(
             res => {
@@ -38,7 +38,7 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
             url: `${DB_URL}/course/delete`,
             method: 'post',
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
             data: {
                 id: `${id}`,

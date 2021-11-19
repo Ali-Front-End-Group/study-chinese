@@ -74,7 +74,7 @@ const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, his
             url: `${DB_URL}/user/update?id=${userInfo.id}`,
             method: 'post',
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
             data: {
                 avatar: avatarInput,
@@ -117,6 +117,8 @@ const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, his
         setIsLogin(false);
         setUserInfo({ id: '', avatar: '', bio: '', nickname: '' });
         setAllCourses([]);
+        sessionStorage.removeItem('id');
+        sessionStorage.removeItem('token');
         openNotification('推出成功！欢迎再次使用！', <EnterOutlined />);
     };
     return (
