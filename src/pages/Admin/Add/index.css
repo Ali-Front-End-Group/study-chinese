@@ -1,6 +1,7 @@
 .addBox {
     min-height: calc(100vh - 60px);
     width: 100%;
+    background-color: #f2f2f2;
 }
 
 .addBox .addBtnBox {

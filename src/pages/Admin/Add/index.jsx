@@ -91,6 +91,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                 if (res.data.status === 200) {
                     const copy = [...allCourse];
                     copy[index].content = res.data.array['思悦'];
+                    copy[index].voiceText = text;
                     setAllCourse(copy);
                     message.success('成功获得音频url！');
                 }
@@ -150,7 +151,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
         } else if (contentType === 'image') {
             obj = { id, contentType, content: '', engText: '' };
         } else if (contentType === 'voice') {
-            obj = { id, contentType, content: '', engText: 'voice', voiceType: '-1' };
+            obj = { id, contentType, content: '', voiceText: '', voiceType: '-1' };
         } else if (contentType === 'video') {
             obj = { id, contentType, content: '', engText: '' };
         } else if (contentType === 'record') {
@@ -159,6 +160,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
         const newCourse = [...allCourse, obj];
         setAllCourse(newCourse);
     };
+    // console.log('http://cb.musictrack.cn/media/x1637300533.747176.mp3'.length);
     // 删除课程
     const deleteCourseById = id => {
         const newCourse = allCourse.filter(obj => obj.id !== id);
@@ -606,9 +608,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                             shape="circle"
                                             danger
                                             style={{ marginLeft: '6px' }}
-                                            onClick={() => {
-                                                deleteCourseById(obj.id);
-                                            }}
+                                            onClick={() => deleteCourseById(obj.id)}
                                         >
                                             <DeleteOutlined />
                                         </Button>
@@ -668,9 +668,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                             shape="circle"
                                             danger
                                             style={{ marginLeft: '6px' }}
-                                            onClick={() => {
-                                                deleteCourseById(obj.id);
-                                            }}
+                                            onClick={() => deleteCourseById(obj.id)}
                                         >
                                             <DeleteOutlined />
                                         </Button>
@@ -685,7 +683,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                             placeholder="请输入中文，并生成语音url..."
                                             style={{ width: 'calc(100% - 114px)' }}
                                             value={obj.content}
-                                            maxLength={36}
+                                            maxLength={55}
                                             onChange={e => {
                                                 const copy = [...allCourse];
                                                 copy[index].content = e.target.value;
@@ -720,9 +718,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                             shape="circle"
                                             danger
                                             style={{ marginLeft: '6px' }}
-                                            onClick={() => {
-                                                deleteCourseById(obj.id);
-                                            }}
+                                            onClick={() => deleteCourseById(obj.id)}
                                         >
                                             <DeleteOutlined />
                                         </Button>
@@ -765,9 +761,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                             shape="circle"
                                             danger
                                             style={{ marginLeft: '6px' }}
-                                            onClick={() => {
-                                                deleteCourseById(obj.id);
-                                            }}
+                                            onClick={() => deleteCourseById(obj.id)}
                                         >
                                             <DeleteOutlined />
                                         </Button>
@@ -931,9 +925,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                             shape="circle"
                                             danger
                                             style={{ marginLeft: '6px' }}
-                                            onClick={() => {
-                                                deleteCourseById(obj.id);
-                                            }}
+                                            onClick={() => deleteCourseById(obj.id)}
                                         >
                                             <DeleteOutlined />
                                         </Button>

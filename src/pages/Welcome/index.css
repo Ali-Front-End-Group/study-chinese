@@ -16,9 +16,9 @@
 }
 
 .left {
-    flex: 1.5;
+    flex: 1;
     height: calc(100vh - 60px);
-    font-size: 80px;
+    font-size: 90px;
     font-weight: 700;
 }
 

@@ -6,7 +6,7 @@ const Welcome = () => {
     return (
         <div
             className="welcomeBox"
-            style={{ background: `url(${welcomeBackground}) 0 / cover fixed` }}
+            style={{ background: `url(${welcomeBackground[1]}) 0 / cover fixed` }}
         >
             {/* <div className="left"></div>
             <div className="right">
