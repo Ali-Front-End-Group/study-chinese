@@ -84,8 +84,8 @@ const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, his
             res => {
                 if (res.data.result === 'success') {
                     setModalVisible(false);
-                    const { avatar, bio, nickname } = res.data.data;
-                    setUserInfo({ avatar, bio, nickname });
+                    const { id, avatar, bio, nickname } = res.data.data;
+                    setUserInfo({ id, avatar, bio, nickname });
                     // setAvatarInput(avatar);
                     // setBioInput(bio);
                     // setNicknameInput(nickname);
