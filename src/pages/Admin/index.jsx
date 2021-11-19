@@ -2,6 +2,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import Help from './Help';
 import Course from './Course';
 import Add from './Add';
+import Square from './Square';
 import './index.css';
 
 const Admin = () => (
@@ -9,6 +10,7 @@ const Admin = () => (
         <Switch>
             <Route path="/admin/add" component={Add} />
             <Route path="/admin/course" component={Course} />
+            <Route path="/admin/square" component={Square} />
             <Route path="/admin/help" component={Help} />
             <Redirect to="/admin/course" />
         </Switch>
