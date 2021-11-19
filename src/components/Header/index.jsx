@@ -85,10 +85,7 @@ const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, his
                 if (res.data.result === 'success') {
                     setModalVisible(false);
                     const { id, avatar, bio, nickname } = res.data.data;
-                    setUserInfo({ id, avatar, bio, nickname });
-                    // setAvatarInput(avatar);
-                    // setBioInput(bio);
-                    // setNicknameInput(nickname);
+                    setUserInfo({ id: `${id}`, avatar, bio, nickname });
                     message.success('更新个人信息成功！');
                 } else {
                     message.warning('更新个人信息失败！');
