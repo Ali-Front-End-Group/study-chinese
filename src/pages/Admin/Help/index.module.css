@@ -4,34 +4,28 @@
     font-family: '微软雅黑';
     min-height: calc(100vh - 60px);
     background-color: #f2f2f2;
+    padding-top: 140px;
+}
+
+.HelpBox img {
+    -webkit-user-drag: none;
 }
 
 .left {
-    /* background-color: pink; */
     margin: 10px;
 }
 
 .right {
-    /* background-color: #555555; */
     display: flex;
     flex-direction: column;
-    /* margin: 10px; */
 }
-
-/* .left_top { */
-/* background-color: #1877F2 */
-/* } */
 
 .left_bottom {
     display: grid;
     grid-template-columns: 50% 50%;
 }
 
-/* .left_bottom_left { */
-/* background-color: #398439; */
-/* } */
 .left_bootom_right {
-    /* background-color: #337AB7; */
     box-sizing: border-box;
     margin: 40px;
     margin-top: 60px;
@@ -40,4 +34,24 @@
 .left_bootom_right p {
     margin: 20px 0;
     font-size: 16px;
+}
+
+.contactBox {
+    height: 40px;
+    display: flex;
+    margin: 6px 0 !important;
+}
+.contactKey {
+    width: 80px;
+    height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-weight: 700;
+}
+.contactValue {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
