@@ -34,15 +34,12 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
             res => {
                 if (res.data.result === 'success') {
                     setAllCourses(res.data.data.rows);
-                    message.success('获取所有课程成功！');
+                    // message.success('获取所有课程成功！');
                 } else {
                     message.warning('获取课程信息失败！');
                 }
             },
-            err => {
-                console.log(err);
-                message.warning('获取课程信息失败！');
-            }
+            () => message.warning('获取课程信息失败！')
         );
     };
     // 从数据库删除指定课程
@@ -65,10 +62,7 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
                     message.warning('删除课程失败！');
                 }
             },
-            err => {
-                console.log(err);
-                message.warning('删除课程失败！');
-            }
+            () => message.warning('删除课程失败！')
         );
     };
     // 点击垃圾桶，删除课程

@@ -61,7 +61,6 @@ const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, his
             })
             .then(
                 res => {
-                    console.log(res.download_url);
                     setAvatarInput(res.download_url);
                     message.success('上传图片成功！');
                 },

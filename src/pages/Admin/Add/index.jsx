@@ -160,7 +160,6 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
         const newCourse = [...allCourse, obj];
         setAllCourse(newCourse);
     };
-    // console.log('http://cb.musictrack.cn/media/x1637300533.747176.mp3'.length);
     // 删除课程
     const deleteCourseById = id => {
         const newCourse = allCourse.filter(obj => obj.id !== id);
@@ -372,8 +371,6 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                 }
             }
         }
-        // console.log(allCourse);
-        // return;
         const data = {
             user_id: userId,
             title: name,
@@ -423,10 +420,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                     message.warning('获取课程信息失败！');
                 }
             },
-            err => {
-                console.log(err);
-                message.warning('获取课程信息失败！');
-            }
+            () => message.warning('获取课程信息失败！')
         );
     };
     // 对话框隐藏

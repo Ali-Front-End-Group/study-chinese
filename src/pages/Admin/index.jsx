@@ -28,10 +28,7 @@ const Admin = ({ isLogin, setAllCourses, setUserInfo }) => {
                     message.warning('获取课程信息失败！');
                 }
             },
-            err => {
-                console.log(err);
-                message.warning('获取课程信息失败！');
-            }
+            () => message.warning('获取课程信息失败！')
         );
     };
     // 获取个人信息
@@ -52,10 +49,7 @@ const Admin = ({ isLogin, setAllCourses, setUserInfo }) => {
                     message.warning('获取课程信息失败！');
                 }
             },
-            err => {
-                console.log(err);
-                message.warning('获取课程信息失败！');
-            }
+            () => message.warning('获取课程信息失败！')
         );
     };
     useEffect(() => {
