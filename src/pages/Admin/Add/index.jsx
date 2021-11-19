@@ -33,7 +33,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
     const [coverLink, setCoverLink] = useState('');
-    // 模态框的显示
+    // 对话框的显示
     const [modalVisible, setModalVisible] = useState(false);
     // 所有课程
     const [allCourse, setAllCourse] = useState([]);
@@ -427,7 +427,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
             }
         );
     };
-    // 模态框隐藏
+    // 对话框隐藏
     const handleCancel = () => {
         setModalVisible(false);
         history.push('/admin/course');
@@ -436,6 +436,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
     return (
         <div className="addBox">
             <div className="addCenter">
+                {/* 对话框 */}
                 <Modal
                     title="课程二维码"
                     visible={modalVisible}

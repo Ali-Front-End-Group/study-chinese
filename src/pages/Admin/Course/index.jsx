@@ -79,7 +79,9 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
             style={{ background: `url(${courseBackground}) 0 / cover fixed` }}
         >
             <div className="courseLayout">
+                {/* 添加课程卡片 */}
                 <AddCourse />
+                {/* 渲染课程卡片列表 */}
                 {allCourses.map(obj => {
                     return (
                         <Card

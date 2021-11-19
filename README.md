@@ -1,6 +1,6 @@
 # 1. 页面结构
 
-![](https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211114120416.png)
+![](https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119093946.png)
 # 2. 本地运行
 
 ## 1. 使用 yarn（推荐）
