@@ -649,7 +649,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                             <span className="courseItem">图片信息：</span>
                                             <br />
                                             <Input
-                                                placeholder="请输入一个汉字，并转化为图片url..."
+                                                placeholder="请输入一个汉字并转化为图片url，或手动上传图片..."
                                                 style={{ width: 'calc(100% - 114px)' }}
                                                 maxLength={1}
                                                 value={obj.content}
@@ -707,7 +707,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                             <span className="courseItem">声音信息：</span>
                                             <br />
                                             <Input
-                                                placeholder="请输入中文，并生成语音url..."
+                                                placeholder="请输入中文并转化为音频url，或手动上传音频..."
                                                 style={{ width: 'calc(100% - 114px)' }}
                                                 value={obj.content}
                                                 maxLength={55}
