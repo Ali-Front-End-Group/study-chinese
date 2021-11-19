@@ -1,4 +1,11 @@
-import { logoLink, appName, groupMember, appDescription, contact } from '../../../utils/constant';
+import {
+    logoLink,
+    appName,
+    groupMember,
+    appDescription,
+    contact,
+    welcomeBackground,
+} from '../../../utils/constant';
 import s from './index.module.css';
 
 const Help = () => (
@@ -27,12 +34,20 @@ const Help = () => (
             </div>
         </div>
         <div className={s.right}>
-            <div style={{ textAlign: 'center' }}>
-                <img
+            <div
+                style={{
+                    height: '360px',
+                    backgroundImage: `url(${welcomeBackground})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: '0 8%',
+                    backgroundSize: '100%',
+                }}
+            >
+                {/* <img
                     alt="BG"
-                    src="/img/aboutBG.png"
+                    src={welcomeBackground}
                     style={{ width: '1000px', height: '293px', marginBottom: '40px' }}
-                />
+                /> */}
             </div>
             <div className={s.left_bottom}>
                 <div>
@@ -91,10 +106,10 @@ const Help = () => (
                     </h2>
                     <hr style={{ height: '1px', backgroundColor: '#bcbfc0', border: 'none' }} />
                     {contact.map((obj, index) => (
-                        <p key={index} className={s.contactBox}>
+                        <div key={index} className={s.contactBox}>
                             <div className={s.contactKey}>{obj.key}：</div>
                             <div className={s.contactValue}>{obj.value}</div>
-                        </p>
+                        </div>
                     ))}
                 </div>
             </div>
