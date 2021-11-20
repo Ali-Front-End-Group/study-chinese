@@ -453,7 +453,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                     </div>
                 </Modal>
                 {/* 左边输入部分 */}
-                <div className="addLeft">
+                <div className="addLeft animated bounceInLeft">
                     <div className="inputBox">
                         {/* 必填内容 */}
                         <div className="requiredBox">
@@ -988,7 +988,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                     </div>
                 </div>
                 {/* 右边预览 */}
-                <div className="addRight">
+                <div className="addRight animated bounceInRight">
                     {/* 手机 */}
                     <div className="mobileBox">
                         <div className="mobileTime">

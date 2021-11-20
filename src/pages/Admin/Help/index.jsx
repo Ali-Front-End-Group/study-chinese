@@ -10,7 +10,7 @@ import s from './index.module.css';
 
 const Help = () => (
     <div className={s.HelpBox}>
-        <div className={s.left}>
+        <div className={`${s.left} animated bounceInLeft`}>
             <div style={{ textAlign: 'center' }}>
                 <img src={logoLink} alt="logo" style={{ width: '120px' }} />
             </div>
@@ -35,6 +35,7 @@ const Help = () => (
         </div>
         <div className={s.right}>
             <div
+                className="animated bounceInDown"
                 style={{
                     height: '360px',
                     backgroundImage: `url(${welcomeBackground})`,
@@ -42,15 +43,9 @@ const Help = () => (
                     backgroundPosition: '0 8%',
                     backgroundSize: '100%',
                 }}
-            >
-                {/* <img
-                    alt="BG"
-                    src={welcomeBackground}
-                    style={{ width: '1000px', height: '293px', marginBottom: '40px' }}
-                /> */}
-            </div>
+            ></div>
             <div className={s.left_bottom}>
-                <div>
+                <div className="animated bounceInUp">
                     <h2 style={{ fontWeight: 'normal', fontSize: '23px', letterSpacing: '5px' }}>
                         小队名称
                     </h2>
@@ -93,7 +88,7 @@ const Help = () => (
                         ))}
                     </div>
                 </div>
-                <div className={s.left_bootom_right}>
+                <div className={`${s.left_bootom_right} animated bounceInRight`}>
                     <h2
                         style={{
                             fontWeight: 'normal',

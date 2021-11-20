@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import QRCode from 'qrcode.react';
 import { nanoid } from 'nanoid';
 import { Modal, Button } from 'antd';
-import { courseBackground } from '../../../utils/constant';
 
 const Square = ({ allCourses }) => {
     const [courses, setCourses] = useState([]);
@@ -27,10 +26,7 @@ const Square = ({ allCourses }) => {
         setTheID('');
     };
     return (
-        <div
-            className="CourseBox"
-            style={{ background: `url(${courseBackground}) 0 / cover fixed` }}
-        >
+        <div className="CourseBox">
             {/* 对话框 */}
             <Modal
                 title="课程二维码"
@@ -51,7 +47,7 @@ const Square = ({ allCourses }) => {
                     />
                 </div>
             </Modal>
-            <div className="courseLayout">
+            <div className="courseLayout animated bounceInUp">
                 {courses.map(obj => {
                     if (JSON.stringify(obj) !== '{}') {
                         return (

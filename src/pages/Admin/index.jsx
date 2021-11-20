@@ -2,7 +2,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setAllCourses, setUserInfo } from '../../redux/actions';
-import { DB_URL } from '../../utils/constant';
+import { DB_URL, backGroundImg } from '../../utils/constant';
 import { message } from 'antd';
 import axios from 'axios';
 import Help from './Help';
@@ -60,7 +60,7 @@ const Admin = ({ isLogin, setAllCourses, setUserInfo }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLogin]);
     return (
-        <div className="adminBox">
+        <div className="adminBox" style={{ background: `url(${backGroundImg}) 0 / cover fixed` }}>
             <Switch>
                 <Route path="/admin/add" component={Add} />
                 <Route path="/admin/course" component={Course} />

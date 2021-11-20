@@ -181,7 +181,7 @@ const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, his
                         </div>
                     </>
                 ) : null}
-                <div className="centerLogo" onClick={toCoursePage}>
+                <div className="centerLogo animated bounceInDown" onClick={toCoursePage}>
                     <img src={logoLink} alt="logo" className="headerLogo" />
                     &nbsp;
                     <span>不学汉语</span>

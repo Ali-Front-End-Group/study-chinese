@@ -6,7 +6,7 @@ import { setAllCourses } from '../../../redux/actions';
 import { DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { nanoid } from 'nanoid';
-import { DB_URL, courseBackground } from '../../../utils/constant';
+import { DB_URL } from '../../../utils/constant';
 import './index.css';
 
 const Course = ({ history, userId, allCourses, setAllCourses }) => {
@@ -81,11 +81,8 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
         history.push(`/admin/add?id=${id}`);
     };
     return (
-        <div
-            className="CourseBox"
-            style={{ background: `url(${courseBackground}) 0 / cover fixed` }}
-        >
-            <div className="courseLayout">
+        <div className="CourseBox">
+            <div className="courseLayout animated bounceInUp">
                 {/* 添加课程卡片 */}
                 <AddCourse />
                 {/* 渲染课程卡片列表 */}

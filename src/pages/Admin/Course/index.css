@@ -1,6 +1,5 @@
 .CourseBox {
     min-height: calc(100vh - 60px);
-    background-size: cover;
 }
 
 .courseLayout {

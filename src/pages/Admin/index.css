@@ -1,4 +1,4 @@
 .adminBox {
     min-height: calc(100vh - 60px);
-    /* background-color: rgb(163, 211, 203); */
+    background-size: cover;
 }
