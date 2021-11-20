@@ -14,7 +14,7 @@ npm install -g yarn
 克隆到本地：
 
 ```powershell
-git clone git@github.com:Ali-Front-End-Group/cloud-homework.git
+git clone git@github.com:Ali-Front-End-Group/study-chinese.git
 
 cd cloud-homework
 ```
@@ -36,7 +36,7 @@ yarn start
 克隆到本地：
 
 ```powershell
-git clone git@github.com:Ali-Front-End-Group/cloud-homework.git
+git clone git@github.com:Ali-Front-End-Group/study-chinese.git
 
 cd cloud-homework
 ```
