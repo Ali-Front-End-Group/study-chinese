@@ -64,8 +64,14 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
         setAllCourse(JSON.parse(content).data);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
+    // 判断是否只有中文
+    const isOnlyChinese = str => /^[\u4e00-\u9fa5|？！，。《》（）：；“”‘’]+$/.test(str);
     // 获得图片url
     const getImg = (character, index) => {
+        if (!isOnlyChinese(character)) {
+            message.info('请输入汉字！');
+            return;
+        }
         axios
             .get(BASE_URL + '/api/get_pic', {
                 params: {
@@ -83,6 +89,10 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
     };
     // 获得声音url
     const getVoice = (text, index) => {
+        if (!isOnlyChinese(text)) {
+            message.info('请输入汉字！');
+            return;
+        }
         axios
             .post(BASE_URL + '/api/tts', {
                 text,
@@ -945,7 +955,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                                 } else if (obj.contentType === 'record') {
                                     return (
                                         <div className="autoItem" key={obj.id}>
-                                            <span className="courseItem">派送口语任务：</span>
+                                            <span className="courseItem">口语任务：</span>
                                             <br />
                                             <Input
                                                 maxLength={20}

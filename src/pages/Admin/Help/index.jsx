@@ -1,18 +1,23 @@
 import {
-    logoLink,
     appName,
     groupMember,
     appDescription,
     contact,
     welcomeBackground,
+    QRCodeLink,
 } from '../../../utils/constant';
 import s from './index.module.css';
 
 const Help = () => (
     <div className={s.HelpBox}>
         <div className={`${s.left} animated bounceInLeft`}>
-            <div style={{ textAlign: 'center' }}>
-                <img src={logoLink} alt="logo" style={{ width: '120px' }} />
+            <div style={{ textAlign: 'center', paddingTop: '30px' }}>
+                {/* <img src={logoLink} alt="logo" style={{ width: '120px' }} /> */}
+                <img
+                    src={QRCodeLink}
+                    alt="QRCode"
+                    style={{ width: '240px', border: '1px solid #ccc' }}
+                />
             </div>
 
             <div className={s.contact} style={{ boxSizing: 'border-box', padding: '30px' }}>
@@ -31,6 +36,7 @@ const Help = () => (
                     <b style={{ marginLeft: '38px' }}>{appName}</b>
                     {appDescription}
                 </p>
+                <div style={{ textAlign: 'center' }}></div>
             </div>
         </div>
         <div className={s.right}>
