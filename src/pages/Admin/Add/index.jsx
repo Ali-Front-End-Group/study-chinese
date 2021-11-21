@@ -2,13 +2,18 @@ import { useState, useEffect } from 'react';
 import { FaWifi } from 'react-icons/fa';
 import { AiOutlineLeft, AiOutlineEllipsis } from 'react-icons/ai';
 import { Input, Button, Radio, Space, message, Popconfirm, Divider, Modal, Tooltip } from 'antd';
-import { BASE_URL, DB_URL, appTcb } from '../../../utils/constant';
+import {
+    getImgAPI,
+    getVoiceAPI,
+    getPinyinAPI,
+    releaseCourseAPI,
+    getAllCourseFromDB_API,
+} from '../../../utils/api';
+import { appTcb } from '../../../utils/constant';
 import { RiVoiceprintFill } from 'react-icons/ri';
 import { withRouter } from 'react-router-dom';
 import QRCode from 'qrcode.react';
 import dayjs from 'dayjs';
-import axios from 'axios';
-import qs from 'qs';
 import { nanoid } from 'nanoid';
 import { connect } from 'react-redux';
 import { setAllCourses } from '../../../redux/actions';
@@ -67,71 +72,58 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
     // 判断是否只有中文
     const isOnlyChinese = str => /^[\u4e00-\u9fa5|？！，。《》（）：；“”‘’]+$/.test(str);
     // 获得图片url
-    const getImg = (character, index) => {
+    const getImg = async (character, index) => {
         if (!isOnlyChinese(character)) {
             message.info('请输入汉字！');
             return;
         }
-        axios
-            .get(BASE_URL + '/api/get_pic', {
-                params: {
-                    character,
-                },
-            })
-            .then(res => {
-                if (res.data.status === 200) {
-                    const copy = [...allCourse];
-                    copy[index].content = res.data.url;
-                    setAllCourse(copy);
-                    message.success('成功获得图片url！');
-                }
-            });
+        const { isTrue, url, text } = await getImgAPI(character);
+        if (isTrue) {
+            const copy = [...allCourse];
+            copy[index].content = url;
+            setAllCourse(copy);
+            message.success(text);
+        } else {
+            message.error(text);
+        }
     };
     // 获得声音url
-    const getVoice = (text, index) => {
+    const getVoice = async (text, index) => {
         if (!isOnlyChinese(text)) {
             message.info('请输入汉字！');
             return;
         }
-        axios
-            .post(BASE_URL + '/api/tts', {
-                text,
-            })
-            .then(res => {
-                if (res.data.status === 200) {
-                    const copy = [...allCourse];
-                    copy[index].content = res.data.array['思悦'];
-                    copy[index].voiceText = text;
-                    setAllCourse(copy);
-                    message.success('成功获得音频url！');
-                }
-            });
+        const { isTrue, url, resText } = await getVoiceAPI(text);
+        if (isTrue) {
+            const copy = [...allCourse];
+            copy[index].content = url;
+            copy[index].voiceText = text;
+            setAllCourse(copy);
+            message.success(resText);
+        } else {
+            message.error(resText);
+        }
     };
     // 获得拼音
-    const getPinyin = (str, index, contentType, value) => {
+    const getPinyin = async (str, index, contentType, value) => {
         if (!str) return;
-        axios
-            .get(`${BASE_URL}/api/get_pinyin`, {
-                params: {
-                    str,
-                },
-            })
-            .then(res => {
-                if (res.data.status === 200) {
-                    const copy = [...allCourse];
-                    if (contentType === 'text') {
-                        copy[index].pinyin = res.data.ret;
-                    } else if (contentType === 'quzzle') {
-                        copy[index].content[0].pinyin = res.data.ret;
-                    } else if (contentType === 'choice') {
-                        copy[index].choice[value].pinyin = res.data.ret;
-                    } else if (contentType === 'record') {
-                        copy[index].pinyin = res.data.ret;
-                    }
-                    setAllCourse(copy);
-                    message.success('成功获得拼音！');
-                }
-            });
+        const { isTrue, pinyin, text } = await getPinyinAPI(str);
+        if (isTrue) {
+            const copy = [...allCourse];
+            if (contentType === 'text') {
+                copy[index].pinyin = pinyin;
+            } else if (contentType === 'quzzle') {
+                copy[index].content[0].pinyin = pinyin;
+            } else if (contentType === 'choice') {
+                copy[index].choice[value].pinyin = pinyin;
+            } else if (contentType === 'record') {
+                copy[index].pinyin = pinyin;
+            }
+            setAllCourse(copy);
+            message.success(text);
+        } else {
+            message.error(text);
+        }
     };
     // 添加课程
     const addCourse = contentType => {
@@ -336,7 +328,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
             );
     };
     // 发布课程 / 更新课程
-    const releaseCourse = () => {
+    const releaseCourse = async () => {
         // 检验是否填写课程基本信息
         if (!name || !desc || !coverLink) {
             message.warning('请填写课程基本信息：名称、描述、封面！');
@@ -381,6 +373,7 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
                 }
             }
         }
+        const token = localStorage.getItem('token');
         const data = {
             user_id: userId,
             title: name,
@@ -390,48 +383,23 @@ const Add = ({ history, location, userId, allCourses, setAllCourses }) => {
             cover: coverLink,
             content: `{"data": ${JSON.stringify(allCourse)}}`,
         };
-        axios({
-            url: isEdit ? `${DB_URL}/course/update?id=${editID}` : `${DB_URL}/course/create`,
-            method: 'post',
-            headers: {
-                'content-type': 'application/x-www-form-urlencoded',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            data: qs.stringify(data),
-        }).then(
-            res => {
-                if (res.data.result === 'success') {
-                    getAllCourseFromDB();
-                    setEditID(res.data.data.id);
-                    message.success(`${isEdit ? '更新' : '添加'}课程成功！`);
-                    // history.push('/admin/course');
-                    setModalVisible(true);
-                } else {
-                    message.error(`${isEdit ? '更新' : '添加'}课程失败！`);
-                }
-            },
-            () => message.error(`${isEdit ? '更新' : '添加'}课程失败！`)
-        );
-    };
-    // 从数据库获取所有课程信息
-    const getAllCourseFromDB = () => {
-        axios({
-            url: `${DB_URL}/course/listAll`,
-            method: 'get',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        }).then(
-            res => {
-                if (res.data.result === 'success') {
-                    setAllCourses(res.data.data.rows);
-                    // message.success('获取所有课程成功！');
-                } else {
-                    message.warning('获取课程信息失败！');
-                }
-            },
-            () => message.warning('获取课程信息失败！')
-        );
+        const params = {
+            isEdit,
+            editID,
+            token,
+            data,
+        };
+        const { isTrue, text, ID } = await releaseCourseAPI(params);
+        if (isTrue) {
+            message.success(text);
+            setEditID(ID);
+            setModalVisible(true);
+            // 发布/更新课程成功，获得所有课程
+            const { isTrue: isTrue_, data } = await getAllCourseFromDB_API(token);
+            isTrue_ && setAllCourses(data);
+        } else {
+            message.error(text);
+        }
     };
     // 对话框隐藏
     const handleCancel = () => {

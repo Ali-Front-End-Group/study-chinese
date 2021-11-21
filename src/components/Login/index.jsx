@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { message } from 'antd';
-import { CheckOutlined, CloseOutlined, ExclamationOutlined } from '@ant-design/icons';
+import { CheckOutlined, ExclamationOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { setIsLogin } from '../../redux/actions';
-import axios from 'axios';
-import qs from 'qs';
-import { DB_URL } from '../../utils/constant';
+import { registerAPI, loginAPI } from '../../utils/api';
 import { openNotification } from '../../utils/functions';
 import './index.css';
 
@@ -16,70 +14,47 @@ const Login = ({ setIsLogin }) => {
     const [rname, setRname] = useState('');
     const [rpwd, setRpwd] = useState('');
     // 注册
-    const register = () => {
+    const register = async () => {
         if (!rname || !rpwd) {
             message.warning('请输入账号和密码再注册！');
             return;
         }
-        const data = { username: rname, password: rpwd };
-        axios({
-            url: `${DB_URL}/register`,
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            method: 'post',
-            data: qs.stringify(data),
-        }).then(
-            res => {
-                if (res.data.result === 'success') {
-                    openNotification('注册成功，请登录！', <CheckOutlined />);
-                    toggle();
-                    setRname('');
-                    setRpwd('');
-                } else {
-                    openNotification('帐号已存在，请更换一个！', <ExclamationOutlined />);
-                }
-            },
-            () => {
-                openNotification('注册失败，请重试！', <CloseOutlined />);
-            }
-        );
+        const { isTrue, text } = await registerAPI(rname, rpwd);
+        if (isTrue) {
+            openNotification(text, <CheckOutlined />);
+            toggle();
+            setRname('');
+            setRpwd('');
+        } else {
+            openNotification(text, <ExclamationOutlined />);
+        }
     };
     // 登录
-    const login = () => {
+    const login = async () => {
         if (!name || !pwd) {
             message.warning('请输入账号和密码再登录！');
             return;
         }
-        const data = { username: name, password: pwd };
-        axios({
-            url: `${DB_URL}/login`,
-            method: 'post',
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify(data),
-        }).then(
-            res => {
-                if (res.data.result === 'success') {
-                    const { token, id } = res.data.data;
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('id', id);
-                    openNotification('登录成功！欢迎进入「不学汉语」！', <CheckOutlined />);
-                    setIsLogin(true);
-                } else {
-                    message.error('登录失败，请重试！');
-                }
-            },
-            () => message.error('登录失败，请重试！')
-        );
+        const { isTrue, id, token, text } = await loginAPI(name, pwd);
+        if (isTrue) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('id', id);
+            openNotification(text, <CheckOutlined />);
+            setIsLogin(true);
+        } else {
+            message.error(text);
+        }
     };
-
     // 切换登录/注册
     const toggle = () => setIsFront(isFront => !isFront);
-    // 回车登录
-    const enterLogin = e => {
-        if (e.key === 'Enter') login();
-    };
-    // 回车注册
-    const enterRegister = e => {
-        if (e.key === 'Enter') register();
+    // 判断按下回车
+    const enter = (e, isLogin) => {
+        if (e.key !== 'Enter') return;
+        if (isLogin) {
+            login();
+        } else {
+            register();
+        }
     };
     return (
         <div className="animated bounceInDown">
@@ -101,7 +76,7 @@ const Login = ({ setIsLogin }) => {
                         value={pwd}
                         onChange={e => setPwd(e.target.value)}
                         onClick={e => e.stopPropagation()}
-                        onKeyDown={e => enterLogin(e)}
+                        onKeyDown={e => enter(e, true)}
                     />
                     <br />
                     <div className="longBtn" onClick={login}>
@@ -131,7 +106,7 @@ const Login = ({ setIsLogin }) => {
                         value={rpwd}
                         onChange={e => setRpwd(e.target.value)}
                         onClick={e => e.stopPropagation()}
-                        onKeyDown={e => enterRegister(e)}
+                        onKeyDown={e => enter(e, false)}
                     />
                     <br />
                     <div className="longBtn" onClick={register}>

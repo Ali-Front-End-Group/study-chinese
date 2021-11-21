@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import { setIsLogin, setUserInfo, setAllCourses } from '../../redux/actions';
 import { defaultAvatar } from '../../utils/constant';
 import { Popconfirm, Modal, Input, Button, message } from 'antd';
-import { DB_URL, appTcb, logoLink } from '../../utils/constant';
-import axios from 'axios';
+import { updateUserInfoAPI } from '../../utils/api';
+import { appTcb, logoLink } from '../../utils/constant';
 import { nanoid } from 'nanoid';
 import List from './List';
 import './index.css';
@@ -68,33 +68,18 @@ const Header = ({ isLogin, setIsLogin, userInfo, setUserInfo, setAllCourses, his
             );
     };
     // 更新用户信息
-    const updateUserInfo = () => {
-        axios({
-            url: `${DB_URL}/user/update?id=${userInfo.id}`,
-            method: 'post',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            data: {
-                avatar: avatarInput,
-                bio: bioInput,
-                nickname: nicknameInput,
-            },
-        }).then(
-            res => {
-                if (res.data.result === 'success') {
-                    setModalVisible(false);
-                    const { id, avatar, bio, nickname } = res.data.data;
-                    setUserInfo({ id: `${id}`, avatar, bio, nickname });
-                    message.success('更新个人信息成功！');
-                } else {
-                    message.warning('更新个人信息失败！');
-                }
-            },
-            () => {
-                message.warning('更新个人信息失败！');
-            }
-        );
+    const updateUserInfo = async () => {
+        const id = userInfo.id;
+        const token = localStorage.getItem('token');
+        const params = { id, token, avatarInput, bioInput, nicknameInput };
+        const { isTrue, id: ID, avatar, bio, nickname, text } = await updateUserInfoAPI(params);
+        if (isTrue) {
+            setModalVisible(false);
+            setUserInfo({ id: `${ID}`, avatar, bio, nickname });
+            message.success(text);
+        } else {
+            message.error(text);
+        }
     };
     // 关闭对话框
     const closeModal = () => {

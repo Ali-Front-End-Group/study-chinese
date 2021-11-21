@@ -4,9 +4,8 @@ import { Popconfirm, message } from 'antd';
 import { connect } from 'react-redux';
 import { setAllCourses } from '../../../redux/actions';
 import { DeleteOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import { nanoid } from 'nanoid';
-import { DB_URL } from '../../../utils/constant';
+import { deleteCourseFromDB_API, getAllCourseFromDB_API } from '../../../utils/api';
 import './index.css';
 
 const Course = ({ history, userId, allCourses, setAllCourses }) => {
@@ -22,59 +21,20 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
         setCourses(myCourses);
     }, [allCourses, userId]);
     const text = '确定删除该课程？';
-    // 从数据库获取所有课程信息
-    const getAllCourseFromDB = () => {
-        axios({
-            url: `${DB_URL}/course/listAll`,
-            method: 'get',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        }).then(
-            res => {
-                if (res.data.result === 'success') {
-                    setAllCourses(res.data.data.rows);
-                    // message.success('获取所有课程成功！');
-                } else {
-                    message.warning('获取课程信息失败！');
-                }
-            },
-            () => message.warning('获取课程信息失败！')
-        );
-    };
-    // 从数据库删除指定课程
-    const deleteCourseFromDB = id => {
-        axios({
-            url: `${DB_URL}/course/delete`,
-            method: 'post',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            data: {
-                id: `${id}`,
-            },
-        }).then(
-            res => {
-                if (res.data.result === 'success') {
-                    message.success('删除课程成功！');
-                    getAllCourseFromDB();
-                } else {
-                    message.warning('删除课程失败！');
-                }
-            },
-            () => message.warning('删除课程失败！')
-        );
-    };
     // 点击垃圾桶，删除课程
-    const deleteCourseById = (e, id) => {
+    const deleteCourseById = async (e, id) => {
         // 阻止事件冒泡
         e.stopPropagation();
-        deleteCourseFromDB(id);
-        // 将相应id过滤掉
-        // const newCourseData = courseData.filter(obj => obj.id !== id);
-        // 更新状态
-        // setCourseData(newCourseData);
-        // message.success('课程删除成功！');
+        const token = localStorage.getItem('token');
+        const { isTrue, text } = await deleteCourseFromDB_API(id, token);
+        if (isTrue) {
+            message.success(text);
+            // 若删除成功，获取所有课程
+            const { isTrue: isTrue_, data } = await getAllCourseFromDB_API(token);
+            isTrue_ && setAllCourses(data);
+        } else {
+            message.error(text);
+        }
     };
     // 跳转到编辑页面
     const toEditCoursePage = id => {
