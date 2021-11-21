@@ -53,8 +53,8 @@ const Admin = ({ isLogin, setAllCourses, setUserInfo }) => {
         );
     };
     useEffect(() => {
-        const id = sessionStorage.getItem('id');
-        const token = sessionStorage.getItem('token');
+        const id = localStorage.getItem('id');
+        const token = localStorage.getItem('token');
         getUserInfo(id, token);
         getAllCourseFromDB(token);
         // eslint-disable-next-line react-hooks/exhaustive-deps

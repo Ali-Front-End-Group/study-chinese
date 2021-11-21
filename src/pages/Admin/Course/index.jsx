@@ -28,7 +28,7 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
             url: `${DB_URL}/course/listAll`,
             method: 'get',
             headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         }).then(
             res => {
@@ -48,7 +48,7 @@ const Course = ({ history, userId, allCourses, setAllCourses }) => {
             url: `${DB_URL}/course/delete`,
             method: 'post',
             headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
             data: {
                 id: `${id}`,
