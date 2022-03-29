@@ -1,6 +1,7 @@
 # 1. 页面结构
 
-![](https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211119093946.png)
+![](https://cdn.jsdelivr.net/gh/lzxjack/cdn/img/20211119093946.png)
+
 # 2. 本地运行
 
 ## 1. 使用 yarn（推荐）
@@ -52,14 +53,3 @@ npm i
 ```powershell
 npm run start
 ```
-
-# 3. 关于代码的合并
-
-大家打开项目时，先双击`Pull.bat`拉取远程最新代码：
-
-![](https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211113172437.png)
-
-提交代码时，双击`Push.bat`，输入本次提交的`commit`，回车即可：
-
-![](https://jack-img.oss-cn-hangzhou.aliyuncs.com/img/20211114120513.png)
-
