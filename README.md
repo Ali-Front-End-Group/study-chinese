@@ -1,6 +1,6 @@
 # 1. 页面结构
 
-![](https://cdn.jsdelivr.net/gh/lzxjack/cdn/img/20211119093946.png)
+![](https://img.lzxjack.top/img/20211119093946.png)
 
 # 2. 本地运行
 

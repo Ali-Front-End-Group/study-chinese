@@ -11,23 +11,19 @@ export const appTcb = tcb.init({
 });
 
 // 默认用户头像
-export const defaultAvatar =
-  'https://cdn.jsdelivr.net/gh/lzxjack/cdn/img/20211118192629.jpg';
+export const defaultAvatar = 'https://img.lzxjack.top/img/20211118192629.jpg';
 
 // logo
-export const logoLink = 'https://cdn.jsdelivr.net/gh/lzxjack/cdn/img/20211118183107.jpg';
+export const logoLink = 'https://img.lzxjack.top/img/20211118183107.jpg';
 
 // 课程卡片页面添加图
-export const addCourseImg =
-  'https://cdn.jsdelivr.net/gh/lzxjack/cdn/img/20211119184151.png';
+export const addCourseImg = 'https://img.lzxjack.top/img/20211119184151.png';
 
 // 登录页面背景
-export const welcomeBackground =
-  'https://cdn.jsdelivr.net/gh/lzxjack/cdn/img/20211118183058.png';
+export const welcomeBackground = 'https://img.lzxjack.top/img/20211118183058.png';
 
 // Admin页面背景
-export const backGroundImg =
-  'https://cdn.jsdelivr.net/gh/lzxjack/cdn/img/20211119190810.jpg';
+export const backGroundImg = 'https://img.lzxjack.top/img/20211119190810.jpg';
 
 // 帮助页面的一些信息
 export const appName = '「不学汉语」';
@@ -52,5 +48,4 @@ export const contact = [
     value: 'https://github.com/Ali-Front-End-Group/study-chinese'
   }
 ];
-export const QRCodeLink =
-  'https://cdn.jsdelivr.net/gh/lzxjack/cdn/img/20211120190328.jpg';
+export const QRCodeLink = 'https://img.lzxjack.top/img/20211120190328.jpg';
